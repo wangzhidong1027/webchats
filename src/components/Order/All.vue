@@ -28,6 +28,9 @@
             		&nbsp;&nbsp;已支付：<b>¥{{payed(allitem.orderMoney,allitem.restToPay,allitem.couponPayed)}}</b>
             	</span>
              </br> 
+             
+             
+             
             <i style="color: #FF3737;">还需付：<b>¥{{allitem.restToPay}}</b></i></span>
             <span class="savem" v-if="allitem.savem!=0 && allitem.status=='1'" > <b>中欣通支付约省{{allitem.savem}}%</b></span>
           </p>
