@@ -38,17 +38,17 @@ module.exports = {
       //   secure:true,
       //   changeOrigin:true
       // },
-			//  '/index.php':{//本地测试
-			//  		target:'http://testapi.7shengqian.com/',
-			//  		secure:true,
-			//  		changeOrigin:true
-      //  	},
-      	 '/index.php':{//本地测试
-           target:'http://121.40.40.219:8601/', //蔡磊
-        // target:'http://testapi.7shengqian.com:9528',// 振华
+			 '/index.php':{//本地测试
+			 		target:'http://testapi.7shengqian.com/',
 			 		secure:true,
-           changeOrigin: true
+			 		changeOrigin:true
        	},
+      // 	 '/index.php':{
+      //      target:'http://121.40.40.219:8601/', //蔡磊
+      //   // target:'http://testapi.7shengqian.com:9528',// 振华
+		// 	 		secure:true,
+      //      changeOrigin: true
+      //  	},
 
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

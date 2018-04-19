@@ -5,74 +5,106 @@
       <img src="../../assets/images/travelTest/use.jpg" alt="">
     </div>
     <p class="toname">付款给 <span>携程旅行网北京分公司</span></p>
-    <p class="money">￥<b>9000.00</b></p>
+    <p class="money">￥<b>{{money}}</b></p>
   </header>
   <div class="typelist">
     <!-- 信用卡分期 -->
-    <div class="creditcard">
-      <div class="name"><span><img src="../../assets/images/travel/信用卡.png" alt="">信用卡分期</span><b></b></div>
-       <div class="numlist">
-        <div class="list">
-          <p>xxx元x6期</p>
-          <p>含服务费***元/期</p>
-        </div>
-         <div class="list">
-          <p>xxx元x6期</p>
-          <p>含服务费***元/期</p>
-        </div>
-         <div class="list">
-          <p>xxx元x6期</p>
-          <p>含服务费***元/期</p>
-        </div>
-         <div class="list">
-          <p>xxx元x6期</p>
-          <p>含服务费***元/期</p>
-        </div>
+    <div class="creditcard" v-for="type in paytypelist">
+      <div class="name" @click="changetype(type.catid)"><span><img src="../../assets/images/travel/信用卡.png" alt="">{{type.cat}}</span><b :class="selectType==type.catid?'selsect':''"></b></div>
+       <div class="numlist" v-show="selectType==type.catid" >
+          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid)"  :class="selectPeriods== item.catid ? 'periods':''">
+            <p>{{money}}元x{{item.cat}}</p>
+            <p>含服务费***元/期</p>
+          </div>
+         <h4>应还总额<span>xxx</span>元</h4>
       </div>
-      <h4>应还总额<span>xxx</span>元</h4>
   </div>
-    <div class="creditcard">
-    <div class="name"><span><img src="../../assets/images/travel/蚂蚁花呗.png" alt="">蚂蚁花呗</span><b></b></div>
-      <div class="numlist">
-      <div class="list">
-        <p>xxx元x6期</p>
-        <p>含服务费***元/期</p>
-        <p>费率x.x%/月</p>
-      </div>
-        <div class="list">
-        <p>xxx元x6期</p>
-        <p>含服务费***元/期</p>
-        <p>费率x.x%/月</p>
-      </div>
-        <div class="list">
-        <p>xxx元x6期</p>
-        <p>含服务费***元/期</p>
-        <p>费率x.x%/月</p>
-      </div>
-        <div class="list">
-        <p>xxx元x6期</p>
-        <p>含服务费***元/期</p>
-        <p>费率x.x%/月</p>
-      </div>
-    </div>
-    <h4>应还总额<span>xxx</span>元</h4>
-  </div>
-     <div class="creditcard">
-      <div class="name"><span><img src="../../assets/images/travel/微信支付.png" alt="">微信支付</span><b></b></div>
-    </div>
+    <!--<div class="creditcard">-->
+    <!--<div class="name"><span><img src="../../assets/images/travel/蚂蚁花呗.png" alt="">蚂蚁花呗</span><b></b></div>-->
+      <!--<div class="numlist">-->
+      <!--<div class="list">-->
+        <!--<p>xxx元x6期</p>-->
+        <!--<p>含服务费***元/期</p>-->
+        <!--<p>费率x.x%/月</p>-->
+      <!--</div>-->
+        <!--<div class="list">-->
+        <!--<p>xxx元x6期</p>-->
+        <!--<p>含服务费***元/期</p>-->
+        <!--<p>费率x.x%/月</p>-->
+      <!--</div>-->
+        <!--<div class="list">-->
+        <!--<p>xxx元x6期</p>-->
+        <!--<p>含服务费***元/期</p>-->
+        <!--<p>费率x.x%/月</p>-->
+      <!--</div>-->
+        <!--<div class="list">-->
+        <!--<p>xxx元x6期</p>-->
+        <!--<p>含服务费***元/期</p>-->
+        <!--<p>费率x.x%/月</p>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<h4>应还总额<span>xxx</span>元</h4>-->
+  <!--</div>-->
+     <!--<div class="creditcard">-->
+      <!--<div class="name"><span><img src="../../assets/images/travel/微信支付.png" alt="">微信支付</span><b></b></div>-->
+    <!--</div>-->
   </div>
 </div>
 </template>
 
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
   export default{
     name: 'Pay',
     data() {
-      return {}
+      return {
+        order:'',
+        id:'',
+        paytypelist:'',
+        money:'',
+        selectType:'',//支付方式
+        selectPeriods:''//支付期数
+      }
     },
-    methods: {},
+    methods: {
+      changetype(id){
+        if(this.selectType==id){
+          this.selectType=''
+        }else{
+          this.selectType=id
+        }
+      },
+      changePeriods(catid){
+        this.selectPeriods=catid
+      }
+    },
     mounted() {
+      var token = localStorage.getItem('tenant')
+      var paylist =this.$route.params.order
+      this.order=paylist.split('&')
+      var goodid=this.order[1].toString().split('=')
+      var ordermoney=this.order[2].toString().split('=')
+      this.money=ordermoney[1]
+      this.id=goodid[1]
+      // var goodid=this.$route.params.id.split('=')
+      // this.id=goodid[1]
+      // var ordermoney=this.$route.params.money.split('=')
+      // this.money=ordermoney[1]
+      var that =this
+      axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchatPay',qs.stringify({
+        token:token,
+        productId: this.id
+      })).then(function (res) {
+          var a=JSON.parse(Base64.decode(res.data))
+        if(a.code==10000){
+          if(a.data.err==10000){
+            that.paytypelist=a.data.data
+          }
+        }
+      }).catch(function (err) {
 
+      })
 
     },
     updated() {
@@ -114,7 +146,7 @@
       color: #333;
       font-weight: bold;
       text-align: center;
-      line-height: 5rem; 
+      line-height: 5rem;
       b{
         font-size: 2rem;
       }
@@ -124,7 +156,7 @@
     padding: 0 0.75rem;
     .creditcard{
       box-shadow:0px 0px 30px rgba(0,0,0,0.1);
-      margin-bottom:0.75rem; 
+      margin-bottom:0.75rem;
       .name{
         padding: 0 0.75rem;
         height: 2.75rem;
@@ -145,6 +177,11 @@
           height: 1rem;
           border-radius: 50%;
         }
+        .selsect{
+          background-image: url(../../assets/images/travel/select.png);
+          background-size: 100%;
+          border: none;
+        }
       }
       .numlist{
         padding:0 0.75rem;
@@ -159,9 +196,14 @@
           text-align: center;
           padding:0.4rem 0;
           margin-bottom: 0.3rem;
+          color: #333;
           p{
             font-size: 0.7rem;
           }
+        }
+        .periods{
+          color: #ff3737;
+          border:1px solid #ff3737;
         }
       }
         h4{

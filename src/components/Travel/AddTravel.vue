@@ -1,20 +1,43 @@
 <template>
   <div class="addTravel">
+    <div class="persen">
       <div class="dtitles">
         <span>请输入商户信息</span>
       </div>
       <div class="list">
         <ul >
-          <li><label><i>*</i>用户名：</label><input v-model="email" type="text" placeholder="请输入您的邮箱 "></li>
-          <li><label><i>*</i>企业名称：</label><input v-model="companyname" type="text" placeholder="请输入企业名称"></li>
-          <li><label><i>*</i>城市：</label><input v-model="address" @focus='selectCity'  type=" text" placeholder="请选择所在城市 "></li>
-          <li><label><i>*</i>联系人：</label><input v-model="linkname" type=" text" placeholder="请输入联系人姓名 "></li>
-          <li><label><i>*</i>联系电话：</label><input v-model="linkphone"  type=" tel" placeholder="请输入联系人手机号 "></li>
-          <li><label>激活码：</label><input  type=" text" placeholder="请输入激活码 "><span>非必填选项</span></li>
+          <li><label><i>*</i>用户名：</label><input v-model="email" type="text" placeholder="请输入您的邮箱 " @blur="testemail"></li>
+          <li><label><i>*</i>企业名称：</label><input v-model="companyname" type="text" placeholder="请输入企业名称" @blur="errinput(companyname)" /></li>
+          <li @click="selectCity"><label><i>*</i>城市：</label><b v-if="showaddress" v-text="showaddress"></b><b class="citytit" v-else >请选择城市</b></li>
+          <li><label><i>*</i>联系人：</label><input v-model="linkname" type="text" placeholder="请输入联系人姓名 " @blur="errinput(linkname)"/></li>
+          <li><label><i>*</i>联系电话：</label><input v-model="linkphone"  type="tel" placeholder="请输入联系人手机号 " @blur="testphone"></li>
+          <li><label><i>*</i>营业执照号：</label><input v-model="bslicenseNO"  type="tel" placeholder="请输入营业执照号 " @blur="isnumber(bslicenseNO)" ></li>
+          <li><label>激活码：</label><input v-model="salerphone"  type="tel" placeholder="请输入激活码 " @blur="isnumber(salerphone)"><span>非必填选项</span></li>
         </ul>
       </div>
       <div class="upload">
         <div class="upload">
+          <p><i>*</i>请上传法人身份证正面照片</p>
+          <div class="dimg just" @click="clickDom('faceIdcard')">
+            <a v-if='!faceIdcard'></a>
+            <img v-if='faceIdcard' :src="faceIdcard"  alt="">
+            <input  type="file" id="faceIdcard" ref="faceIdcard" accept="image/*"
+                    @change="ImgBase64($event,'faceIdcard')" name="bslicense">
+          </div>
+          <p><i>*</i>请上传法人身份证反面照片</p>
+          <div class="dimg just" @click="clickDom('backIdcard')">
+            <a v-if='!backIdcard'></a>
+            <img v-if='backIdcard' :src="backIdcard"  alt="">
+            <input  type="file" id="backIdcard" ref="backIdcard" accept="image/*"
+                    @change="ImgBase64($event,'backIdcard')" name="bslicense">
+          </div>
+          <p><i>*</i>请上传手持身份证照片</p>
+          <div class="dimg just" @click="clickDom('takeIdcard')">
+            <a v-if='!takeIdcard'></a>
+            <img v-if='takeIdcard' :src="takeIdcard"  alt="">
+            <input  type="file" id="takeIdcard" ref="takeIdcard" accept="image/*"
+                    @change="ImgBase64($event,'takeIdcard')" name="bslicense">
+          </div>
             <p><i>*</i>请上传营业执照</p>
             <div class="dimg just" @click="clickDom('bslicense')">
               <a v-if='!bslicense'></a>
@@ -22,7 +45,7 @@
               <input  type="file" id="bslicense" ref="bslicense" accept="image/*"
                      @change="ImgBase64($event,'bslicense')" name="bslicense">
             </div>
-            <p>请上传企业Logo<span><i>*</i>非必填选项</span></p>
+            <p><i>*</i>请上传企业Logo</p>
             <div class="dimg back"  @click="clickDom('logo')" >
               <a v-if='!logo'></a>
               <img v-if='logo' :src="logo" alt="">
@@ -38,6 +61,7 @@
       </div>
       <div class="cos">
         <button @click="gosubmit">确认提交</button>
+      </div>
       </div>
       <picker-address v-if="isshow" :selectCity=selectCity :sureCity=sureCity></picker-address>
   </div>
@@ -61,30 +85,94 @@
         address:[],
         province:'',
         city:'',
+        bslicenseNO:"",//营业执照号
         salerphone:'',//激活码
+        faceIdcard:'',//身份证正面地址
+        backIdcard:'',//身份证反面地址
+        takeIdcard:'',//手持身份证地址
+        cardInfo: {idCardNo:'',cname:'',startdate:'',enddate:''},//身份证信息
         aptitude:'',//资质
         bslicense:'', //营业执照
-        logo:'', 
+        logo:'',//企业LOGO
         isshow:false,
-      }  
+        showaddress:'',
+      }
     },
     methods: {
+      errinput(str){//特殊字符匹配
+        var pattern=/[`~!@#\$%\^\&\*\(\)_\+<>\?:"\{\},\.\\\/;'\[\]]/im;
+        if(pattern.test(str)){
+          Toast('不能输入特殊字符')
+        }
+      },
+      //纯数字数字正则
+      isnumber(str){
+        var pattern=/^[0-9]*$/g;
+        if(!pattern.test(str)){
+          Toast('不能输入数字以外的其它字符')
+        }
+      },
       clickDom(Dom){
-        var img=document.getElementById(Dom)
+        var img = document.getElementById(Dom)
         img.click()
       },
       selectCity(){
-        this.isshow=!this.isshow;
+        this.isshow =!this.isshow;
       },
-      sureCity(str){
-        console.log(str)
-        this.address=str;
-         this.isshow=false
+      sureCity(attr){
+          this.address=attr;
+          this.showaddress=this.address[0].cat+this.address[1].cat
+          this.isshow=false
       },
       upimg(imgsrc, category,_this){
         var _this= this
         var token = '6fHdQpdyvCQGgokuQQ';
+        if (category == 'faceIdcard') {
+          Indicator.open('身份证照片上传中')
+          axios.post(BASE_URL + '/index.php?r=CardjPay/checkIdCard', qs.stringify({
+            token: token,
+            type: 'face',
+            cardImg: imgsrc
+          })).then(function (res) {
+            Indicator.close()
+            var a = Base64.decode(res.data)
+            a = JSON.parse(a)
+            if (a.code==10000&&a.data.err == "10000") {
+              _this.cardInfo.idCardNo = a.data.data.idCardNo
+              _this.cardInfo.cname = a.data.data.cname
+              _this.faceIdcard = a.data.data.cardImg
+            } else {
+              _this.ai=true
+              MessageBox.alert('身份证识别失败，请您重新上传', '提示');
+            }
+          }).catch(function (err) {
+            Indicator.close()
+          });
+        }
+        if(category == 'backIdcard'){
+          Indicator.open('身份证照片上传中')
+          axios.post(BASE_URL + '/index.php?r=CardjPay/checkIdCard', qs.stringify({
+            token: token,
+            type: 'back',
+            cardImg: imgsrc
+          })).then(function (res) {
+            Indicator.close()
+            var a = Base64.decode(res.data)
+            a = JSON.parse(a)
+            if (a.code==10000&&a.data.err == "10000") {
+              _this.cardInfo.enddate = a.data.data.enddate
+              _this.cardInfo.startdate = a.data.data.startdate
+              _this.backIdcard=a.data.data.cardImg
+            } else {
+              _this.ai=true
+              MessageBox.alert('身份证识别失败，请您重新上传', '提示');
+            }
+          }).catch(function (err) {
+            Indicator.close()
+          });
+        }
         if (category == 'bslicense') {
+          Indicator.open('营业执照上传中')
           axios.post(BASE_URL + '/index.php?r=Common/UploadImg', qs.stringify({
             token: token,
             fileImg: imgsrc,
@@ -101,7 +189,26 @@
             Indicator.close()
           });
         }
+        if (category == 'takeIdcard') {
+          Indicator.open('手持身份证照片上传中')
+          axios.post(BASE_URL + '/index.php?r=Common/UploadImg', qs.stringify({
+            token: token,
+            fileImg: imgsrc,
+          })).then(function (res) {
+            Indicator.close()
+            var a = Base64.decode(res.data)
+            a = JSON.parse(a)
+            if (a.code==10000&&a.data.err == "10000") {
+              _this.takeIdcard = a.data.data.imgUrl
+            } else {
+              Toast(a.info)
+            }
+          }).catch(function (err) {
+            Indicator.close()
+          });
+        }
          if (category == 'logo') {
+           Indicator.open('企业logo上传中')
           axios.post(BASE_URL + '/index.php?r=Common/UploadImg', qs.stringify({
             token: '6fHdQpdyvCQGgokuQQ',
             fileImg: imgsrc,
@@ -119,6 +226,7 @@
           });
         }
          if (category == 'aptitude') {
+           Indicator.open('企业资质上传中')
           axios.post(BASE_URL + '/index.php?r=Common/UploadImg', qs.stringify({
             token: token,
             fileImg: imgsrc,
@@ -135,7 +243,7 @@
             Indicator.close()
           });
         }
-       
+
       },
        ImgBase64(e, type) {
         let tag = e.target;
@@ -146,7 +254,6 @@
         if(!fileList.length){
             return
         }
-        Indicator.open('图片上传中')
         var Orientation = null
         EXIF.getData(fileList[0], function () {
           Orientation = EXIF.getTag(fileList[0], 'Orientation');
@@ -171,7 +278,6 @@
                 expectWidth = expectHeight * this.naturalWidth / this.naturalHeight;
               }
             }
-           
             var canvas = document.createElement("canvas");
             var ctx = canvas.getContext("2d");
             canvas.width = expectWidth;
@@ -179,27 +285,28 @@
             ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
             var base64 = null;
             // 修复ios上传图片的时候 被旋转的问题
-            if (Orientation != "" && Orientation != 1) {
-              switch (Orientation) {
-                case 6://需要顺时针（向左）90度旋转
-                  _this.rotateImg(this, 'left', canvas);
-                  break;
-                case 8://需要逆时针（向右）90度旋转
-                  _this.rotateImg(this, 'right', canvas);
-                  break;
-                case 3://需要180度旋转
-                  _this.rotateImg(this, 'right', canvas);//转两次
-                  _this.rotateImg(this, 'right', canvas);
-                  break;
-              }
-            }
+            // if (Orientation != "" && Orientation != 1) {
+            //   switch (Orientation) {
+            //     case 6://需要顺时针（向左）90度旋转
+            //       _this.rotateImg(this, 'left', canvas);
+            //       break;
+            //     case 8://需要逆时针（向右）90度旋转
+            //       _this.rotateImg(this, 'right', canvas);
+            //       break;
+            //     case 3://需要180度旋转
+            //       _this.rotateImg(this, 'right', canvas);//转两次
+            //       _this.rotateImg(this, 'right', canvas);
+            //       break;
+            //   }
+            // }
+
             base64 = canvas.toDataURL("image/jpeg", 1);
-            // _this.idcardsrc=base64
-            if(!base64){
-              Toast('上传失败，请重新选择图片，或者更换图片')
-              return
-            }
+            // if(!base64){
+            //   Toast('上传失败，请重新选择图片，或者更换图片')
+            //   return
+            // }
             _this.upimg(base64,_type,_this)
+
           }
         }
       },
@@ -248,27 +355,69 @@
             break;
         }
       },
+      testemail(){
+        if(!this.email){
+          return
+        }
+        if(!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(this.email)){
+          Toast('请输入正确邮箱地址')
+        }
+      },
+      testphone(){
+        if(!this.linkphone){
+          return
+        }
+        if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/).test(this.linkphone)){
+          Toast('请输入正确联系电话')
+        }
+      },
       gosubmit(){
-        if(!this.username){
+        if(!this.email&&!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(this.email)){
           Toast('请输入用户名邮箱')
-          return 
+          return
         }
          if(!this.companyname){
           Toast('请输入企业名称')
-          return 
+          return
         }
          if(!this.linkname){
           Toast('请输入联系人姓名')
-          return 
+          return
         }
-         if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/.test(this.linkphone))){
+        if(!this.bslicenseNO){
+          Toast('请输入营业执照号')
+          return
+        }
+         if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/.test(this.linkphone))&& !this.linkphone){
           Toast('请输入联系人手机号码')
-          return 
+          return
         }
-        if(!bslicense){
+        if(!this.bslicense){
           Toast('请上传营业执照')
-          return 
+          return
         }
+        if(!this.logo){
+          Toast('请上传企业logo')
+          return
+        }
+        if(!this.faceIdcard){
+          Toast('请上传身份证正面照片')
+          return
+        }
+        if(!this.backIdcard){
+          Toast('请上传身份证反面照片')
+          return
+        }
+        if(!this.takeIdcard){
+          Toast('请上传手持身份证照片')
+          return
+        }
+
+        if(!this.cardInfo.idCardNo||!this.cardInfo.cname||!this.cardInfo.startdate||!this.cardInfo.enddate){
+          Toast('身份证信息有误，请重新上传')
+          return
+        }
+        // Indicator.open()
         axios.post(BASE_URL+"/index.php?r=YinjiaStage/InputMerch",qs.stringify({
           username:this.email,
           companyname:this.companyname,
@@ -276,19 +425,39 @@
           linkphone:this.linkphone,
           salerphone:this.salerphone,
           bslicense:this.bslicense,
+          province:this.address[0].catid,
+          city:this.address[1].catid,
+          legalname:this.cardInfo.cname,
+          legalidcard:this.cardInfo.idCardNo,
+          idstartdate:this.cardInfo.startdate,
+          idenddate:this.cardInfo.enddate,
+          legalface:this.faceIdcard,
+          legalback:this.backIdcard,
+          lefalhand:this.takeIdcard,
+          certificate:this.bslicenseNO,
           logo:this.logo,
           aptitude:this.aptitude,
-})).then(function(res){
-            Toast()
+        })).then(function(res){
+          Indicator.close()
+          var a =JSON.parse(Base64.decode(res.data))
+          console.log(a)
+          if(a.code==10000){
+            localStorage.setItem('tenant',a.token)
+            MessageBox.alert('请补全您的对公账户信息', '提示').then(action => {
+              window.location.href='#/travel/addcredit'
+            });
+          }else{
+            MessageBox.alert(a.info, '提示');
+          }
         }).catch(function(err){
 
         })
-        
+
       },
-     
+
     },
     mounted() {
-
+      document.title = '商户入驻'
 
     },
     updated() {
@@ -299,13 +468,20 @@
     },
     components: {
       'picker-address':PickerAddress
-
     }
   }
 </script>
 
 <style scoped lang="scss">
-
+.addTravel{
+  height: 100%;
+  width: 100%;
+}
+.persen{
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
   .dtitles{padding:0.75rem 0.75rem; font-size: 0.8rem; font-weight: bold;
     span{
       font-size: 0.8rem;
@@ -313,7 +489,7 @@
     }
   }
 
-  #aptitude, #bslicense, #logo{
+  #aptitude, #bslicense, #logo,#faceIdcard,#backIdcard,#takeIdcard{
     display: none;
   }
   .dimg {
@@ -326,7 +502,7 @@
     b{
       font-size: 0.7rem;
       font-weight: normal;
-      color: #666;
+      color: #333;
     }
   }
   .list ul li span{
@@ -343,6 +519,7 @@
       i{
         color: #ff3737;
       }
+
       span{
         color: #ff3737;
         margin-left: 1rem;
@@ -359,7 +536,7 @@
   div.list ul li a{float: right; font-size: 0.35rem;}
   div.prompt{ padding: 0.625rem  0.75rem 1.75rem 0.75rem;}
   div.prompt span{ font-size: 0.7rem; color: #ff3b3b; font-weight: bold;}
-  div.cos{margin: 0rem 0.75rem 2.5rem 0.75rem;margin-top: 1rem}
+  div.cos{padding: 1rem 0.75rem 0rem 0.75rem; background:#fff;z-index: 1;}
   div.cos button{ width:100%; padding:0.75rem 0rem; background-color: #ff3737; color: #fff; text-align: center; font-size:0.7rem; border: none; border-radius: 0.1rem;}
   div.upload{ background-color: #fff; margin-top:0.75rem;  }
   div.dimg{width:17.25rem; height:8.75rem; border-radius: 0.1rem; margin: 0rem 0.75rem 0rem 0.75rem; background-repeat: no-repeat; background-size:100% 100%; position: relative;}
@@ -380,6 +557,9 @@
   .back img{
     width: 8.75rem;
     margin:0 auto;
+  }
+  .citytit{
+    color: #666;
   }
 
 

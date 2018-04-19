@@ -2,7 +2,7 @@
 <div class="income">
 <header>
   <div class="contianer">
-    <nav><span></span><span>全部收入<b>></b></span><span>历史收入</span></nav>
+    <nav><span></span><span class="checklist">全部收入<b class="iconfont icon-jiantou"></b><ul><li>dasdas</li></ul></span><span>历史收入</span></nav>
     <h4><b>42052.00</b>元</h4>
     <p>共计<b>3</b>笔</p>
   </div>
@@ -23,7 +23,9 @@
   export default{
     name: 'Income',
     data() {
-      return {}
+      return {
+
+      }
     },
     methods: {},
     mounted() {
@@ -61,6 +63,22 @@
       display: flex;
       justify-content: space-between;
       padding-top: 0.75rem;
+      .checklist{
+        position: relative;
+        ul{
+          position: absolute;
+          top: 1rem;
+          left: 0;
+          background: #fff;
+          border: 1px solid #eee;
+          width: 100%;
+          text-align: center;
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          border-radius: 4px;
+          line-height: 2rem;
+        }
+      }
       span{
         font-size: 0.7rem;
         color: #666666;
@@ -80,7 +98,7 @@
     p{
       text-align: center;
       font-size:0.7rem;
-      color: #666; 
+      color: #666;
       b{
         color: #333333;
         padding: 3px;

@@ -82,28 +82,7 @@ import Inform from '@/components/WX/Phone/Inform'
    import CardClassify from '@/components/ElectronicCard/CardClassify/CardClassify'
    import CardList from '@/components/ElectronicCard/CardList/CardList'
    import CardDetails from '@/components/ElectronicCard/CardDetails/CardDetails'
-// import Realname from '@/components/J_pay/Main/Realname'
-// import Quick from '@/components/J_pay/Quick/Quick'
-// import Select from '@/components/J_pay/Quick/Select'
-// import QuickPay from '@/components/J_pay/Quick/QuickPay'
-// import Sccessful from '@/components/J_pay/Quick/Sccessful'
-//
-// import J_pay from '@/components/J_pay/J_pay'
-// import Protocol from '@/components/J_pay/Protocol'
-// import J_main from '@/components/J_pay/Main/J_main'
-// import J_index from '@/components/J_pay/J_index'
-// import Dredge from '@/components/J_pay/Dredge'
-// import J_service from '@/components/J_pay/J_service'
-// import Natice from '@/components/J_pay/Service/Natice'
-// import NaticeContent from '@/components/J_pay/Service/NaticeContent'
-//
-// import J_Record from '@/components/J_pay/Main/J_Record'
-// import MyCard from '@/components/J_pay/Main/MyCard'
-// import Approver from '@/components/J_pay/Main/Approver'
-// import Credit from '@/components/J_pay/Main/Credit'
-// import AddCredit from '@/components/J_pay/Main/AddCredit'
 
-//旅游
 import Travel from '@/components/Travel'
 import TravelIndex from '@/components/Travel/index'
 import AddTravel from '@/components/Travel/AddTravel'
@@ -112,6 +91,9 @@ import Income from '@/components/Travel/Income'
 import TravelPay from '@/components/Travel/Pay'
 import History from '@/components/Travel/History'
 
+import TravelLogin from '@/components/Travel/Login'
+import TravelAddCredit from '@/components/Travel/AddCredit'
+import TravelSettlement from '@/components/Travel/Settlement'
 Vue.use(Router)
 
 export default new Router({
@@ -182,41 +164,18 @@ export default new Router({
     // {path:'/cardpay/:orderid',name: 'CardPay',component: CardPay},
     {path:'/succeedpay/:orderid',name: 'SucceedPay',component: SucceedPay},
 
-    //J_pay
-    // {path:'/jpay',name: 'J_pay',component: J_pay,
-    //   children:[
-    //     {path:'/jpay/main',name:'J_main',component:J_main},
-    //     {path:'/jpay/jpay',name:'J_index',component:J_index},
-    //     {path:'/jpay/dredge',name:'Dredge',component:Dredge},
-    //
-    //     {path:'/jpay/service',name:'J_service',component:J_service},
-    //     {path:'/jpay/service/natice',name:'Natice',component:Natice},
-    //     {path:'/jpay/service/natice/content/:id',name:'NaticeContent',component:NaticeContent},
-    //     {path: '/jpay/main/record', name: 'J_Record', component:J_Record },
-    //     {path: '/jpay/main/mycard', name: 'MyCard', component:MyCard },
-    //     {path: '/jpay/main/approver', name: 'Approver', component:Approver },
-    //     {path: '/jpay/main/realname', name: 'Realname', component:Realname },
-    //     {path: '/jpay/main/credit', name: 'Credit', component:Credit },
-    //     {path: '/jpay/main/addcredit', name: 'AddCredit', component:AddCredit },
-    //     {path: '/jpay/protocol', name: 'Protocol', component:Protocol },
-    //
-    //     {path: '/jpay/quick', name: 'Quick', component:Quick },
-    //     {path: '/jpay/quick/select/:oriderid', name: 'Select', component:Select },
-    //     {path: '/jpay/quick/quickpay/:orderid/:cardid', name: 'QuickPay', component:QuickPay },
-    //     { path: '/jpay/quick/pay/sccessful/:orderid', name: 'Sccessful', component:Sccessful },
-    //     {path:'/jpay',redirect:"/jpay/jpay"},
-    //     {path:'/jpay/*',redirect:"/jpay/jpay"}
-    //   ]
-    // },
-    //旅游
+
       {path:'/travel',name: 'Travel',component: Travel,
         children:[
           {path: '/travel/index', name: 'TravelIndex', component:TravelIndex },
           {path: '/travel/addtravel', name: 'AddTravel', component:AddTravel },
           { path: '/travel/publish', name: 'Publish', component: Publish },
           { path: '/travel/income', name: 'Income', component: Income },
-          { path: '/travel/TravelPay', name: 'TravelPay', component: TravelPay },
+          { path: '/travel/travelpay/:id', name: 'TravelPay', component: TravelPay },
           { path: '/travel/history', name: 'History', component: History },
+          { path: '/travel/login', name: 'TravelLogin', component: TravelLogin },
+          { path: '/travel/addcredit', name: 'TravelAddCredit', component: TravelAddCredit },
+          { path: '/travel/settlement', name: 'TravelSettlement', component: TravelSettlement },
           {path:'/travel',redirect:"/travel/index"},
           {path:'/travel/*',redirect:"/travel/index"}
         ]

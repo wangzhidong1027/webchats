@@ -1,108 +1,176 @@
 <template>
   <div class="travel-index">
+    <div class="one">
       <header>
           <div class="merchant">
               <div class="merchant-img">
-                <img src="../../assets/images/travelTest/use.jpg" alt="">
+                <a href="#/travel/Settlement"> <img :src="my.logo" alt=""></a>
               </div>
               <div class="merchant-data">
                   <div class="merchant-text">
-                    <p class="name"><b>携程旅行网北京分公司</b></p>
-                    <p class="address">北京市朝阳区酒仙桥北路范德萨发按时</p>
+                    <p class="name"><b v-text="my.companyname"></b></p>
+                    <p class="address" v-text="my.companyname"></p>
                   </div>
-                  <div class="issue"><button>发布商品</button></div>
+                  <div class="issue"><button> <a @click="goaddgoods">发布商品</a></button></div>
               </div>
           </div>
       </header>
       <div class="container">
-         <div class="top"></div>
           <section>
-              <div class="iscoll">
-            	<mt-loadmore :bottom-method="loadBottom" :bottomLoadingText='""' :bottomDropText='""' :bottomPullText='""' :auto-fill="false" ref='loadmore' :bottomDistance=150 >
+            	<!--<mt-loadmore :bottom-method="loadBottom" :bottomLoadingText='""' :bottomDropText='""' :bottomPullText='""' :auto-fill="false" ref='loadmore' :bottomDistance=150 >-->
                 <ul>
-                  <li>
+                  <li v-for="goods,index in tenant">
                     <div class="goodstit">
-                      <div class="img"><img src="../../assets/images/travelTest/goods.jpg" alt=""></div>
+                      <div class="img"><img :src="goods.pdpicture" alt=""></div>
                       <div class="goods">
-                        <p class="goodsname">海南三亚七日游</p>
-                        <p class="goodstext">海南三亚七天游海天盛宴海南，三亚七日游海天海南三亚七日游海天盛宴海南三亚七天游</p>
-                        <h5><b>￥ </b><span>900000.00</span></h5>
+                        <p class="goodsname" v-text="goods.pname"></p>
+                        <p class="goodstext" v-text="goods.pintro"></p>
+                        <h5><b>￥ </b><span v-text="goods.pmoney"></span></h5>
                       </div>
                     </div>
                     <div class='gopay'>
-                        <a href="">去收款</a><button><img src="" alt=""></button>
-                    </div>
-                  </li>
-                   <li>
-                    <div class="goodstit">
-                      <div class="img"><img src="../../assets/images/travelTest/goods.jpg" alt=""></div>
-                      <div class="goods">
-                        <p class="goodsname">海南三亚七日游</p>
-                        <p class="goodstext">海南三亚七天游海天盛宴海南，三亚七日游海天海南三亚七日游海天盛宴海南三亚七天游</p>
-                        <h5><b>￥ </b><span>900000.00</span></h5>
-                      </div>
-                    </div>
-                    <div class='gopay'>
-                        <a href="">去付款</a><button><img src="" alt=""></button>
-                    </div>
-                  </li>
-                   <li>
-                    <div class="goodstit">
-                      <div class="img"><img src="../../assets/images/travelTest/goods.jpg" alt=""></div>
-                      <div class="goods">
-                        <p class="goodsname">海南三亚七日游</p>
-                        <p class="goodstext">海南三亚七天游海天盛宴海南，三亚七日游海天海南三亚七日游海天盛宴海南三亚七天游</p>
-                        <h5><b>￥ </b><span>900000.00</span></h5>
-                      </div>
-                    </div>
-                    <div class='gopay'>
-                        <a href="">去付款</a><button><img src="" alt=""></button>
-                    </div>
-                  </li>
-                   <li>
-                    <div class="goodstit">
-                      <div class="img"><img src="../../assets/images/travelTest/goods.jpg" alt=""></div>
-                      <div class="goods">
-                        <p class="goodsname">海南三亚七日游</p>
-                        <p class="goodstext">海南三亚七天游海天盛宴海南，三亚七日游海天海南三亚七日游海天盛宴海南三亚七天游</p>
-                        <h5><b>￥ </b><span>900000.00</span></h5>
-                      </div>
-                    </div>
-                    <div class='gopay'>
-                        <a href="">去付款</a><button><img src="" alt=""></button>
+                        <a :href=' "#/travel/receivables/"+goods.pid '>去收款</a><button @click="deleteGoods(goods.pid,index)"></button>
                     </div>
                   </li>
                 </ul>
-                </mt-loadmore>
-            </div>
+                <!--</mt-loadmore>-->
           </section>
       </div>
+    </div>
+    <!--<travel-tab :selectedpage="'商品'"></travel-tab>-->
   </div>
 </template>
 
 <script>
-  import {Indicator, Loadmore,Toast} from 'mint-ui';
+  import {Loadmore} from 'mint-ui';
+  import axios from 'axios'
+  import qs from 'qs'
+  import {Indicator,Toast ,MessageBox} from 'mint-ui'
+  import TravelTab from './TravelTab'
   export default{
     name: 'TravelIndex',
     data() {
-      return {}
+      return {
+        tenant:[],
+        my:'',
+        token:'',
+        ishave:false,
+        issure:false
+      }
     },
     methods: {
       loadBottom(){
         console.log(1)
+      },
+      goaddgoods(){
+        if(this.ishave){
+          if(this.issure){
+            window.location.href='#/travel/publish'
+          }else{
+            MessageBox.alert('您的信息正在认证中，请耐心等待')
+          }
+        }else{
+          MessageBox.alert('您还未填写对公账户，请前去填写').then(action => {
+            window.location.href='#/travel/addcredit'
+          });
+        }
+      },
+      //删除
+      deleteGoods(pid,index){
+        var that =this
+        MessageBox.confirm("您确定删除此商品",'  ').then(action => {
+          Indicator.open()
+          axios.post(BASE_URL + '/index.php?r=YinjiaStage/DelMerchGoods', qs.stringify({
+            token: this.token,
+            productId: pid
+          })).then(function (res) {
+            Indicator.close()
+            var data = JSON.parse(Base64.decode(res.data))
+            if (data.code == 10000) {
+              that.tenant.splice(index, 1)
+              Toast('删除成功')
+            } else {
+              Toast(data.info)
+            }
+          }).catch(function (err) {
+
+          })
+        })
       }
     },
     mounted() {
+      document.title = '分期业务'
+      var that =this
+      this.token = localStorage.getItem('tenant')
+      //验证商户有无对公账户
+      axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({
+        token:this.token,
+      })).then(function (res) {
+        var a=JSON.parse(Base64.decode(res.data))
+        if(a.code==10000){
+          if(a.data.err==10000){
+            if(a.data.data.bankno){
+              that.ishave=true
+            }else{
+              MessageBox.alert('请补全对公账户信息','提示').then(action => {
+                window.location.href='#/travel/addcredit'
+              })
+            }
+          }
+        }
+      }).catch(function (err) {
 
+      })
+      //获取账户信息
+      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatInfo',qs.stringify({
+        token:this.token
+      })).then(function(res){
+        var a =JSON.parse(Base64.decode(res.data))
+        if(a.code==10000){
+          if(a.data.err==10000){
+            that.my = a.data.data
+            if(a.data.data.attestation==1){
+              that.issure=true
+            }
+          }else{
+            Toast('商户信息获取失败，请刷新页面')
+          }
+        }else{
+          Toast('商户信息获取失败，请刷新页面')
+        }
+      }).catch(function(err){
+
+      })
+      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchGoods',qs.stringify({
+          token:this.token
+      })).then(function(res){
+        var a = JSON.parse(Base64.decode(res.data))
+        if(a.code==10000){
+          if(a.data.err==10000){
+            that.tenant = a.data.data
+            if(!that.tenant.length){
+              Toast('暂无发布商品')
+            }
+
+          }else{
+            Toast('商品列表获取失败，请刷新页面')
+          }
+        }else{
+          Toast('商品列表获取失败，请刷新页面')
+        }
+      }).catch(function(err){
+
+      })
 
     },
     updated() {
-
     },
     activated() {
 
     },
-    components: {}
+    components: {
+       'travel-tab':TravelTab
+    }
   }
 </script>
 
@@ -111,16 +179,22 @@
   height: 100%;
   display: flex;
   flex-flow: column;
+  .one{
+    height: 100%;
+    overflow: scroll;
+    padding-bottom:2.5rem;
+    background: #f5f5f5;
+  }
   header{
     height: 6.95rem;
     background: #f0c37c;
     padding: 0 0.75rem;
     z-index: 999;
+    padding-top: 2.75rem;
     .merchant{
       width: 100%;
       height: 5.75rem;
       background: #fff;
-      margin-top: 2.75rem;
       border-radius: 8px;
       position: relative;
       box-shadow:0px 0px 30px rgba(0,0,0,0.1);
@@ -185,12 +259,10 @@
     /*}*/
     section{
       display: flex;
-      flex: 1;
-      .iscoll{
-        height: 100%;
-        overflow: scroll;
+      background: #f1f1f2;
         ul{
           padding-top:2.5rem;
+          width: 100%;
          li{
            background:#fff;
            padding:0 0.75rem;
@@ -199,12 +271,16 @@
            display: flex;
            flex-flow: column;
            margin-bottom: 0.5rem;
+           width: 100%;
            .goodstit{
+             width: 100%;
              display: flex;
              justify-content: space-around;
              padding: 0.75rem 0;
              border-bottom: 1px solid #eee;
+             flex: 1;
              .img{
+
               width: 4.5rem;
               margin-right: 0.5rem;
               img{
@@ -220,11 +296,14 @@
                  color: #333;
                  font-weight: bold;
                  height: 1.1rem;
+                 overflow: hidden;
                }
+
                .goodstext{
                  font-size: 0.5rem;
                  color: #666;
                  flex: 1;
+                 overflow: hidden;
                }
                h5{
                  color: #ff3737;
@@ -261,7 +340,6 @@
          }
         }
       }
-    }
 
   }
 
