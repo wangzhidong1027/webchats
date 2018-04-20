@@ -78,11 +78,13 @@ import Inform from '@/components/WX/Phone/Inform'
 
 
 //electronic card
-//
-   import CardClassify from '@/components/ElectronicCard/CardClassify/CardClassify'
-   import CardList from '@/components/ElectronicCard/CardList/CardList'
-   import CardDetails from '@/components/ElectronicCard/CardDetails/CardDetails'
+import CardClassify from '@/components/ElectronicCard/CardClassify/CardClassify'
+import CardList from '@/components/ElectronicCard/CardList/CardList'
+import CardDetails from '@/components/ElectronicCard/CardDetails/CardDetails'
 
+
+
+//银嘉分期
 import Travel from '@/components/Travel'
 import TravelIndex from '@/components/Travel/index'
 import AddTravel from '@/components/Travel/AddTravel'
@@ -90,17 +92,21 @@ import Publish from '@/components/Travel/Publish'
 import Income from '@/components/Travel/Income'
 import TravelPay from '@/components/Travel/Pay'
 import History from '@/components/Travel/History'
-
 import TravelLogin from '@/components/Travel/Login'
 import TravelAddCredit from '@/components/Travel/AddCredit'
 import TravelSettlement from '@/components/Travel/Settlement'
+import TravelMain from '@/components/Travel/Main'
+import TravelRefund from '@/components/Travel/Refund'
+import BackMoney from '@/components/Travel/BackMoney'
+import RefundRecord from '@/components/Travel/RefundRecord'
+
 Vue.use(Router)
 
 export default new Router({
 //	mode: 'history',
   	routes: [
-       { path: '/Activitytheme', name: 'Activitytheme', component: Activitytheme },
-		{path: '/Afd', name: 'Afd', component: Afd },
+        {path: '/Activitytheme', name: 'Activitytheme', component: Activitytheme },
+		    {path: '/Afd', name: 'Afd', component: Afd },
 				{path:'/qustore',name: 'QuStore',component: QuStore},
 				{path:'/car',name: 'Car',component: Car},
 				{path:'/main',name: 'Main',component: Main,},
@@ -120,79 +126,63 @@ export default new Router({
             {path: '/order/cancel',name: 'Cancel',component: Cancel},
             {path: '/order/complete',name: 'Complete',component: Complete},
             {path:'/order/*',redirect:"/order/all"}
-					]},
-
-
-
+          ]},
 				{path:'/recharge',name: 'Recharge',component: Recharge},
 				{path:'/Activate',name: 'Activate',component: Activate},
 				{path:'/ArRe3',name: 'ArRe3',component: ArRe3},
 				{path:'/ArRe4/:orderId',name: 'ArRe4',component: ArRe4},
-
-
-  	// {path:'/jd',name: 'JDindex',component: JDindex},
-    {path:'/goodslist/:id',name: 'GoodsList',component: GoodsList},
-    {path:'/details/:id',name: 'Details',component: Details},
-
-
-    // Card
-   	{path:'/cardclassify',name: 'CardClassify',component: CardClassify},
-   	{path:'/cardlist/:id',name: 'CardList',component: CardList},
-   	{path:'/carddetails/:id',name: 'CardDetails',component: CardDetails},
-
-  	{path:'/account',name: 'Account',component: Account},
-  	{path:'/myaddress',name: 'MyAddress',component: MyAddress},
-  	{path:'/addaddress',name: 'AddAddress',component: AddAddress},
-  	{path:'/applyfor/:alltype/:childorderid/:oneid',name: 'ApplyFor',component: ApplyFor},
-  	{path:'/applyplan/:id/:goodsid',name: 'ApplyPlan',component: ApplyPlan},
-  	{path:'/after',name: 'After',component: After},
-  	{path:'/discounts',name: 'Discounts',component: Discounts},
-    {path:'/record',name: 'Record',component: Record},
-  	{path:'/myQudou',name: 'MyQudou',component: MyQudou},
-
-
-
-
-    {path:'/classify/:catid',name: 'Classify',component: Classify},
-    // {path:'/order/:state',name: 'Order',component: Order},
-    {path:'/ordercontent/:childorderid/:ischild',name: 'OrderContent',component: OrderContent},
-    {path:'/logistics/:btocorderid',name: 'Logistics',component: Logistics},
-
-    {path:'/submitorder',name: 'SubmitOrder',component: SubmitOrder},
-    {path:'/pay/:orderid',name: 'Pay',component: Pay},
-    {path:'/paymoney/:way/:orderid',name: 'PayMoney',component: PayMoney},
-    // {path:'/cardpay/:orderid',name: 'CardPay',component: CardPay},
-    {path:'/succeedpay/:orderid',name: 'SucceedPay',component: SucceedPay},
-
-
-      {path:'/travel',name: 'Travel',component: Travel,
-        children:[
-          {path: '/travel/index', name: 'TravelIndex', component:TravelIndex },
-          {path: '/travel/addtravel', name: 'AddTravel', component:AddTravel },
-          { path: '/travel/publish', name: 'Publish', component: Publish },
-          { path: '/travel/income', name: 'Income', component: Income },
-          { path: '/travel/travelpay/:id', name: 'TravelPay', component: TravelPay },
-          { path: '/travel/history', name: 'History', component: History },
-          { path: '/travel/login', name: 'TravelLogin', component: TravelLogin },
-          { path: '/travel/addcredit', name: 'TravelAddCredit', component: TravelAddCredit },
-          { path: '/travel/settlement', name: 'TravelSettlement', component: TravelSettlement },
-          {path:'/travel',redirect:"/travel/index"},
-          {path:'/travel/*',redirect:"/travel/index"}
-        ]
-      },
-
-
-    {path:'/joiestcard',name: 'JoiestCard',component: JoiestCard},
-    {path:'/joiesttong',name: 'JoiestTong',component: JoiestTong},
-    {path:'/recycle',name: 'Recycle',component: Recycle},
-    {path:'/phone',name: 'Phone',component: Phone,
-    	children: [
-  	 		{path: '/phone/hf',component: Telephone},
-        // {path: '/phone/ll',component: Flux},
-        // {path: '/phone/inform',component: Inform},
-	  	]},
-    {path: '/inform',component: Inform},
-    {path:'/',redirect:"/qustore"},
-    {path:'*',redirect:"/qustore"}
-	]
-})
+        {path:'/goodslist/:id',name: 'GoodsList',component: GoodsList},
+        {path:'/details/:id',name: 'Details',component: Details},
+        // Card
+        {path:'/cardclassify',name: 'CardClassify',component: CardClassify},
+        {path:'/cardlist/:id',name: 'CardList',component: CardList},
+        {path:'/carddetails/:id',name: 'CardDetails',component: CardDetails},
+        {path:'/account',name: 'Account',component: Account},
+        {path:'/myaddress',name: 'MyAddress',component: MyAddress},
+        {path:'/addaddress',name: 'AddAddress',component: AddAddress},
+        {path:'/applyfor/:alltype/:childorderid/:oneid',name: 'ApplyFor',component: ApplyFor},
+        {path:'/applyplan/:id/:goodsid',name: 'ApplyPlan',component: ApplyPlan},
+        {path:'/after',name: 'After',component: After},
+        {path:'/discounts',name: 'Discounts',component: Discounts},
+        {path:'/record',name: 'Record',component: Record},
+        {path:'/myQudou',name: 'MyQudou',component: MyQudou},
+        {path:'/classify/:catid',name: 'Classify',component: Classify},
+        {path:'/ordercontent/:childorderid/:ischild',name: 'OrderContent',component: OrderContent},
+        {path:'/logistics/:btocorderid',name: 'Logistics',component: Logistics},
+        {path:'/submitorder',name: 'SubmitOrder',component: SubmitOrder},
+        {path:'/pay/:orderid',name: 'Pay',component: Pay},
+        {path:'/paymoney/:way/:orderid',name: 'PayMoney',component: PayMoney},
+        {path:'/succeedpay/:orderid',name: 'SucceedPay',component: SucceedPay},
+        {path:'/travel',name: 'Travel',component: Travel,
+          children:[
+            {path: '/travel/index', name: 'TravelIndex', component:TravelIndex },
+            {path: '/travel/main', name: 'TravelMain', component:TravelMain },
+            {path: '/travel/addtravel', name: 'AddTravel', component:AddTravel },
+            { path: '/travel/publish', name: 'Publish', component: Publish },
+            { path: '/travel/income', name: 'Income', component: Income },
+            { path: '/travel/travelpay/:id', name: 'TravelPay', component: TravelPay },
+            { path: '/travel/history', name: 'History', component: History },
+            { path: '/travel/login', name: 'TravelLogin', component: TravelLogin },
+            { path: '/travel/addcredit', name: 'TravelAddCredit', component: TravelAddCredit },
+            { path: '/travel/settlement', name: 'TravelSettlement', component: TravelSettlement },
+            { path: '/travel/refund', name: 'TravelRefund', component: TravelRefund },
+            { path: '/travel/backmoney', name: 'BackMoney', component: BackMoney },
+            { path: '/travel/refundrecord', name: 'RefundRecord', component: RefundRecord },
+            {path:'/travel',redirect:"/travel/index"},
+            {path:'/travel/*',redirect:"/travel/index"}
+          ]
+        },
+        {path:'/joiestcard',name: 'JoiestCard',component: JoiestCard},
+        {path:'/joiesttong',name: 'JoiestTong',component: JoiestTong},
+        {path:'/recycle',name: 'Recycle',component: Recycle},
+        {path:'/phone',name: 'Phone',component: Phone,
+          children: [
+            {path: '/phone/hf',component: Telephone},
+            // {path: '/phone/ll',component: Flux},
+            // {path: '/phone/inform',component: Inform},
+          ]},
+        {path: '/inform',component: Inform},
+        {path:'/',redirect:"/qustore"},
+        {path:'*',redirect:"/qustore"}
+      ]
+    })

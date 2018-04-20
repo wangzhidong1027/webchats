@@ -1,7 +1,7 @@
 <template>
   <footer class="navtab">
     <router-link to="/travel/index" :class="selectedpage=='商品'? 'isactive' :''"><span class="iconfont icon-zhuye"></span><b>商品</b></router-link>
-    <router-link to="/travel/income" :class="selectedpage=='收款记录'? 'isactive' :''"><span class="iconfont icon-wode"></span><b>收款记录</b></router-link>
+    <router-link to="/travel/main" :class="selectedpage=='我的'? 'isactive' :''"><span class="iconfont icon-wode"></span><b>我的</b></router-link>
   </footer>
 </template>
 <script>
@@ -58,10 +58,10 @@
   }
   .isactive{
     span{
-      color: #ff3737;
+      color: #000;
     }
     b{
-      color: #ff3737;
+      color: #000;
     }
   }
 
