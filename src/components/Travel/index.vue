@@ -37,14 +37,14 @@
           </section>
       </div>
     </div>
-    <!--<travel-tab :selectedpage="'商品'"></travel-tab>-->
+    <travel-tab :selectedpage="'商品'"></travel-tab>
   </div>
 </template>
 
 <script>
   import {Loadmore} from 'mint-ui';
-  import axios from 'axios'
-  import qs from 'qs'
+  import axios from 'axios';
+  import qs from 'qs';
   import {Indicator,Toast ,MessageBox} from 'mint-ui'
   import TravelTab from './TravelTab'
   export default{
@@ -60,7 +60,6 @@
     },
     methods: {
       loadBottom(){
-        console.log(1)
       },
       goaddgoods(){
         if(this.ishave){
@@ -166,7 +165,6 @@
     updated() {
     },
     activated() {
-
     },
     components: {
        'travel-tab':TravelTab

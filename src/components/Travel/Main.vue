@@ -1,11 +1,11 @@
 <template>
   <div class="main">
     <ul>
-      <li><a href="/travel/inmaincome"><span ><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
-      <li><a href="/travel/inmaincome"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a href="#/travel/income"><span ><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a href="#/travel/refund"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
     </ul>
     <div class="out_box">
-      <button>退出登录</button>
+      <button @click="loginout">退出登录</button>
     </div>
     <travel-tab :selectedpage="'我的'"></travel-tab>
   </div>
@@ -13,12 +13,22 @@
 
 <script>
   import TravelTab from './TravelTab'
+  import {MessageBox} from 'mint-ui'
   export default{
     name: 'Main',
     data() {
       return {}
     },
-    methods: {},
+    methods: {
+      loginout(){
+        MessageBox.confirm('确定退出','提示').then(action=>{
+          localStorage.removeItem("tenant");
+          window.location.href='#/travel/login'
+        }, action => {
+          return false
+        })
+      }
+    },
     mounted() {
 
 

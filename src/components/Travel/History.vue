@@ -12,6 +12,8 @@
 </div>
 </template>
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
   export default{
     name: 'History',
     data() {
@@ -19,7 +21,23 @@
     },
     methods: {},
     mounted() {
+      var that =this
+      var token = localStorage.getItem('tenant')
+      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetOrderInfo',qs.stringify({
+        token:token
+      })).then(function(res){
+        var data =JSON.parse(Base64.decode(res.data))
+        console.log(data)
 
+        if(data.code==10000){
+          if(data.data.err==10000){
+            that.data=data.data.data
+            that.getallMoney()
+          }
+        }
+      }).catch(function(err){
+
+      })
 
     },
     updated() {
@@ -55,7 +73,7 @@
        display: flex;
         justify-content: space-around;
       p{
-       
+
         display: flex;
         flex-flow: column;
         text-align: center;
@@ -65,7 +83,7 @@
         }
         span{
           font-size: 0.7rem;
-          color: #999; 
+          color: #999;
         }
       }
     }

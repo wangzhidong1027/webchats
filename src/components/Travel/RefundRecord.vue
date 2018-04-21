@@ -59,17 +59,33 @@
   </div>
 </template>
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
   export default{
     name: 'RefundRecord',
     data() {
       return {
-
+        token:'',
+        data:[]
       }
     },
-    methods: {},
+    methods: {
+      getorderlist(){
+        axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetOrderInfo',qs.stringify({
+          token:this.token
+        })).then(function(data){
+          var res =Base64.decode(data.data)
+          res =JSON.parse(res)
+          console.log(res)
+        }).catch(function(err){
+
+        })
+      }
+    },
     mounted() {
-
-
+      this.token = localStorage.getItem('tenant')
+      console.log(this.token)
+      this.getorderlist()
     },
     updated() {
 

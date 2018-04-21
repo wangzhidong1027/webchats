@@ -2,17 +2,17 @@
 <div class="income">
 <header>
   <div class="contianer">
-    <nav><span></span><span class="checklist">全部收入<b class="iconfont icon-jiantou"></b><ul><li>dasdas</li></ul></span><span>历史收入</span></nav>
-    <h4><b>42052.00</b>元</h4>
+    <nav><span></span><span class="checklist">全部收入<b class="iconfont icon-jiantou"></b><!--<ul><li>dasdas</li></ul>--></span><span>历史收入</span></nav>
+    <h4><b>{{allmoney}}</b>元</h4>
     <p>共计<b>3</b>笔</p>
   </div>
 </header>
 <div class="deal">
   <ul>
-    <li>
-      <div class="title"><p class="number">201585445544</p><p class="time">21:05</p></div>
+    <li v-for="item in data">
+      <div class="title"><p class="number">{{item.orderid}}</p><p class="time">{{item.paytime}}</p></div>
       <div class="dealType">信用卡分期</div>
-      <div class="money">+154542.00</div>
+      <div class="money">+{{item.pmoney}}</div>
     </li>
   </ul>
 </div>
@@ -20,16 +20,41 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
   export default{
     name: 'Income',
     data() {
       return {
-
+        data:[],
+        allmoney:'0.00'
       }
     },
-    methods: {},
+    methods: {
+        getallMoney(){
+          var money =0
+          for(var i=0;i<this.data.length;i++){
+              money+=this.data[i].pmoney*100
+          }
+          this.allmoney=money/100
+        }
+    },
     mounted() {
+      var that =this
+      var token = localStorage.getItem('tenant')
+      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatOrder',qs.stringify({
+        token:token
+      })).then(function(res){
+          var data =JSON.parse(Base64.decode(res.data))
+        if(data.code==10000){
+          if(data.data.err==10000){
+            that.data=data.data.data
+            that.getallMoney()
+          }
+        }
+      }).catch(function(err){
 
+      })
 
     },
     updated() {

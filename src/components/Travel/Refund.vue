@@ -1,8 +1,8 @@
 <template>
   <div class="refund">
     <ul>
-      <li><a href="/travel/inmaincome"><i class="recode"></i><span>申请退款<b class="iconfont icon-jiantou-copy"></b></span></a></li>
-      <li><a href="/travel/inmaincome"><i class="refund"></i><span>退款记录<b class="iconfont icon-jiantou-copy"></b></span></a></li>
+      <li><a href="/travel/backmoney"><i class="recode"></i><span>申请退款<b class="iconfont icon-jiantou-copy"></b></span></a></li>
+      <li><a href="/travel/refundrecord"><i class="refund"></i><span>退款记录<b class="iconfont icon-jiantou-copy"></b></span></a></li>
     </ul>
   </div>
 </template>
