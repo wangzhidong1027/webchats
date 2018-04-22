@@ -89,6 +89,7 @@ import Travel from '@/components/Travel'
 import TravelIndex from '@/components/Travel/index'
 import AddTravel from '@/components/Travel/AddTravel'
 import Publish from '@/components/Travel/Publish'
+import Receivables from '@/components/Travel/Receivables'
 import Income from '@/components/Travel/Income'
 import TravelPay from '@/components/Travel/Pay'
 import History from '@/components/Travel/History'
@@ -99,9 +100,11 @@ import TravelMain from '@/components/Travel/Main'
 import TravelRefund from '@/components/Travel/Refund'
 import BackMoney from '@/components/Travel/BackMoney'
 import RefundRecord from '@/components/Travel/RefundRecord'
+import UserInfo from '@/components/Travel/UserInfo'
+import RefundInfo from '@/components/Travel/RefundInfo'
+import Oneday from '@/components/Travel/Oneday'
 
 Vue.use(Router)
-
 export default new Router({
 //	mode: 'history',
   	routes: [
@@ -156,18 +159,22 @@ export default new Router({
         {path:'/travel',name: 'Travel',component: Travel,
           children:[
             {path: '/travel/index', name: 'TravelIndex', component:TravelIndex },
+            {path: '/travel/receivables/:id', name: 'Receivables', component:Receivables },
             {path: '/travel/main', name: 'TravelMain', component:TravelMain },
             {path: '/travel/addtravel', name: 'AddTravel', component:AddTravel },
             { path: '/travel/publish', name: 'Publish', component: Publish },
             { path: '/travel/income', name: 'Income', component: Income },
-            { path: '/travel/travelpay/:id', name: 'TravelPay', component: TravelPay },
+            { path: '/travel/travelpay/:order', name: 'TravelPay', component: TravelPay },
             { path: '/travel/history', name: 'History', component: History },
             { path: '/travel/login', name: 'TravelLogin', component: TravelLogin },
             { path: '/travel/addcredit', name: 'TravelAddCredit', component: TravelAddCredit },
             { path: '/travel/settlement', name: 'TravelSettlement', component: TravelSettlement },
             { path: '/travel/refund', name: 'TravelRefund', component: TravelRefund },
-            { path: '/travel/backmoney', name: 'BackMoney', component: BackMoney },
+            { path: '/travel/backmoney/:torderid', name: 'BackMoney', component: BackMoney },
             { path: '/travel/refundrecord', name: 'RefundRecord', component: RefundRecord },
+            { path: '/travel/userinfo/:token/:orderid', name: 'UserInfo', component: UserInfo },
+            { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo }, 
+            { path: '/travel/oneday/:data', name: 'Oneday', component: Oneday }, 
             {path:'/travel',redirect:"/travel/index"},
             {path:'/travel/*',redirect:"/travel/index"}
           ]

@@ -1,15 +1,15 @@
 <template>
-<div class="income">
+<div class="oneday">
 <header>
   <div class="contianer">
     <nav><span></span><span class="checklist">全部收入<b class="iconfont icon-jiantou"></b><!--<ul><li>dasdas</li></ul>--></span><span>历史收入</span></nav>
-    <h4><b>{{allmoney}}</b>元</h4>
-    <p>共计<b>{{data.length}}</b>笔</p>
+    <h4><b>{{data.money}}</b>元</h4>
+    <p>共计<b>{{data.order.length}}</b>笔</p>
   </div>
 </header>
 <div class="deal">
   <ul>
-    <li v-for="item in data">
+    <li v-for="item in data.order">
       <div class="title"><p class="number">{{item.orderid}}</p><p class="time">{{item.paytime}}</p></div>
       <div class="dealType">信用卡分期</div>
       <div class="money">+{{item.pmoney}}</div>
@@ -20,37 +20,36 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import qs from 'qs'
+import axios from 'axios'
+import qs from 'qs'
   export default{
-    name: 'Income',
+    name: 'Oneday',
     data() {
       return {
-        data:[],
-        allmoney:'0.00'
+        token:'',
+        data:{},
+        allmoney:''
       }
     },
-    methods: {
-        getallMoney(){
-          var money =0
-          for(var i=0;i<this.data.length;i++){
-              money+=this.data[i].pmoney*100
-          }
-          this.allmoney=money/100
-        }
-    },
+    methods: {},
     mounted() {
       var that =this
-      var token = localStorage.getItem('tenant')
-      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatOrder',qs.stringify({
-        token:token
+      this.token = localStorage.getItem('tenant')
+      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetOrderPass',qs.stringify({
+        token:this.token,
+        data:'2018/04/21'
       })).then(function(res){
-          var data =JSON.parse(Base64.decode(res.data))
-        if(data.code==10000){
-          if(data.data.err==10000){
-            that.data=data.data.data
-            that.getallMoney()
+        var a =JSON.parse(Base64.decode(res.data))
+        console.log(a)
+        
+        if(a.code==10000){
+          if(a.data.err==10000){
+            that.data=a.data.data
+          }else{
+            Toast(a.msg)
           }
+        }else{
+          Toast(a.info)
         }
       }).catch(function(err){
 
@@ -68,7 +67,7 @@
 </script>
 
 <style scoped lang="scss">
-.income{
+.oneday{
   display: flex;
   flex-flow: column;
   header{

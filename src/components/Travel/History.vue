@@ -1,8 +1,10 @@
 <template>
 <div class="history">
   <div class="all">
-     <div class="historylist">
-    <p class="date"><span>3月12日</span><span>></span></p>
+    <div class="historylist">
+    <a href="#/travel/onday/data">
+      <p class="date"><span>3月12日</span><span>></span></p>
+    </a>
     <div class="allnumber">
       <p><b>4</b><span>笔数</span></p>
       <p><b>4250.00</b><span>金额（元）</span></p>
@@ -27,8 +29,6 @@
         token:token
       })).then(function(res){
         var data =JSON.parse(Base64.decode(res.data))
-        console.log(data)
-
         if(data.code==10000){
           if(data.data.err==10000){
             that.data=data.data.data

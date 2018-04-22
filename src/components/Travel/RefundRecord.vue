@@ -1,34 +1,37 @@
 <template>
   <div class="refund_record">
       <ul>
-        <li>
-          <div class="orderid"><span>退款单号：<b>154545451154</b></span> <div class="btn"><button>取消退款</button><a href="">修改</a></div></div>
+        <li v-for="item,index in data">
+          <div class="orderid"><span>退款单号：<b>{{item.tdorderid}}</b></span> <div class="btn"><button  v-if="item.tstatus==0" @click="quxiao(item.tdorderid,index)">取消退款</button><a v-if="item.tstatus==2" :href='"#/travel/backmoney/" + item.orderid '>修改</a></div></div>
           <div class="order_contaner">
             <div class="order_img">
-              <img src="../../assets/images/travelTest/goods.jpg" alt="">
+              <img :src="item.pdpicture" alt="">
             </div>
             <div class="order_text">
-                <p>后来看客户客户</p>
+                <p>{{item.pname}}</p>
                 <div class="order_msg">
-                    大师傅沙发的萨达烦死哒尴尬死的刚度
+                    {{item.pintro}}
                 </div>
                 <div class="order_money">
-                    ￥<b>5000.</b>00
+                    ￥<b>{{item.pmoney}}</b>00
                 </div>
             </div>
           </div>
+          <a :href='"#/travel/refundinfo/"+item.orderid'>
           <div class="refund_status">
             <div class="status_img">
-              <img src="../../assets/images/travel/ok.png" alt="">
-              <i>申请中</i>
+              <img src="../../assets/images/travel/repulse.png" alt="" v-if="item.tstatus==2">
+              <img v-else src="../../assets/images/travel/ok.png" alt="">
+              <i>{{item.tstatus_cn}}</i>
             </div>
             <div class="status_text">
-              放假惊世毒妃订单
+              您的退款订单{{item.orderid}}{{item.tstatus_cn}}
             </div>
             <i class="iconfont icon-jiantou-copy"></i>
           </div>
+          </a>
         </li>
-        <li>
+        <!-- <li>
           <div class="orderid"><span>退款单号：<b>154545451154</b></span> <div class="btn"><button>取消退款</button><a href="">修改</a></div></div>
           <div class="order_contaner">
             <div class="order_img">
@@ -54,13 +57,14 @@
             </div>
             <i class="iconfont icon-jiantou-copy"></i>
           </div>
-        </li>
+        </li> -->
       </ul>
   </div>
 </template>
 <script>
   import axios from 'axios'
   import qs from 'qs'
+  import {Toast,MessageBox} from 'mint-ui'
   export default{
     name: 'RefundRecord',
     data() {
@@ -71,20 +75,57 @@
     },
     methods: {
       getorderlist(){
-        axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetOrderInfo',qs.stringify({
+        var that =this
+        axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatRefundOrders',qs.stringify({
           token:this.token
         })).then(function(data){
           var res =Base64.decode(data.data)
           res =JSON.parse(res)
-          console.log(res)
+          if(res.code==10000){
+            if(res.data.err=10000){
+              that.data=res.data.data
+            }else{
+              Toast(res.data.msg)
+            }
+          }else{
+            Toast(res.info)
+          }
         }).catch(function(err){
 
         })
-      }
+      },
+     quxiao(torderid,index){
+       var that =this
+       MessageBox.confirm('确定取消退款？','提示').then(action=>{
+          axios.post(BASE_URL+'/index.php?r=YinjiaStage/CancelRefund',qs.stringify({
+            token:this.token,
+            tdorderid:torderid
+          })).then(function(data){
+            var res =Base64.decode(data.data)
+            res =JSON.parse(res)
+            console.log(res)
+            if(res.code==10000){
+              that.data.splice(index,1)
+              Toast('删除成功')
+            }else{
+              Toast(res.info)
+            }
+          }).catch(function(err){
+
+          })
+        }, action => {
+          return false
+        })
+       
+     }
+
+
+
+
+
     },
     mounted() {
       this.token = localStorage.getItem('tenant')
-      console.log(this.token)
       this.getorderlist()
     },
     updated() {

@@ -12,7 +12,7 @@
     <div class="creditcard" v-for="type in paytypelist">
       <div class="name" @click="changetype(type.catid)"><span><img src="../../assets/images/travel/信用卡.png" alt="">{{type.cat}}</span><b :class="selectType==type.catid?'selsect':''"></b></div>
        <div class="numlist" v-show="selectType==type.catid" >
-          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid)"  :class="selectPeriods== item.catid ? 'periods':''">
+          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat)"  :class="selectPeriods== item.catid ? 'periods':''">
             <p>{{money}}元x{{item.cat}}</p>
             <p>含服务费***元/期</p>
           </div>
@@ -49,12 +49,14 @@
       <!--<div class="name"><span><img src="../../assets/images/travel/微信支付.png" alt="">微信支付</span><b></b></div>-->
     <!--</div>-->
   </div>
+  <button class="gopay" @click="gopay">确定付款</button>
 </div>
 </template>
 
 <script>
   import axios from 'axios'
   import qs from 'qs'
+  import {Toast,Indicator} from 'mint-ui'
   export default{
     name: 'Pay',
     data() {
@@ -63,8 +65,10 @@
         id:'',
         paytypelist:'',
         money:'',
-        selectType:'',//支付方式
-        selectPeriods:''//支付期数
+        selectType:'',  
+        paytype:'',
+        selectPeriods:'',//支付期数
+        paytitle:''
       }
     },
     methods: {
@@ -75,14 +79,50 @@
           this.selectType=id
         }
       },
-      changePeriods(catid){
+      changePeriods(catid,type,cat){
         this.selectPeriods=catid
+        this.paytype=type
+        this.paytitle=cat
+
+      },
+      gopay(){
+        if(!this.selectPeriods){
+          Toast('请选择支付方式')
+          return 
+        }
+        Indicator.open()
+        var that =this
+        axios.post(BASE_URL+'/index.php?r=YinjiaStage/WayAllPay',qs.stringify({
+          token:this.token,
+          productId:this.id,
+          money:this.money,
+          payWay:this.paytype,
+          stageWay:this.selectPeriods,
+          stageTitle:this.paytitle,
+          stageContent:this.paytitle
+        })).then(function(res){
+          var data = JSON.parse(Base64.decode(res.data))
+          Indicator.close()
+          if(data.code==10000){
+            if(data.data.err=10000){
+               window.location.href='#/travel/userinfo/'+that.token+'/'+data.data.data.orderid
+            }else{
+              Toast(data.data.msg)
+            }
+          }else{
+            Toast(data.info)
+          }
+          
+        }).catch(function(err){
+
+        })
       }
     },
     mounted() {
-      var token = localStorage.getItem('tenant')
+      // var token = localStorage.getItem('tenant')
       var paylist =this.$route.params.order
       this.order=paylist.split('&')
+      this.token=this.order[0].toString().split('=')[1].replace('@','/')
       var goodid=this.order[1].toString().split('=')
       var ordermoney=this.order[2].toString().split('=')
       this.money=ordermoney[1]
@@ -93,7 +133,7 @@
       // this.money=ordermoney[1]
       var that =this
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchatPay',qs.stringify({
-        token:token,
+        token: this.token,
         productId: this.id
       })).then(function (res) {
           var a=JSON.parse(Base64.decode(res.data))
@@ -154,6 +194,7 @@
   }
   .typelist{
     padding: 0 0.75rem;
+    padding-bottom:2.25rem;
     .creditcard{
       box-shadow:0px 0px 30px rgba(0,0,0,0.1);
       margin-bottom:0.75rem;
@@ -218,6 +259,17 @@
         }
     }
   }
+  .gopay{
+    height:2.25rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border: none;
+    background: #ff3737;
+    color: #fff;
+    font-size: 0.8rem;
+    width: 100%
+   }
 }
 
 </style>

@@ -101,6 +101,9 @@
       document.title = '分期业务'
       var that =this
       this.token = localStorage.getItem('tenant')
+      if(!this.token){
+           window.location.href='#/travel/login'
+      }
       //验证商户有无对公账户
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({
         token:this.token,
