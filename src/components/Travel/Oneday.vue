@@ -2,9 +2,9 @@
 <div class="oneday">
 <header>
   <div class="contianer">
-    <nav><span></span><span class="checklist">全部收入<b class="iconfont icon-jiantou"></b><!--<ul><li>dasdas</li></ul>--></span><span>历史收入</span></nav>
+    <nav><span>{{day}}</span><span class="checklist">全部收入<!--<b class="iconfont icon-jiantou"></b><ul><li>dasdas</li></ul>--></span><span></span></nav>
     <h4><b>{{data.money}}</b>元</h4>
-    <p>共计<b>{{data.order.length}}</b>笔</p>
+    <p>共计<b>{{allnum}}</b>笔</p>
   </div>
 </header>
 <div class="deal">
@@ -27,24 +27,27 @@ import qs from 'qs'
     data() {
       return {
         token:'',
-        data:{},
-        allmoney:''
+        data:[],
+        allmoney:'',
+        allnum:0,
+        day:''
+
       }
     },
     methods: {},
     mounted() {
       var that =this
+      this.day=this.$route.params.date
       this.token = localStorage.getItem('tenant')
       axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetOrderPass',qs.stringify({
         token:this.token,
-        data:'2018/04/21'
+        paytime:this.day
       })).then(function(res){
         var a =JSON.parse(Base64.decode(res.data))
-        console.log(a)
-        
         if(a.code==10000){
           if(a.data.err==10000){
             that.data=a.data.data
+            that.allnum=a.data.data.order.length
           }else{
             Toast(a.msg)
           }

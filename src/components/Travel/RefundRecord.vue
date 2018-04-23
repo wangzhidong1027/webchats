@@ -2,7 +2,7 @@
   <div class="refund_record">
       <ul>
         <li v-for="item,index in data">
-          <div class="orderid"><span>退款单号：<b>{{item.tdorderid}}</b></span> <div class="btn"><button  v-if="item.tstatus==0" @click="quxiao(item.tdorderid,index)">取消退款</button><a v-if="item.tstatus==2" :href='"#/travel/backmoney/" + item.orderid '>修改</a></div></div>
+          <div class="orderid"><span>退款单号：<b>{{item.tdorderid}}</b></span> <div class="btn"><button  v-if="item.tstatus==2||item.tstatus==4" @click="quxiao(item.tdorderid,index)">取消退款</button><a v-if="item.tstatus==6" :href='"#/travel/backmoney/" + item.orderid '>修改</a></div></div>
           <div class="order_contaner">
             <div class="order_img">
               <img :src="item.pdpicture" alt="">
@@ -13,14 +13,14 @@
                     {{item.pintro}}
                 </div>
                 <div class="order_money">
-                    ￥<b>{{item.pmoney}}</b>00
+                    ￥<b>{{item.tdorderprice}}</b>
                 </div>
             </div>
           </div>
           <a :href='"#/travel/refundinfo/"+item.orderid'>
           <div class="refund_status">
             <div class="status_img">
-              <img src="../../assets/images/travel/repulse.png" alt="" v-if="item.tstatus==2">
+              <img src="../../assets/images/travel/repulse.png" alt="" v-if="item.tstatus==6">
               <img v-else src="../../assets/images/travel/ok.png" alt="">
               <i>{{item.tstatus_cn}}</i>
             </div>
@@ -116,13 +116,8 @@
         }, action => {
           return false
         })
-       
+
      }
-
-
-
-
-
     },
     mounted() {
       this.token = localStorage.getItem('tenant')
@@ -227,7 +222,7 @@
         display: flex;
         justify-content: space-between;
         background: #f9f9f9;
-        font-size: 0.4rem;
+        font-size: 0.5rem;
         color: #333;
         padding:0 0.75rem;
         height: 2.25rem;

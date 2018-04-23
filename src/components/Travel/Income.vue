@@ -2,7 +2,8 @@
 <div class="income">
 <header>
   <div class="contianer">
-    <nav><span></span><span class="checklist">全部收入<b class="iconfont icon-jiantou"></b><!--<ul><li>dasdas</li></ul>--></span><span>历史收入</span></nav>
+    <nav><span></span><span class="checklist">全部收入<!--<b class="iconfont icon-jiantou"></b><ul><li>dasdas</li></ul>--></span><span><a
+      href="#/travel/history">历史收入</a></span></nav>
     <h4><b>{{allmoney}}</b>元</h4>
     <p>共计<b>{{data.length}}</b>笔</p>
   </div>
@@ -12,7 +13,7 @@
     <li v-for="item in data">
       <div class="title"><p class="number">{{item.orderid}}</p><p class="time">{{item.paytime}}</p></div>
       <div class="dealType">信用卡分期</div>
-      <div class="money">+{{item.pmoney}}</div>
+      <div class="money">+{{item.orderselprice}}</div>
     </li>
   </ul>
 </div>
@@ -34,9 +35,10 @@
         getallMoney(){
           var money =0
           for(var i=0;i<this.data.length;i++){
-              money+=this.data[i].pmoney*100
+              money+=this.data[i].orderselprice*100
           }
-          this.allmoney=money/100
+          money=money/100
+          this.allmoney= money
         }
     },
     mounted() {

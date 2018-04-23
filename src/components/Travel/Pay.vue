@@ -12,7 +12,7 @@
     <div class="creditcard" v-for="type in paytypelist">
       <div class="name" @click="changetype(type.catid)"><span><img src="../../assets/images/travel/信用卡.png" alt="">{{type.cat}}</span><b :class="selectType==type.catid?'selsect':''"></b></div>
        <div class="numlist" v-show="selectType==type.catid" >
-          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat)"  :class="selectPeriods== item.catid ? 'periods':''">
+          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat,type.cat)"  :class="selectPeriods== item.catid ? 'periods':''">
             <p>{{money}}元x{{item.cat}}</p>
             <p>含服务费***元/期</p>
           </div>
@@ -65,10 +65,11 @@
         id:'',
         paytypelist:'',
         money:'',
-        selectType:'',  
+        selectType:'',
         paytype:'',
         selectPeriods:'',//支付期数
-        paytitle:''
+        paytitle:'',
+        payContent:""
       }
     },
     methods: {
@@ -79,16 +80,16 @@
           this.selectType=id
         }
       },
-      changePeriods(catid,type,cat){
+      changePeriods(catid,type,cat,typecat){
         this.selectPeriods=catid
         this.paytype=type
-        this.paytitle=cat
-
+        this.paytitle=typecat
+        this.payContent=cat
       },
       gopay(){
         if(!this.selectPeriods){
           Toast('请选择支付方式')
-          return 
+          return
         }
         Indicator.open()
         var that =this
@@ -99,7 +100,7 @@
           payWay:this.paytype,
           stageWay:this.selectPeriods,
           stageTitle:this.paytitle,
-          stageContent:this.paytitle
+          stageContent:this.payContent
         })).then(function(res){
           var data = JSON.parse(Base64.decode(res.data))
           Indicator.close()
@@ -112,7 +113,7 @@
           }else{
             Toast(data.info)
           }
-          
+
         }).catch(function(err){
 
         })

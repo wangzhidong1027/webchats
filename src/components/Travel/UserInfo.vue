@@ -1,12 +1,12 @@
 <template>
   <div class="addcredit">
     <div class="creditcard">
-      <p><span>姓名：</span><input type="text" placeholder="请输入姓名" v-model="name" ></p>
-      <p><span>身份证号码：</span><input type="tel" placeholder="请输入身份证号码" v-model="idcard" ></p>
-      <p><span>信用卡卡号：</span><input type="tel" placeholder="请输入信用卡卡号" v-model="bank" @blur="changeCount"></p>
-      <p><span>预留手机号：</span><input type="tel" placeholder="请输入预留手机号" v-model="mobile"></p>
-      <p><span>有效期：</span><i class="data" v-text="date" @click="selectDate" ></i></p>
-      <p><span>CVV2码：</span><input type="tel" placeholder="CVV2码" v-model="cvv"><b @click="explain">说明</b></p>
+      <p><span><i>*</i>姓名：</span><input type="text" placeholder="请输入姓名" v-model="name" ></p>
+      <p><span><i>*</i>身份证号码：</span><input type="text" placeholder="请输入身份证号码" v-model="idcard" ></p>
+      <p><span><i>*</i>信用卡卡号：</span><input type="tel" placeholder="请输入信用卡卡号" v-model="bank" @blur="changeCount"></p>
+      <p><span><i>*</i>预留手机号：</span><input type="tel" placeholder="请输入预留手机号" v-model="mobile"></p>
+      <p><span><i>*</i>有效期：</span><i class="data" v-text="date" @click="selectDate" ></i></p>
+      <p><span><i>*</i>CVV2码：</span><input type="tel" placeholder="CVV2码" v-model="cvv"><b @click="explain">说明</b></p>
     </div>
     <div class="btn">
       <p  @click="gopay">提交</p>
@@ -111,28 +111,39 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
           });
       },
       gopay(){
-         if(!(/^([\u4e00-\u9fa5]){2,7}$/).test(this.name)){
-          Toast('请填写姓名')
+        if(!this.name){
+          Toast('请输入姓名')
           return
         }
-        if(!(/^[0-9]*$/.test(this.idcard))){
+
+         if(!(/^([\u4e00-\u9fa5]){2,7}$/).test(this.name)){
+          Toast('姓名格式有误')
+          return
+        }
+        if(!this.idcard){
+          Toast('请填写身份证号码')
+          return
+        }
+        // if(!(/^[0-9]*$/.test(this.idcard))){
+        if(!(/(^\d{15}$)|(^\d{17}([0-9]|X|x)$)/.test(this.idcard))){
           Toast('请输入正确的身份证号')
+          return
+        }
+        if(!this.bank){
+          Toast('请填写银行卡号')
+          this.bank = ""
           return
         }
          if(!(/^[0-9]*$/.test(this.bank))){
           Toast('请填写正确银行卡号')
           return
         }
-         if(!this.idcard){
-          Toast('请填写身份证号码')
+        if(!this.mobile){
+          Toast('请填写手机号码')
+          this.mobile = ""
           return
         }
-        if(!this.bank){
-          Toast('请填写正确银行卡号')
-          this.bank = ""
-          return
-        }
-        if((!(/(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/.test(this.mobile)))&&(this.mobile=='')){
+        if(!(/^[1][3,4,5,7,8][0-9]{9}$/.test(this.mobile))){
           Toast('请填写正确手机号码')
           this.mobile = ""
           return
@@ -142,11 +153,16 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
           this.date = ""
           return
         }
-        if((!(/^\d{3}$/.test(this.cvv)))&&(this.cvv=='')){
+        if(!this.cvv){
+          Toast('请填写cvv2码')
+          return
+        }
+        if(!(/^\d{3}$/.test(this.cvv))){
           Toast('请填写正确cvv2码')
           this.cvv = ""
           return
         }
+
         var that =this
         Indicator.open()
         axios.post(BASE_URL+'/index.php?r=YinjiaStage/UserInfo',qs.stringify({
@@ -201,6 +217,7 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid #eee;
+
         input{
           flex: 1;
           border: none;
@@ -210,6 +227,9 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
         span{
           font-size: 0.7rem;
           line-height: 2.45rem;
+          i{
+            color: #ff3737;
+          }
         }
         b{
           font-size: 0.7rem;

@@ -22,7 +22,7 @@
       </div>
       <div class="cause_box">
         <p><i>*</i>退款原因</p>
-        <textarea v-model="content" name="" id="" cols="30" rows="10"></textarea>
+        <textarea v-model="content"  placeholder="请填写退款原因 200字以内"></textarea>
       </div>
       <div class="money"><i>*</i>退款金额 <span>￥{{money}}</span></div>
       <div class="img">
@@ -35,7 +35,7 @@
               <input type="file" class="input_img" :id="'input_img' + index" ref="input_img" accept="image/*" @change="ImgBase64($event,index)">
              </li>
               <li v-if="urla.length!=6" @click="clickDom('')"> <div class="upimg" >
-                <input type="file" class="input_img" id="input_img" accept="image/*" @change="ImgBase64($event,'')">
+                <input type="file" class="input_img" id="input_img" accept="image/*" @change="ImgBase64($event,'-1')">
               </div></li>
           </ul>
       </div>
@@ -86,18 +86,30 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
                 if(a.data.data.singlestatus!=4){
                   that.ordergoods=a.data.data
                   that.money=that.ordergoods.orderselprice
-                  if(a.data.data.singlestatus==3){
-                      that.issecond=true
-                      that.getrefundorder()
+                  if(a.data.data.singlestatus!=3){
+                    if(a.data.data.singlestatus!=2) {
+                      if (a.data.data.singlestatus == 6) {
+                        that.issecond = true
+                        that.getrefundorder()
+                      }
+                    }else{
+                      that.orderid=''
+                      MessageBox.alert('该订单已提交申请','提示')
+                    }
+                  }else{
+                    that.orderid=''
+                    MessageBox.alert('该订单已取消，无法再次申请','提示')
                   }
                 }else{
                   that.orderid=''
-                  MessageBox.alert('该订单正在退款处理中','提示')
+                  MessageBox.alert('该订单正在审核中','提示')
                 }
               }else{
                 that.orderid=''
                 MessageBox.alert('该订单已退款成功','提示')
               }
+            }else{
+              MessageBox.alert(a.info,'提示')
             }
         }).catch(function(err){
 
@@ -125,7 +137,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
                 that.orderid=''
               }
         }).catch(function (err) {
-          
+
         })
       },
       delimg(index){
@@ -172,21 +184,21 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
             canvas.height = expectHeight;
             ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
             var base64 = null;
-            // 修复ios上传图片的时候 被旋转的问题
-            if (Orientation != "" && Orientation != 1) {
-              switch (Orientation) {
-                case 6://需要顺时针（向左）90度旋转
-                  _this.rotateImg(this, 'left', canvas);
-                  break;
-                case 8://需要逆时针（向右）90度旋转
-                  _this.rotateImg(this, 'right', canvas);
-                  break;
-                case 3://需要180度旋转
-                  _this.rotateImg(this, 'right', canvas);//转两次
-                  _this.rotateImg(this, 'right', canvas);
-                  break;
-              }
-            }
+            // // 修复ios上传图片的时候 被旋转的问题
+            // if (Orientation != "" && Orientation != 1) {
+            //   switch (Orientation) {
+            //     case 6://需要顺时针（向左）90度旋转
+            //       _this.rotateImg(this, 'left', canvas);
+            //       break;
+            //     case 8://需要逆时针（向右）90度旋转
+            //       _this.rotateImg(this, 'right', canvas);
+            //       break;
+            //     case 3://需要180度旋转
+            //       _this.rotateImg(this, 'right', canvas);//转两次
+            //       _this.rotateImg(this, 'right', canvas);
+            //       break;
+            //   }
+            // }
             base64 = canvas.toDataURL("image/jpeg", 1);
             if(!base64){
               Toast('上传失败，请重新选择图片，或者更换图片')
@@ -202,7 +214,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
         var that =this
         axios.post(BASE_URL + '/index.php?r=Common/UploadImg', qs.stringify({
           token: '6fHdQpdyvCQGgokuQQ',
-          cardImg: base64
+          fileImg: base64
         })).then(function (res) {
           Indicator.close()
           var a = Base64.decode(res.data)
@@ -210,7 +222,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
           if(a.code==10000){
             if(a.data.err==10000){
               if(index>=0){
-                 that.urla[index]=a.data.data.imgUrl
+                that.$set(that.urla,[index],a.data.data.imgUrl)
               }else{
                 that.urla.push(a.data.data.imgUrl)
               }
@@ -226,14 +238,32 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
       },
       needback(){
         var that=this
+        if(this.urla.length<1){
+          MessageBox.alert('请上传凭证','提示')
+          return
+        }
+        if(!this.content){
+          MessageBox.alert('请输入退款原因','提示')
+          return
+        }
+        if(this.content.length>200){
+          MessageBox.alert('退款原因不能超过200字符','提示')
+          return
+        }
         if(!(/^[0-9]*$/.test(this.orderid))){
           MessageBox.alert('请输入正确的订单号','提示')
           return
         }
-        if(!this.content.length>200){
-           MessageBox.alert('请输入正确的订单号','提示')
+        if(!this.orderid){
+          MessageBox.alert('请输入订单号','提示')
           return
         }
+        if(!this.money||this.money<=0){
+          MessageBox.alert('请输入正确的订单号','提示')
+          return
+        }
+        console.log(this.money+'______'+this.orderid)
+        Indicator.open()
         if(this.issecond){
           //二次申请退款
           axios.post(BASE_URL+'/index.php?r=YinjiaStage/OrderRefundSecond',qs.stringify({
@@ -243,6 +273,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
             urla:JSON.stringify(this.urla),
             content:this.content
           })).then(function(res){
+            Indicator.close()
               var a =JSON.parse(Base64.decode(res.data))
               if(a.code==10000){
                 that.isok=true
@@ -250,7 +281,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
                   window.location.href='#/travel/refundrecord'
                 }, 3000);
               }else{
-                MessageBox.alert(a.info,'提示')
+                MessageBox.alert( a.info,'提示')
               }
           }).catch(function(err){
 
@@ -264,6 +295,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
             content:this.content
           })).then(function(res){
               var a =JSON.parse(Base64.decode(res.data))
+            Indicator.close()
               if(a.code==10000){
                 that.isok=true
                 setTimeout(function(){
@@ -276,7 +308,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
 
           })
         }
-       
+
       },
        tow(){
 
@@ -384,7 +416,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
         textarea{
           border: none;
           width: 100%;
-          height: 5.5rem;
+         min-height: 5.5rem;
           border: none;
           background: #f1f5f9;
           font-size: 0.7rem;
@@ -406,9 +438,10 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
           color: #ff3f3f;
         }
       }
-     
+
       .img{
         padding-top: 1rem;
+        overflow: hidden;
         p{
           font-size: 0.7rem;
           line-height: 2.25rem;
@@ -447,7 +480,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
                 text-align: center;
                 line-height: 1rem;
               }
-             
+
             }
             img{
               width: 100%;

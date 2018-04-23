@@ -103,7 +103,9 @@
       this.token = localStorage.getItem('tenant')
       if(!this.token){
            window.location.href='#/travel/login'
-      }
+      }else{
+
+
       //验证商户有无对公账户
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({
         token:this.token,
@@ -163,7 +165,7 @@
       }).catch(function(err){
 
       })
-
+    }
     },
     updated() {
     },
@@ -258,6 +260,7 @@
       /*height: 2.5rem;*/
       /*width: 100%;*/
     /*}*/
+
     section{
       display: flex;
       background: #f1f1f2;

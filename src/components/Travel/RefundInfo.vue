@@ -14,22 +14,22 @@
         {{order.pintro}}
       </div>
       <div class="order_money">
-        ￥<b>{{order.pmoney}}</b>
+        ￥<b>{{order.tdorderprice}}</b>
       </div>
     </div>
   </div>
   <div class="plan">
     <p>退款进度</p>
     <div class="pian_line">
-        <img v-if='order.singlestatus==5' src="../../assets/images/travel/images/plan5.jpg" alt="">
-        <img v-else :src='"../../assets/images/travel/images/plan"+ order.tstatus +".jpg"' alt=""/>
+        <!--<img v-if='order.singlestatus==6' src="../../assets/images/travel/images/plan5.jpg" alt="">-->
+        <img  :src='"../../assets/images/travel/images/plan"+ order.tstatus +".jpg"' alt=""/>
     </div>
   </div>
   <div class="cause_box">
     <p>退款原因</p>
      <div class="cause_text">{{order.content}}</div>
   </div>
-  <div class="money">退款金额 <span>￥{{order.pmoney}}</span></div>
+  <div class="money">退款金额 <span>￥{{order.tdorderprice}}</span></div>
   <div class="img">
     <p>退款凭证</p>
     <ul class="clear">
@@ -48,8 +48,8 @@
   <div class="oldrecode" v-if="oldinfo" >
     <p class="title">审核未通过记录</p>
     <div class="text" v-for="item in oldinfo">
-      <p><span>审核时间：</span><b>{{item.date}}</b></p>
-      <p><span>处理结果:</span><b>{{item.content}}</b></p>
+      <p><span>申请时间：</span><b>{{order.addtime}}</b></p>
+      <p><span>处理结果：</span><b>{{item.content}}</b></p>
       <p><span>处理时间：</span><b>{{item.date}}</b></p>
     </div>
   </div>
@@ -92,14 +92,14 @@ import {Toast,MessageBox,Indicator} from 'mint-ui'
               Toast(a.msg)
             }
           }else{
-            Toast(a.info) 
+            Toast(a.info)
           }
        }).catch(function(err){
 
        })
     },
     updated() {
-        
+
     },
     activated() {
 
@@ -136,7 +136,7 @@ import {Toast,MessageBox,Indicator} from 'mint-ui'
             font-size: 0.6rem;
           }
         }
-      
+
       }
      .order_contaner{
       display: flex;
@@ -238,6 +238,7 @@ import {Toast,MessageBox,Indicator} from 'mint-ui'
         margin-top: 0.75rem;
         background: #fff;
         padding: 0 0.75rem;
+        overflow: hidden;
         p{
           font-weight: bold;
           font-size: 0.7rem;

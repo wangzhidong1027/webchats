@@ -173,8 +173,8 @@ export default new Router({
             { path: '/travel/backmoney/:torderid', name: 'BackMoney', component: BackMoney },
             { path: '/travel/refundrecord', name: 'RefundRecord', component: RefundRecord },
             { path: '/travel/userinfo/:token/:orderid', name: 'UserInfo', component: UserInfo },
-            { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo }, 
-            { path: '/travel/oneday/:data', name: 'Oneday', component: Oneday }, 
+            { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo },
+            { path: '/travel/oneday/:date', name: 'Oneday', component: Oneday },
             {path:'/travel',redirect:"/travel/index"},
             {path:'/travel/*',redirect:"/travel/index"}
           ]
