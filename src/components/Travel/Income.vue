@@ -12,7 +12,7 @@
   <ul>
     <li v-for="item in data">
       <div class="title"><p class="number">{{item.orderid}}</p><p class="time">{{item.paytime}}</p></div>
-      <div class="dealType">信用卡分期</div>
+      <div class="dealType">微信全额支付</div>
       <div class="money">+{{item.orderselprice}}</div>
     </li>
   </ul>
@@ -42,6 +42,7 @@
         }
     },
     mounted() {
+      document.title='退单详情'
       var that =this
       var token = localStorage.getItem('tenant')
       axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatOrder',qs.stringify({
@@ -149,6 +150,9 @@
         }
         .dealType{
           color: #999;
+          display: flex;
+          flex: 1;
+          margin-left: 1.5rem;
         }
         .money{
           color: #333333;

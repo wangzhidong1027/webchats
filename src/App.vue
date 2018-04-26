@@ -125,7 +125,7 @@ body,html{
 	}
 }
 .mint-msgbox{
-	border-radius: 0.2rem;
+	border-radius: 12px;
 	z-index: 9999;
 }
 .mint-msgbox-btn.mint-msgbox-confirm.gocard{

@@ -9,7 +9,7 @@
               <div class="merchant-data">
                   <div class="merchant-text">
                     <p class="name"><b v-text="my.companyname"></b></p>
-                    <p class="address" v-text="my.companyname"></p>
+                    <p class="address" >{{my.province_cn}}{{my.city_cn}}</p>
                   </div>
                   <div class="issue"><button> <a @click="goaddgoods">发布商品</a></button></div>
               </div>
@@ -29,7 +29,8 @@
                       </div>
                     </div>
                     <div class='gopay'>
-                        <a :href=' "#/travel/receivables/"+goods.pid '>去收款</a><button @click="deleteGoods(goods.pid,index)"></button>
+                        <a href='javascript:;' class="cardpay" @click="back">分期收款</a><!--"#/travel/receivables/"+goods.pid +"/card "-->
+                        <a :href=' "#/travel/receivables/"+goods.pid+"/wx" '>微信收款</a><button @click="deleteGoods(goods.pid,index)"></button>
                     </div>
                   </li>
                 </ul>
@@ -59,6 +60,9 @@
       }
     },
     methods: {
+      back(){
+        MessageBox.alert('正在开发中，请您耐心等待')
+      },
       loadBottom(){
       },
       goaddgoods(){
@@ -95,6 +99,28 @@
 
           })
         })
+      },
+      getgoods(){
+        var that =this
+        axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchGoods',qs.stringify({
+          token:this.token
+        })).then(function(res){
+          var a = JSON.parse(Base64.decode(res.data))
+          if(a.code==10000){
+            if(a.data.err==10000){
+              that.tenant = a.data.data
+              if(!that.tenant.length){
+                Toast('暂无发布商品')
+              }
+            }else{
+              Toast('商品列表获取失败，请刷新页面')
+            }
+          }else{
+            Toast('商品列表获取失败')
+          }
+        }).catch(function(err){
+
+        })
       }
     },
     mounted() {
@@ -104,8 +130,6 @@
       if(!this.token){
            window.location.href='#/travel/login'
       }else{
-
-
       //验证商户有无对公账户
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({
         token:this.token,
@@ -135,36 +159,18 @@
             that.my = a.data.data
             if(a.data.data.attestation==1){
               that.issure=true
+              that.getgoods()
             }
           }else{
             Toast('商户信息获取失败，请刷新页面')
           }
         }else{
-          Toast('商户信息获取失败，请刷新页面')
+          Toast('商户信息获取失败')
         }
       }).catch(function(err){
 
       })
-      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchGoods',qs.stringify({
-          token:this.token
-      })).then(function(res){
-        var a = JSON.parse(Base64.decode(res.data))
-        if(a.code==10000){
-          if(a.data.err==10000){
-            that.tenant = a.data.data
-            if(!that.tenant.length){
-              Toast('暂无发布商品')
-            }
 
-          }else{
-            Toast('商品列表获取失败，请刷新页面')
-          }
-        }else{
-          Toast('商品列表获取失败，请刷新页面')
-        }
-      }).catch(function(err){
-
-      })
     }
     },
     updated() {
@@ -331,12 +337,15 @@
                font-weight: bold;
                padding:0 1rem;
                font-size: 0.65rem;
+               margin-right: 0.5rem;
+             }
+             .cardpay{
+               background:#c4b1b1;
              }
              button{
                width: 1.5rem;
                height: 1.5rem;
                border: 1px solid #cacaca;
-               margin-left: 0.5rem;
                background: url(../../assets/images/travel/lese.png) no-repeat center;
                background-size: 70%;
              }

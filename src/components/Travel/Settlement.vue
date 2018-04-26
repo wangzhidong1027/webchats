@@ -80,9 +80,9 @@ export default{
 			this.tf=!this.tf
       // this.wnums=this.wnum.replace(/^(\w{4})\w{6}(.*)$/, '$1****$2')
 		},
-
 	},
   mounted(){
+    document.title='收款账户'
     var that =this
     this.token=localStorage.getItem('tenant')
     axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({

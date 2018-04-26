@@ -70,12 +70,11 @@ import qs from 'qs'
     },
     methods: {
       isnumber(){
-        if(this.pmoney[0]=="."){
-          this.pmoney='0'+this.pmoney[0]
+        if(this.pmoney[0]==".") {
+          this.pmoney = '0.'
         }
-        if(!(/^[0-9]+(.[0-9]{0,2})?$/g).test(this.pmoney)){
-          this.pmoney =''
-          Toast('请输入正确的价格')
+        if (!(/\d+(?:\.\d{0,4})?$/.test(this.pmoney))) {
+          this.pmoney=this.pmoney.substr(0,this.pmoney.length-1)
         }
         if(this.pmoney.indexOf(".")!=-1){
           var str_=this.pmoney.substr(this.pmoney.indexOf(".")+1);
@@ -87,6 +86,10 @@ import qs from 'qs'
               this.pmoney=this.pmoney.substr(0,this.pmoney.indexOf(".")+3)
             }
           }
+        }
+        if(this.pmoney>10000){
+          MessageBox.alert('金额不能超过一万')
+          this.pmoney=''
         }
       },
       getimg(){
@@ -183,10 +186,14 @@ import qs from 'qs'
           Toast('请输入商品金额')
           return
         }
-        if(this.pmoney-50000<0){
+        if (!(/\d+(?:\.\d{0,4})?$/.test(this.pmoney))) {
+          Toast('请输入正确金额')
+          return
+        }
+        if(this.pmoney-10000<0){
 
         }else{
-          Toast('金额最高为50000元')
+          Toast('金额最高为10000元')
           return
         }
         if(!(/^[0-9]+(\.[0-9]{0,2})?$/g).test(this.pmoney)){
@@ -228,6 +235,7 @@ import qs from 'qs'
     },
     mounted() {
       this.token = localStorage.getItem('tenant')
+      document.title='商品发布'
     },
     updated() {
 

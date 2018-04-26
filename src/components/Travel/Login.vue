@@ -134,7 +134,7 @@ const Login = {
                       Toast('登录成功')
                       localStorage.setItem('tenant',a.data.token)
                       setTimeout(function () {
-                        window.location.href='#/travel/index'
+                        window.location.href= '#/travel/index'
                       },2000)
                   }else{
                     MessageBox({
@@ -198,7 +198,7 @@ const Login = {
 
 
   mounted(){
-
+    document.title='银嘉分期登录'
 	},
 	updated(){
 

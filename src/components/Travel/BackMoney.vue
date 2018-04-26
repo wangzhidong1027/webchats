@@ -262,7 +262,6 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
           MessageBox.alert('请输入正确的订单号','提示')
           return
         }
-        console.log(this.money+'______'+this.orderid)
         Indicator.open()
         if(this.issecond){
           //二次申请退款
@@ -342,8 +341,12 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
     height: 100%;
     overflow: scroll;
     background: #fff;
+    display: flex;
+    flex-flow: column;
     .container {
+      flex: 1;
       padding: 0 0.75rem;
+      overflow: scroll;
       .input_box {
         display: flex;
         align-items: center;
@@ -363,12 +366,13 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
         }
       }
      .order_contaner{
+       margin: 0.75rem 0;
       display: flex;
       justify-content: space-around;
       padding: 0.75rem;
       overflow: hidden;
       height: 5.5rem;
-      box-shadow:0px 0px 5px #f5f5f5;
+      box-shadow:0px 0px 15px #f1f5f9;
       .order_img{
         width: 4rem;
         img{
@@ -469,6 +473,9 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
               display: block;
               width: 1.2rem;
               height: 1.2rem;
+              display: flex;
+              text-align: center;
+              align-items: center;
               b{
                 display: inline-block;
                 color: #333;
@@ -479,8 +486,9 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
                 border-radius: 50%;
                 text-align: center;
                 line-height: 1rem;
+                text-align: center;
+                margin: 0 auto;
               }
-
             }
             img{
               width: 100%;

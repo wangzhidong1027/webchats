@@ -2,21 +2,21 @@
 <div id="travelPay">
   <header>
     <div class="tenantImg">
-      <img src="../../assets/images/travelTest/use.jpg" alt="">
+      <img :src="logo" alt="">
     </div>
-    <p class="toname">付款给 <span>携程旅行网北京分公司</span></p>
+    <p class="toname">付款给 <span>{{name}}</span></p>
     <p class="money">￥<b>{{money}}</b></p>
   </header>
-  <div class="typelist">
+  <div class="typelist" v-if="paytypelist.length">
     <!-- 信用卡分期 -->
     <div class="creditcard" v-for="type in paytypelist">
-      <div class="name" @click="changetype(type.catid)"><span><img src="../../assets/images/travel/信用卡.png" alt="">{{type.cat}}</span><b :class="selectType==type.catid?'selsect':''"></b></div>
+      <div class="name" @click="changetype(type.catid,type.cat)"><span><img :src='"../../assets/images/travel/paytype"+ type.catid + ".png"' alt="">{{type.cat}}</span><b :class="paytype==type.catid?'selsect':''"></b></div>
        <div class="numlist" v-show="selectType==type.catid" >
-          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat,type.cat)"  :class="selectPeriods== item.catid ? 'periods':''">
+          <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat,type.cat)"  :class="selectPeriods== item.catid&& paytype== type.catid? 'periods':''">
             <p>{{money}}元x{{item.cat}}</p>
             <p>含服务费***元/期</p>
           </div>
-         <h4>应还总额<span>xxx</span>元</h4>
+         <!--<h4>应还总额<span>xxx</span>元</h4>-->
       </div>
   </div>
     <!--<div class="creditcard">-->
@@ -49,7 +49,15 @@
       <!--<div class="name"><span><img src="../../assets/images/travel/微信支付.png" alt="">微信支付</span><b></b></div>-->
     <!--</div>-->
   </div>
+  <div class="wxcode" v-if="showWX">
+        <section>
+          <h6><i class="iconfont icon-guanbi" @click="cloceWXcode"></i></h6>
+          <div><span><img src="../../assets/images/travel/paytype9.png" alt=""></span>微信支付</div></section>
+        <img :src="codeurl" alt="">
+        <p>长按二维码识别</p>
+  </div>
   <button class="gopay" @click="gopay">确定付款</button>
+  <div class="v-modal" v-if="showWX"></div>
 </div>
 </template>
 
@@ -69,25 +77,38 @@
         paytype:'',
         selectPeriods:'',//支付期数
         paytitle:'',
-        payContent:""
+        payContent:"",
+        name:'',
+        logo:'',
+        showWX:false,
+        codeurl:''
       }
     },
     methods: {
-      changetype(id){
+      changetype(id,typecat){
         if(this.selectType==id){
-          this.selectType=''
+          this.selectType='';
         }else{
-          this.selectType=id
+          this.selectType=id;
+          if(id==9){
+            this.paytype=id;
+            this.paytitle=typecat;
+            this.selectPeriods=''
+            this.payContent=''
+          }
         }
       },
+      cloceWXcode(){
+        this.showWX = false
+      },
       changePeriods(catid,type,cat,typecat){
-        this.selectPeriods=catid
-        this.paytype=type
-        this.paytitle=typecat
-        this.payContent=cat
+        this.selectPeriods=catid;
+        this.paytype=type;
+        this.paytitle=typecat;
+        this.payContent=cat;
       },
       gopay(){
-        if(!this.selectPeriods){
+        if(!this.paytype){
           Toast('请选择支付方式')
           return
         }
@@ -106,7 +127,12 @@
           Indicator.close()
           if(data.code==10000){
             if(data.data.err=10000){
-               window.location.href='#/travel/userinfo/'+that.token+'/'+data.data.data.orderid
+              if(that.paytype==9){
+                that.codeurl=data.data.data.code_url
+                that.showWX=true
+              }else {
+                window.location.href = '#/travel/userinfo/' + that.token + '/' + data.data.data.orderid
+              }
             }else{
               Toast(data.data.msg)
             }
@@ -133,6 +159,7 @@
       // var ordermoney=this.$route.params.money.split('=')
       // this.money=ordermoney[1]
       var that =this
+      alert(1)
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchatPay',qs.stringify({
         token: this.token,
         productId: this.id
@@ -140,7 +167,9 @@
           var a=JSON.parse(Base64.decode(res.data))
         if(a.code==10000){
           if(a.data.err==10000){
-            that.paytypelist=a.data.data
+            that.paytypelist=a.data.data.payWay
+            that.name=a.data.data.companyname,
+            that.logo=a.data.data.logo
           }
         }
       }).catch(function (err) {
@@ -158,11 +187,12 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
 #travelPay{
   width: 100%;
   height: 100%;
   background: #fff;
+  overflow: scroll;
   header{
     display: flex;
     flex-flow: column;
@@ -170,11 +200,14 @@
     .tenantImg{
       padding-top: 2.1rem;
       width: 100%;
+      margin-bottom: 0.5rem;
       img{
         display: block;
         width: 3rem;
         margin: 0 auto;
+        border-radius: 8px;
       }
+
     }
     .toname{
       width: 100%;
@@ -187,7 +220,7 @@
       color: #333;
       font-weight: bold;
       text-align: center;
-      line-height: 5rem;
+      line-height: 4.5rem;
       b{
         font-size: 2rem;
       }
@@ -271,6 +304,50 @@
     font-size: 0.8rem;
     width: 100%
    }
+  .wxcode{
+    position: fixed;
+    top: 50%;
+    left: 0;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: -50%;
+    z-index: 100;
+    background: #fff;
+    border-radius: 8px;
+    section{
+      padding-top: 0.75rem;
+      h6{
+        text-align: right;
+        padding:0 0.7rem;
+        color: #ddd;
+      }
+      div{
+        display: flex;
+        justify-content: center;
+        color: #333;
+        font-size:1rem;
+        img{
+          width: 1.5rem;
+          margin-right: 0.3rem;
+        }
+      }
+
+    }
+    img{
+      display: block;
+      margin: 0 auto;
+      width: 70%;
+    }
+    p{
+      height: 3rem;
+      background: #3cb034;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #fff;
+      line-height:3rem;
+    }
+  }
+
 }
 
 </style>

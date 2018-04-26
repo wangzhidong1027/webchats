@@ -84,7 +84,6 @@
       onValuesChange(picker,values){
 
         if(this.slots[0].values){
-          console.log(this.slots[0].values[1])
           picker.setSlotValue(1,this.slots[0].values[1]);
           this.bankname=values[0]
         }
@@ -113,13 +112,20 @@
         })
       },
       submitCredit(){
-
         if(!this.bankno){
           MessageBox.alert('请输入企业账号')
           return
         }
+        if(!(/^[0-9]*$/g.test(this.bankno))){
+          MessageBox.alert('企业账号格式不正确')
+          return
+        }
         if(!this.mobile){
           MessageBox.alert('请输入手机号')
+          return
+        }
+        if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/.test(this.mobile))){
+          MessageBox.alert('手机号码格式不正确')
           return
         }
         if(!this.address){
@@ -164,7 +170,7 @@
       }
     },
     mounted() {
-      document.title = '分期业务'
+      document.title = '企业账户录入'
       this.token=localStorage.getItem('tenant')
       this.getbank()
     },

@@ -14,7 +14,11 @@ import Activitytheme from '@/components/Activitytheme'
 
 //愚人节
 
-import Afd from '@/components/Afd/afd'
+//mport Afd from '@/components/Afd/afd'
+
+//注册活动
+import Rnas from '@/components/Rnas/rnas'
+
 
 import Main from '@/components/Main'
 import Account from '@/components/MyMain/Account'
@@ -109,8 +113,10 @@ export default new Router({
 //	mode: 'history',
   	routes: [
         {path: '/Activitytheme', name: 'Activitytheme', component: Activitytheme },
-		    {path: '/Afd', name: 'Afd', component: Afd },
-				{path:'/qustore',name: 'QuStore',component: QuStore},
+		  //  {path: '/Afd', name: 'Afd', component: Afd },
+      {path:'/rnas', name:'Rnas', component: Rnas},
+
+      {path:'/qustore',name: 'QuStore',component: QuStore},
 				{path:'/car',name: 'Car',component: Car},
 				{path:'/main',name: 'Main',component: Main,},
 				{path:'/register',name: 'Register',component: Register,
@@ -159,7 +165,7 @@ export default new Router({
         {path:'/travel',name: 'Travel',component: Travel,
           children:[
             {path: '/travel/index', name: 'TravelIndex', component:TravelIndex },
-            {path: '/travel/receivables/:id', name: 'Receivables', component:Receivables },
+            {path: '/travel/receivables/:id/:type', name: 'Receivables', component:Receivables },
             {path: '/travel/main', name: 'TravelMain', component:TravelMain },
             {path: '/travel/addtravel', name: 'AddTravel', component:AddTravel },
             { path: '/travel/publish', name: 'Publish', component: Publish },

@@ -12,8 +12,7 @@
     },
     methods: {},
     mounted() {
-
-
+      document.title='分期业务'
     },
     updated() {
 
