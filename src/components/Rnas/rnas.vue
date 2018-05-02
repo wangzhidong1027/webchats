@@ -45,7 +45,7 @@ export default {
   	methods:{
   		//验证手机号码
   		submit(){
-  			
+
 			var testphone=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
   			var that =this
   			if(!this.phone){
@@ -108,7 +108,7 @@ export default {
 				that.correct=false
 			}
 		},*/
-  		
+
   		//立即绑定
   		sbinding(){
   			var that =this
@@ -132,10 +132,11 @@ export default {
 				)
 				.then(function(res){
 					if(res.data.err==1002){
-						MessageBox.alert('您已领取').then(action => {
+						MessageBox.alert('您已领取过了呦~ 请前往趣商城').then(action => {
      						window.location.href='#/qustore'
-		                });
-		               
+               // confirmButtonText: '前往趣商城',
+						});
+
 					}else if(res.data.err==1000){
 						MessageBox.confirm('领取成功，前往去趣商城进行登录').then(action => {
      						window.location.href='#/qustore'
@@ -156,8 +157,8 @@ export default {
 				}).catch(function(err){});
   			}
   		},
-  		
-  		
+
+
 		//倒计时
 		timer() {
 	        if(this.time > 0) {
@@ -185,8 +186,8 @@ export default {
 	.bg1{
 		background-image:url(../../assets/images/rnas/rnasb1.png);
 		height:18.7rem;
-		
-		
+
+
 	}
 	.bg2{
 		background-image:url(../../assets/images/rnas/rnasb2.png);
@@ -196,7 +197,7 @@ export default {
 			margin: 0 auto 0 auto;
 			padding-top:19px;
 			.box{
-				height:2.27rem;	
+				height:2.27rem;
 				line-height: 2.27rem;
 				background-color: #f6302d;
 				border:none;
@@ -242,25 +243,25 @@ export default {
 			}
 		}
 		.dform:after{
-			content: "."; 
-			display: block; 
-			height: 0;  
-			clear: both;  
+			content: ".";
+			display: block;
+			height: 0;
+			clear: both;
 			visibility: hidden;
 		}
 		.binding{
-			display: block; 
-			width:12.5rem; 
-			height: 2.35rem; 
+			display: block;
+			width:12.5rem;
+			height: 2.35rem;
 			background-color: #fde265;
-			line-height: 2.35rem; 
-			margin: 0 auto;  
-			font-size:0.7rem; 
+			line-height: 2.35rem;
+			margin: 0 auto;
+			font-size:0.7rem;
 			text-align: center;
-			color: #ff7d09; 
-			font-weight:bold; 
-			border:none;  
-			border-radius: 0.2rem; 
+			color: #ff7d09;
+			font-weight:bold;
+			border:none;
+			border-radius: 0.2rem;
 			box-shadow:0px 3px 3px #e1871a;
 		}
 	}
