@@ -31,15 +31,13 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env,
       // 'WEB_URL':"'https://webchats.7shengqian.com'",
-      'BASE_URL': '"https://api.7shengqian.com"'          //生产
-// 'BASE_URL': '"https://tapi.7shengqian.com"'         //预生成8081
- //    'BASE_URL':'"http://testapi.7shengqian.com"'       //本地测试
-//      'BASE_URL': '"http://testapi.7shengqian.com:9528"'
-//         'BASE_URL': '"http://121.40.40.219:8601"'      //蔡磊
-        // 'BASE_URL': '"http://testapi.7shengqian.com:9528"'
-
-
-
+      // 'BASE_URL': '"https://api.7shengqian.com"',              //生产
+      // 'PAY_appid':'wxd11d5e7feb979553',                       //生产
+      //'BASE_URL': '"https://tapi.7shengqian.com"'           //预生成8081
+      'BASE_URL':'"http://testapi.7shengqian.com"',         //本地测试
+      'PAY_appid':'wxb68ed0995576d589',                     //测试
+      //'BASE_URL': '"http://121.40.40.219:8601"'             //蔡磊
+      // 'BASE_URL': '"http://testapi.7shengqian.com:9528"'   //振华
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {

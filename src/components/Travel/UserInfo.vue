@@ -1,15 +1,35 @@
 <template>
-  <div class="addcredit">
+  <div class="addcredit" v-html="">
     <div class="creditcard">
-      <p><span><i>*</i>姓名：</span><input type="text" placeholder="请输入姓名" v-model="name" ></p>
-      <p><span><i>*</i>身份证号码：</span><input type="text" placeholder="请输入身份证号码" v-model="idcard" ></p>
+      <p><span><i>*</i>姓名：</span><input type="text" placeholder="请输入姓名" v-model="name"></p>
+      <p><span><i>*</i>身份证号码：</span><input type="text" placeholder="请输入身份证号码" v-model="idcard"></p>
       <p><span><i>*</i>信用卡卡号：</span><input type="tel" placeholder="请输入信用卡卡号" v-model="bank" @blur="changeCount"></p>
       <p><span><i>*</i>预留手机号：</span><input type="tel" placeholder="请输入预留手机号" v-model="mobile"></p>
-      <p><span><i>*</i>有效期：</span><i class="data" v-text="date" @click="selectDate" ></i></p>
+      <p><span><i>*</i>有效期：</span><i class="data" v-text="date" @click="selectDate"></i></p>
       <p><span><i>*</i>CVV2码：</span><input type="tel" placeholder="CVV2码" v-model="cvv"><b @click="explain">说明</b></p>
     </div>
+    <button @click="verify">tijiao</button>
+    <div>
+      <form action="https://gateway.95516.com/gateway/api/frontTransReq.do" method="post" id = "pay_form" >
+        <input type="hidden" name="accessType" id="accessType" value="0"/>
+        <input type="hidden" name="backUrl" id="backUrl" value="http://124.207.178.129:8082/backNotify/UNIONPAY_INSTAL/99"/>
+        <input type="hidden" name="bizType" id="bizType" value="000301"/>
+        <input type="hidden" name="certId" id="certId" value="74778248003"/>
+        <input type="hidden" name="channelType" id="channelType" value="07"/>
+        <input type="hidden" name="encoding" id="encoding" value="UTF-8"/>
+        <input type="hidden" name="frontUrl" id="frontUrl" value="http://124.207.178.129:8082/frontNotify/UNIONPAY_INSTAL/99"/>
+        <input type="hidden" name="merId" id="merId" value="802310048161356"/>
+        <input type="hidden" name="orderId" id="orderId" value="1000018523"/>
+        <input type="hidden" name="signMethod" id="signMethod" value="01"/>
+        <input type="hidden" name="signature" id="signature" value="hoZhfPLHVygjQE2y0eD2l6NwROj9B5d34ZJ7w3FXMCWEQnZGaI8zPVx1jy40K5GSlNgkRyXZg8fZ+e5YL845ydjY5WWBlYa/LJSJW68IpcAshVyYLjP/spEqh+f7ZxwKv5yeb4UyiM1Aw9vMkqujsD2s478Tvoq/hYNutNdloMPMfLhkAJjXTdf/kmK2owwsdWmla6+SBWc+KSN/oJXwrNECSNnWNGaK7upR91k4OxYIbegcumwPY6RYGYZ26k0ZPIN4x1XXIaDACjy15LoIBcqK1kF/e6XQL/dp+dDSOsyLTrJcb8K7721gYnWM80DIwwGLW/ynAlGerbrPkNEfKg=="/>
+        <input type="hidden" name="txnSubType" id="txnSubType" value="00"/>
+        <input type="hidden" name="txnTime" id="txnTime" value="20180504105911"/>
+        <input type="hidden" name="txnType" id="txnType" value="79"/>
+        <input type="hidden" name="version" id="version" value="5.1.0"/>
+      </form>
+    </div>
     <div class="btn">
-      <p  @click="gopay">提交</p>
+      <p @click="gopay">提交</p>
       <!--<p >提交</p>-->
     </div>
     <div class="cvv" v-if="showcvv2">
@@ -35,153 +55,187 @@
 </template>
 
 <script>
-import axios from 'axios'
-import qs from 'qs'
-import {Toast,Indicator,MessageBox } from 'mint-ui'
-  export default{
+  import axios from 'axios'
+  import qs from 'qs'
+  import {Toast, Indicator, MessageBox} from 'mint-ui'
+
+  export default {
     name: 'Userinfo',
     data() {
       return {
-        name:'',
-        idcard:'',
-        date:'请选择有效期号',
-        showcvv2:false,
-        showver:false,
-        bank:'',//银行
-        mobile:'',//手机号
-        time:'',//有效期
-        cvv:'',//cvv2
-        format:'',//有效期对应
-        verification:'',//获取银行卡信息
-        orderNo:'',
-        token:''
+        name: '',
+        idcard: '',
+        date: '请选择有效期号',
+        showcvv2: false,
+        showver: false,
+        bank: '',//银行
+        mobile: '',//手机号
+        time: '',//有效期
+        cvv: '',//cvv2
+        format: '',//有效期对应
+        verification: '',//获取银行卡信息
+        orderNo: '',
+        token: '',
+        data: ''
       }
     },
     methods: {
-      selectDate(){
+      verify() {
+        var formData =new FormData
+        formData.append({
+          accessType: '0',
+          backUrl: 'http://124.207.178.129:8082/backNotify/UNIONPAY_INSTAL/99',
+          bizType:'000301',
+          certId:'74778248003',
+          channelType:'07',
+          encoding:'UTF-8',
+          frontUrl:'http://124.207.178.129:8082/frontNotify/UNIONPAY_INSTAL/99',
+          merId:'802310048161356',
+          orderId:'1000018523',
+          signMethod:'01',
+          signature:'hoZhfPLHVygjQE2y0eD2l6NwROj9B5d34ZJ7w3FXMCWEQnZGaI8zPVx1jy40K5GSlNgkRyXZg8fZ+e5YL845ydjY5WWBlYa/LJSJW68IpcAshVyYLjP/spEqh+f7ZxwKv5yeb4UyiM1Aw9vMkqujsD2s478Tvoq/hYNutNdloMPMfLhkAJjXTdf/kmK2owwsdWmla6+SBWc+KSN/oJXwrNECSNnWNGaK7upR91k4OxYIbegcumwPY6RYGYZ26k0ZPIN4x1XXIaDACjy15LoIBcqK1kF/e6XQL/dp+dDSOsyLTrJcb8K7721gYnWM80DIwwGLW/ynAlGerbrPkNEfKg==',
+          txnSubType:'00',
+          txnTime:'20180504105911',
+          txnType:'79',
+          version:'5.1.0'
+        })
+        // document.all.pay_form.submit()
+
+        // axios({
+        //   url: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
+        //   method: 'post',
+        //   headers : {
+        //     "Content-Type":'application/x-www-form-urlencoded; charset=UTF-8'
+        //   },
+        //
+        // })
+        // axios.post('https://gateway.95516.com/gateway/api/frontTransReq.do', formData)
+        //   .then(response => {
+        //
+        //   })
+      },
+      selectDate() {
         this.$refs.picker.open();
       },
-      handleConfirm(date){
+      handleConfirm(date) {
         var y = date.getFullYear();
         var m = date.getMonth() + 1;
         m = m < 10 ? '0' + m : m;
         var d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
         this.date = y + '-' + m + '-' + d;
-        this.format =this.date
+        this.format = this.date
       },
-      explain(){
+      explain() {
         this.showcvv2 = !this.showcvv2
       },
-      vheck(){
-        this.showver=!this.showver
+      vheck() {
+        this.showver = !this.showver
       },
-      changeCount(){
+      changeCount() {
         var token = '6fHdQpdyvCQGgokuQQ';
-        var that=this
-        if(!that.bank){
+        var that = this
+        if (!that.bank) {
           return
         }
-        if(!(/^[0-9]*$/.test(this.bank))){
+        if (!(/^[0-9]*$/.test(this.bank))) {
           Toast('请填写正确银行卡号')
           return
         }
-        axios.post(BASE_URL+'/index.php?r=CardjPay/CheckCard',qs.stringify({
-          token:token,
-          type:'2',
-          cardNo:that.bank
+        axios.post(BASE_URL + '/index.php?r=CardjPay/CheckCard', qs.stringify({
+          token: token,
+          type: '2',
+          cardNo: that.bank
         }))
           .then(function (res) {
             var edoc = Base64.decode(res.data)
             edoc = JSON.parse(edoc)
-            if(edoc.code==10000){
-              if(edoc.data.err==10000){
-                that.verification=edoc.data.data.id
-              }else{
+            if (edoc.code == 10000) {
+              if (edoc.data.err == 10000) {
+                that.verification = edoc.data.data.id
+              } else {
                 Toast(edoc.data.msg)
-                that.verification=''
+                that.verification = ''
               }
-            }else{
+            } else {
               Toast(edoc.info)
-              that.verification=''
+              that.verification = ''
             }
 
           })
           .catch(function (err) {
           });
       },
-      gopay(){
-        if(!this.name){
+      gopay() {
+        if (!this.name) {
           Toast('请输入姓名')
           return
         }
-
-         if(!(/^([\u4e00-\u9fa5]){2,7}$/).test(this.name)){
+        if (!(/^([\u4e00-\u9fa5]){2,7}$/).test(this.name)) {
           Toast('姓名格式有误')
           return
         }
-        if(!this.idcard){
+        if (!this.idcard) {
           Toast('请填写身份证号码')
           return
         }
         // if(!(/^[0-9]*$/.test(this.idcard))){
-        if(!(/(^\d{15}$)|(^\d{17}([0-9]|X|x)$)/.test(this.idcard))){
+        if (!(/(^\d{15}$)|(^\d{17}([0-9]|X|x)$)/.test(this.idcard))) {
           Toast('请输入正确的身份证号')
           return
         }
-        if(!this.bank){
+        if (!this.bank) {
           Toast('请填写银行卡号')
           this.bank = ""
           return
         }
-         if(!(/^[0-9]*$/.test(this.bank))){
+        if (!(/^[0-9]*$/.test(this.bank))) {
           Toast('请填写正确银行卡号')
           return
         }
-        if(!this.mobile){
+        if (!this.mobile) {
           Toast('请填写手机号码')
           this.mobile = ""
           return
         }
-        if(!(/^[1][3,4,5,7,8][0-9]{9}$/.test(this.mobile))){
+        if (!(/^[1][3,4,5,7,8][0-9]{9}$/.test(this.mobile))) {
           Toast('请填写正确手机号码')
           this.mobile = ""
           return
         }
-        if(this.date!=this.format ) {
+        if (this.date != this.format) {
           Toast('请选择有效期日期')
           this.date = ""
           return
         }
-        if(!this.cvv){
+        if (!this.cvv) {
           Toast('请填写cvv2码')
           return
         }
-        if(!(/^\d{3}$/.test(this.cvv))){
+        if (!(/^\d{3}$/.test(this.cvv))) {
           Toast('请填写正确cvv2码')
           this.cvv = ""
           return
         }
-
-        var that =this
+        var that = this
         Indicator.open()
-        axios.post(BASE_URL+'/index.php?r=YinjiaStage/UserInfo',qs.stringify({
-          token:this.token,
-          orderid:this.orderNo,
-          signedName:this.name,
-          idNo:this.idcard,
-          accountNumber:that.bank,
-          selectFinaCode:that.verification,
-          cvn2:that.cvv,
-          validityCard:that.date,
-          mobileNo:that.mobile,
-        })) .then(function (res) {
+        axios.post(BASE_URL + '/index.php?r=YinjiaStage/UserInfo', qs.stringify({
+          token: this.token,
+          orderid: this.orderNo,
+          signedName: this.name,
+          idNo: this.idcard,
+          accountNumber: that.bank,
+          selectFinaCode: that.verification,
+          cvn2: that.cvv,
+          validityCard: that.date,
+          mobileNo: that.mobile,
+        })).then(function (res) {
           Indicator.close()
-          var a=Base64.decode(res.data)
-          a=JSON.parse(a)
-          if(a.code==10000){
-              MessageBox.alert('支付成功','提示')
-          }else{
+          var a = Base64.decode(res.data)
+          a = JSON.parse(a)
+          if (a.code == 10000) {
+            MessageBox.alert('支付成功', '提示')
+          } else {
             Toast(a.info)
           }
         }).catch(function (err) {
@@ -191,12 +245,12 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
       },
 
     },
-    mounted(){
-      this.token=this.$route.params.token
-      this.orderNo=this.$route.params.orderid
+    mounted() {
+      this.token = this.$route.params.token
+      this.orderNo = this.$route.params.orderid
     },
     updated() {
-
+      document.all.pay_form.submit()
     },
     activated() {
 
@@ -206,39 +260,39 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
 </script>
 
 <style scoped lang="scss">
-  .addcredit{
+  .addcredit {
     width: 100%;
     height: 100%;
-    .creditcard{
+    .creditcard {
       background: #fff;
       margin-bottom: 0.75rem;
-      p{
+      p {
         padding: 0 0.75rem;
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid #eee;
 
-        input{
+        input {
           flex: 1;
           border: none;
           font-size: 0.7rem;
           color: #666;
         }
-        span{
+        span {
           font-size: 0.7rem;
           line-height: 2.45rem;
-          i{
+          i {
             color: #ff3737;
           }
         }
-        b{
+        b {
           font-size: 0.7rem;
           line-height: 2.45rem;
           font-weight: normal;
           color: #ff3737;
           padding-left: 1rem;
         }
-        i{
+        i {
           font-style: normal;
           font-weight: normal;
           line-height: 2.45rem;
@@ -249,9 +303,9 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
       }
 
     }
-    .btn{
+    .btn {
       padding: 0.75rem;
-      p{
+      p {
         background: #ff3737;
         color: #fff;
         text-align: center;
@@ -260,50 +314,50 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
         border-radius: 4px;
       }
     }
-    .zhezhao{
+    .zhezhao {
       width: 100%;
       height: 100%;
       background: #000;
       position: fixed;
       top: 0;
       left: 0;
-      opacity:0.6;
+      opacity: 0.6;
     }
-    .vzhezhao{
+    .vzhezhao {
       width: 100%;
       height: 100%;
       background: #000;
       position: fixed;
       top: 0;
       left: 0;
-      opacity:0.6;
+      opacity: 0.6;
     }
-    .cvv{
+    .cvv {
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       border-radius: 4px;
-      height:12.5rem;
+      height: 12.5rem;
       position: fixed;
       top: 50%;
       background: #fff;
       z-index: 111;
-      margin:0 1rem;
+      margin: 0 1rem;
       margin-top: -7rem;
-      img{
+      img {
         width: 100%;
         height: 100%;
       }
-      .CVVpic{
+      .CVVpic {
         padding: 1.8rem 3.4rem;
         padding-bottom: 0;
       }
-      .text{
+      .text {
         font-size: 0.7rem;
         text-align: center;
-        color:#666;
+        color: #666;
         line-height: 2.5rem;
       }
-      .butto{
+      .butto {
         width: 100%;
         background: #ff3737;
         text-align: center;
@@ -314,62 +368,62 @@ import {Toast,Indicator,MessageBox } from 'mint-ui'
         border-bottom-right-radius: 4px;
       }
     }
-    .verifications{
+    .verifications {
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       border-radius: 4px;
       position: fixed;
       top: 50%;
       left: 50%;
-      width:15.75rem;
-      margin-left:-7.875rem ;
+      width: 15.75rem;
+      margin-left: -7.875rem;
       background: #fff;
       z-index: 111;
       margin-top: -7rem;
       padding-top: 1.5rem;
-      .title{
+      .title {
         font-size: 0.8rem;
         color: #333;
         text-align: center;
         margin-bottom: 1.125rem;
       }
-      .box{
+      .box {
         margin: 0rem 1.75rem;
         border-right: none;
-        .number{
-          width:2.038rem;
+        .number {
+          width: 2.038rem;
           height: 1.94rem;
           text-align: center;
           color: #333;
           line-height: 2.0rem;
           font-size: 0.9rem;
           float: left;
-          border:0.025rem solid #000000;
+          border: 0.025rem solid #000000;
           border-left: none;
         }
 
-        :nth-child(1){
-          border-left:0.025rem solid #000000;
+        :nth-child(1) {
+          border-left: 0.025rem solid #000000;
         }
-        .clear{
+        .clear {
           clear: both;
         }
       }
-      .text{
+      .text {
         height: 0;
         border: none;
         overflow: hidden;
       }
-      .tips{
+      .tips {
         margin-top: 0.625rem;
         font-size: 0.55rem;
         color: #999999;
         text-align: center;
       }
-      .button{
+      .button {
         border-top: 0.025rem #eeeeee solid;
         padding: 0.625rem 0rem 1.25rem 0rem;
-        border-radius:0 0 4px 4px;
+        border-radius: 0 0 4px 4px;
         font-size: 0.85rem;
         text-align: center;
         color: #ff3737;

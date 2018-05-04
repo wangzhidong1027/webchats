@@ -159,7 +159,6 @@
       // var ordermoney=this.$route.params.money.split('=')
       // this.money=ordermoney[1]
       var that =this
-      alert(1)
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchatPay',qs.stringify({
         token: this.token,
         productId: this.id

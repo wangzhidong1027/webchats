@@ -1,8 +1,8 @@
 <template>
   <div class="main">
     <ul>
-      <li><a href="#/travel/income"><span ><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
-      <li><a href="#/travel/refund"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a  @click="gourl('#/travel/income')"><span ><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a  @click="gourl('#/travel/refund')"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
     </ul>
     <div class="out_box">
       <button @click="loginout">退出登录</button>
@@ -13,11 +13,17 @@
 
 <script>
   import TravelTab from './TravelTab'
+  import axios from "axios";
+  import qs from "qs";
+  import {Indicator, Toast} from "mint-ui";
   import {MessageBox} from 'mint-ui'
   export default{
     name: 'Main',
     data() {
-      return {}
+      return {
+        isadd:false,
+        isok:false
+      }
     },
     methods: {
       loginout(){
@@ -27,10 +33,65 @@
         }, action => {
           return false
         })
+      },
+      gourl(url){
+          if(!this.isadd){
+              MessageBox.alert('请补全认证信息','提示').then(action => {
+                window.location.href='#/travel/addcredit'
+              })
+            return
+          }
+        if(!this.isok){
+          MessageBox.alert('信息认证中，请耐心等待','提示').then(action => {
+          })
+          return
+        }
+          window.location.href=url
       }
     },
     mounted() {
+      var that =this
+      this.token = localStorage.getItem('tenant')
+      if(!this.token){
+        window.location.href='#/travel/login'
+      }else{
+        //验证商户有无对公账户
+        axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({
+          token:this.token,
+        })).then(function (res) {
+          var a=JSON.parse(Base64.decode(res.data))
+          if(a.code==10000){
+            if(a.data.err==10000){
+              if(a.data.data.bankno){
+                that.isadd=true
+              }
+            }
+          }
+        }).catch(function (err) {
 
+        })
+        //获取账户信息
+        axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatInfo',qs.stringify({
+          token:this.token
+        })).then(function(res){
+          var a =JSON.parse(Base64.decode(res.data))
+          if(a.code==10000){
+            if(a.data.err==10000){
+              that.my = a.data.data
+              if(a.data.data.attestation==1){
+                that.isok=true
+              }
+            }else{
+              Toast('商户信息获取失败，请刷新页面')
+            }
+          }else{
+            Toast('商户信息获取失败')
+          }
+        }).catch(function(err){
+
+        })
+
+      }
 
     },
     updated() {

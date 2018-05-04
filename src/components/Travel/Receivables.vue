@@ -317,7 +317,7 @@
       margin: 0;
     }
     #money {
-      margin-left:0rem;
+      margin-left:0.1rem;
       width: 0.1rem;
       border: none;
       opacity: 0;

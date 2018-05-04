@@ -29,7 +29,7 @@
                       </div>
                     </div>
                     <div class='gopay'>
-                        <a href='javascript:;' class="cardpay" @click="back">分期收款</a><!--"#/travel/receivables/"+goods.pid +"/card "-->
+                        <a :href='"#/travel/receivables/"+goods.pid +"/card "'  class="cardpay" >分期收款</a><!--@click="back" -->
                         <a :href=' "#/travel/receivables/"+goods.pid+"/wx" '>微信收款</a><button @click="deleteGoods(goods.pid,index)"></button>
                     </div>
                   </li>

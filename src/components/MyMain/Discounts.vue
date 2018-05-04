@@ -27,7 +27,7 @@
 		    			</div>
 		    		</a>
 		    	</li>
-		    	
+
 		    </ul>
 		  </mt-tab-container-item>
 		  <mt-tab-container-item id="2">
@@ -50,7 +50,7 @@
 		    			</div>
 		    		</a>
 		    	</li>
-		    	
+
 		    </ul>
 		  </mt-tab-container-item>
 		  <mt-tab-container-item id="3">
@@ -73,7 +73,7 @@
 		    			</div>
 		    		</a>
 		    	</li>
-		    	
+
 		    </ul>
 		  </mt-tab-container-item>
 		</mt-tab-container>
@@ -82,7 +82,7 @@
 
 <script>
 	import { Navbar, TabItem } from 'mint-ui';
-	import { MessageBox } from 'mint-ui';	
+	import { MessageBox } from 'mint-ui';
 	import axios from 'axios';
 	import qs from "qs";
 	const Discounts = {
@@ -93,8 +93,8 @@
 				use:[],
 				notuse:[],
 				over:[]
-				
-				
+
+
 	    	}
 	  	},
 	  	methods:{
@@ -102,7 +102,7 @@
 	  		already(status){
 	  			var token = localStorage.getItem("token")
 				var that =this
-				
+
 				axios.post(
 					BASE_URL+'/index.php?r=Couponcate/index',
 					qs.stringify({
@@ -110,27 +110,24 @@
 			  			status:status
 			  		})
 				)
-				
+
 				.then(function(res){
 			  			var a=JSON.parse(Base64.decode(res.data))
 						if(a.data.err==10002){
 							if(status==1){
-								that.use=a.data.result	
-								//console.log(11)
+								that.use=a.data.result
 							}
 							if(status==2){
-								that.notuse=a.data.result	
-								//console.log(12)
+								that.notuse=a.data.result
 							}
 							if(status==3){
-								that.over=a.data.result	
-								//console.log(13)
+								that.over=a.data.result
 							}
 						}
 			  	}).catch(function(err){
-	
+
 			    });
-				
+
 	  		}
 	  		//切换状态
 	  	},
@@ -155,9 +152,8 @@
 				)
 				.then(function(res){
 		  			var a=JSON.parse(Base64.decode(res.data))
-		  			//console.log(1)
 					if(a.data.err==10002){
-						that.use=a.data.result					
+						that.use=a.data.result
 					}
 		  		}).catch(function(err){
 
@@ -171,7 +167,7 @@
 
 		},
 	    components:{
-	
+
 	    }
 	}
 	export default Discounts
@@ -217,7 +213,7 @@
 								color: #fff;
 								margin: 0.75rem 0 0 1.37rem;
 								display: inline-block;
-								
+
 							}
 							.font2{
 								font-size: 0.75rem;
@@ -265,7 +261,7 @@
 								}
 							}
 						}
-						
+
 					}
 					a:after{
 						content:"";
@@ -273,7 +269,7 @@
 						clear:both;
 						height:0;
 						overflow:hidden;
-						visibility:hidden;	
+						visibility:hidden;
 					}
 					a.a1{
 						background-image: url(../../assets/images/youhuiquan0.png);
@@ -294,7 +290,7 @@
 								color: #fff;
 								margin: 0.75rem 0 0 1.37rem;
 								display: inline-block;
-								
+
 							}
 							.font2{
 								font-size: 0.75rem;
@@ -357,7 +353,7 @@
 								color: #fff;
 								margin: 0.75rem 0 0 1.37rem;
 								display: inline-block;
-								
+
 							}
 							.font2{
 								font-size: 0.75rem;
@@ -409,9 +405,9 @@
 				}
 			}
 		}
-		
+
 	}
 }
-	
+
 
 </style>

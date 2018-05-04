@@ -71,8 +71,6 @@ const Login = {
             }).catch(function(err){
 
             })
-
-
         },
         counttime() {
             if(this.validate){
