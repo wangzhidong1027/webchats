@@ -100,7 +100,6 @@
           version:'5.1.0'
         })
         // document.all.pay_form.submit()
-
         // axios({
         //   url: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
         //   method: 'post',
@@ -271,7 +270,6 @@
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid #eee;
-
         input {
           flex: 1;
           border: none;
