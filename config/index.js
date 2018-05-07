@@ -40,12 +40,13 @@ module.exports = {
       //   changeOrigin:true
       // },
 			 '/index.php':{//本地测试
-			 		target:'http://testapi.7shengqian.com/',
+			 		// target:'http://testapi.7shengqian.com/',
+           target:'http://121.40.40.219:8601/', //蔡磊
 			 		secure:true,
 			 		changeOrigin:true
        	},
       // 	 '/index.php':{
-      //      target:'http://121.40.40.219:8601/', //蔡磊
+      //
       //   // target:'http://testapi.7shengqian.com:9528',// 振华
 		// 	 		secure:true,
       //      changeOrigin: true

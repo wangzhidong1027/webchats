@@ -107,6 +107,7 @@ import RefundRecord from '@/components/Travel/RefundRecord'
 import UserInfo from '@/components/Travel/UserInfo'
 import RefundInfo from '@/components/Travel/RefundInfo'
 import Oneday from '@/components/Travel/Oneday'
+import ChildMerchants from '@/components/Travel/ChildMerchants'
 
 Vue.use(Router)
 export default new Router({
@@ -181,6 +182,7 @@ export default new Router({
             { path: '/travel/userinfo/:token/:orderid', name: 'UserInfo', component: UserInfo },
             { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo },
             { path: '/travel/oneday/:date', name: 'Oneday', component: Oneday },
+            { path: '/travel/childmerchants', name: 'ChildMerchants', component: ChildMerchants },
             {path:'/travel',redirect:"/travel/index"},
             {path:'/travel/*',redirect:"/travel/index"}
           ]

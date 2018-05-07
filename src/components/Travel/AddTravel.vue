@@ -41,7 +41,7 @@
             <a v-if='!backIdcard'></a>
             <img v-if='backIdcard' :src="backIdcard" alt="">
             <input type="file" id="backIdcard" ref="backIdcard" accept="image/*"
-                   @change="ImgBase64($event,'backIdcard')" name="bslicense">
+                   ImgBase64 name="bslicense">
           </div>
           <p><i>* </i>请上传手持身份证照片</p>
           <div class="dimg just" @click="clickDom('takeIdcard')">
