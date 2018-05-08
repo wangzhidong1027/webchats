@@ -28,7 +28,7 @@
         orderid:'',
         order:'',
         code:'',
-        codeMsg:'已发送'
+        codeMsg:'获取验证码'
       }
     },
     methods: {
@@ -37,30 +37,30 @@
         if(this.codeMsg=='已发送'){
           MessageBox.confirm('未收到验证码，重新下单？').then(action => {
             window.history.back(-1)
-          }).then(action => {
+          },action => {
             return
           });
+        }else{
+          Indicator.open()
+          axios.post(BASE_URL+'/index.php?r=YinjiaStage/SmsCodeSend',qs.stringify({
+            token:this.token,
+            orderid:this.orderid,
+            signOrderid:this.sign
+          })).then(function(res){
+            Indicator.close()
+            var a = Base64.decode(res.data)
+            a=JSON.parse(a)
+            if(a.code==10000){
+              Toast('验证码已发送')
+              that.codeMsg='已发送'
+            }else{
+              Toast(a.info)
+            }
+          }).catch(function(err){
+            Indicator.close()
+            Toast('网络故障，请稍后再试')
+          })
         }
-        Indicator.open()
-        axios.post(BASE_URL+'/index.php?r=YinjiaStage/SmsCodeSend',qs.stringify({
-          token:this.token,
-          orderid:this.orderid,
-          signOrderid:this.sign
-        })).then(function(res){
-          Indicator.close()
-          var a = Base64.decode(res.data)
-          a=JSON.parse(a)
-          console.log(a)
-          if(a.code==10000){
-            Toast('验证码已发送')
-            that.codeMsg='已发送'
-          }else{
-            Toast(a.info)
-          }
-        }).catch(function(err){
-          Indicator.close()
-          Toast('网络故障，请稍后再试')
-        })
       },
       gopay(){
         Indicator.open()
@@ -79,14 +79,13 @@
               message: '支付成功',
               duration: 1000
             });
-            window.location.href=''
+            //window.location.href=''
           }else{
             Toast({
               message: a.info,
               duration: 1000
             });
           }
-          console.log(a)
         }).catch(function(err){
           Indicator.close()
           Toast('网络故障，请稍后再试')
@@ -94,9 +93,9 @@
       }
     },
     mounted() {
-      this.token='6aqLQ5cg5nEF'
-      this.orderid='4315257431875774'
-      this.sign='4215254312484171'
+      this.token = (this.$route.params.token).replace(/@/g,'/')
+      this.orderid = this.$route.params.orderid
+      this.sign=this.$route.params.sign.split('&')[0]
         Indicator.open()
         var that = this
         axios.post(BASE_URL+'/index.php?r=YinjiaStage/OrderDetail',qs.stringify({

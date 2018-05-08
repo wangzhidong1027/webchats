@@ -8,8 +8,8 @@
       </div>
       <div class="money">
         <span>￥</span>
-        <input type='text' id="money" ref="money" v-model="message" @blur="change()" @keyup="inputmoney">
         <p @click="changemoney()"><label for="money"  number>{{message}}</label></p>
+        <input type='text' id="money" ref="money" v-model="message" @blur="change()" @keyup="inputmoney">
       </div>
       <div class="content" v-text="tit"></div>
       <div class="operation">

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import { Field,Indicator ,MessageBox } from 'mint-ui'
+  import { Field,Indicator,Toast ,MessageBox } from 'mint-ui'
   import axios from "axios";
   import qs from "qs";
   import PickerAddress from './PickerAddress'
@@ -193,7 +193,85 @@
         }
       },
       submitMerchants(){
-        axios.post(BASE_URL+"/index.php?r=YinjiaStageShare/InputMerchShare",qs.stringify({
+        if (!this.email) {
+          Toast({
+            message: '请输入邮箱',
+            duration: 2000
+          });
+          return
+        }
+        if (!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(this.email)) {
+          Toast({
+            message: '请输入正确邮箱',
+            duration: 2000
+          });
+          return
+        }
+        if(!this.merchants_name){
+          Toast({
+            message: '请输入企业名称',
+            duration: 2000
+          });
+          return
+        }
+        if((/(?=[\x21-\x7e]+)[^A-Za-z0-9]/).test(this.merchants_name)){
+          Toast({
+            message: '请输入正确企业名称',
+            duration: 2000
+          });
+          return
+        }
+        if(!this.phone){
+          Toast({
+            message: '请输入手机号码',
+            duration: 2000
+          });
+          return
+        }
+        if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/).test(this.phone)){
+          Toast({
+            message: '请输入正确手机号码',
+            duration: 2000
+          });
+          return
+        }
+        if(!this.activation){
+          Toast({
+            message: '请输入激活码',
+            duration: 2000
+          });
+          return
+        }
+        if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/).test(this.activation)){
+          Toast({
+            message: '请输入正确激活码',
+            duration: 2000
+          });
+          return
+        }
+          if(!this.faceIdcard){
+            Toast({
+              message: '请上传身份证正面图片',
+              duration: 2000
+            });
+            return
+          }
+        if(!this.backIdcard){
+          Toast({
+            message: '请上传身份证反面图片',
+            duration: 2000
+          });
+          return
+        }
+        if(this.address.length!=2){
+          Toast({
+            message: '请选择城市',
+            duration: 2000
+          });
+          return
+        }
+        Indicator.open()
+          axios.post(BASE_URL+"/index.php?r=YinjiaStageShare/InputMerchShare",qs.stringify({
           token:this.token,
           username:this.email,
           province:this.address[0].catid,
@@ -211,18 +289,33 @@
           sign:this.sign,
         })).then(function(res){
             var a =Base64.decode(res.data)
-            console.log(a)
+            a=JSON.parse(a)
+            Indicator.close()
+            console.log(a.code)
+            if(a.code==10000){
+              Toast({
+                message: '入驻成功',
+                duration: 1000
+              });
+              window.location.href ='#/travel/login'
+            }else{
+              MessageBox.alert(a.info)
+            }
         }).catch(function (err) {
 
         })
       },
-
     },
     mounted() {
-        this.token='6aqLQ5cg5nEF'
-        this.time='1525693343'
-        this.sign='11cea7c8dc839fb4f9571b0fc329aab4'
-        var nowtime
+      this.token =this.$route.params.token.replace(/@/g,'/')
+      this.time =this.$route.params.time
+      this.sign =this.$route.params.sign
+      var nowtime=Date.parse(new Date())/1000
+      if(nowtime>=this.time ){
+          MessageBox.alert('链接已失效,请联系总店获取最新链接').then(action=>{
+            window.location.href ='#/travel/login'
+          })
+       }
     },
     updated() {
 

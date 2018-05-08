@@ -180,12 +180,24 @@
           validityCard: that.date,
           mobileNo: that.mobile,
         })).then(function (res) {
-          Indicator.close()
+
           var a = Base64.decode(res.data)
           a = JSON.parse(a)
+          console.log(a)
           if (a.code == 10000) {
-            console.log(a)
-            window.location.href='#/travel/paycode/'+that.token+'/'+that.orderNo+'/'+a.data.data.signOrderid
+            if(a.data.err==10011){
+              Indicator.close()
+              var Btokem =that.token.replace(/\//g,'@')
+              window.location.href='#/travel/paycode/'+Btokem+'/'+that.orderNo+'/'+a.data.data.signOrderid
+            }else if(a.data.err==10010){
+              that.Html=a.data.data.url
+              setTimeout(function () {
+                Indicator.close()
+                document.all.pay_form.submit()
+              },1000)
+            }else{
+              MessageBox.alert(a.data.data.Msg)
+            }
           } else {
             Toast(a.info)
           }
@@ -197,8 +209,9 @@
 
     },
     mounted() {
-      this.$router.replace()
-      this.token = this.$route.params.token
+      // this.$router.replace()
+
+      this.token = this.$route.params.token.replace(/@/g,'/')
       this.orderNo = this.$route.params.orderid
     },
     updated() {

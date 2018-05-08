@@ -1,9 +1,9 @@
 <template>
   <div class="main">
     <ul>
-      <li><a  @click="gourl('#/travel/income')"><span ><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
-      <li><a  @click="gourl('#/travel/refund')"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
-      <li><a  @click="gourl('#/travel/invite')"><span><i class="refund"></i>邀请分店入驻</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a @click="gourl('#/travel/income')"><span><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a @click="gourl('#/travel/refund')"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li v-if="ischild"><a @click="gourl('#/travel/invite')"><span><i class="refund"></i>邀请分店入驻</span><b class="iconfont icon-jiantou-copy"></b></a></li>
     </ul>
     <div class="out_box">
       <button @click="loginout">退出登录</button>
@@ -18,53 +18,55 @@
   import qs from "qs";
   import {Indicator, Toast} from "mint-ui";
   import {MessageBox} from 'mint-ui'
-  export default{
+
+  export default {
     name: 'Main',
     data() {
       return {
-        isadd:false,
-        isok:false
+        isadd: false,
+        isok: false,
+        ischild: false
       }
     },
     methods: {
-      loginout(){
-        MessageBox.confirm('确定退出','提示').then(action=>{
+      loginout() {
+        MessageBox.confirm('确定退出', '提示').then(action => {
           localStorage.removeItem("tenant");
-          window.location.href='#/travel/login'
+          window.location.href = '#/travel/login'
         }, action => {
           return false
         })
       },
-      gourl(url){
-          if(!this.isadd){
-              MessageBox.alert('请补全认证信息','提示').then(action => {
-                window.location.href='#/travel/addcredit'
-              })
-            return
-          }
-        if(!this.isok){
-          MessageBox.alert('信息认证中，请耐心等待','提示').then(action => {
+      gourl(url) {
+        if (!this.isadd) {
+          MessageBox.alert('请补全认证信息', '提示').then(action => {
+            window.location.href = '#/travel/addcredit'
           })
           return
         }
-          window.location.href=url
+        if (!this.isok) {
+          MessageBox.alert('信息认证中，请耐心等待', '提示').then(action => {
+          })
+          return
+        }
+        window.location.href = url
       }
     },
     mounted() {
-      var that =this
+      var that = this
       this.token = localStorage.getItem('tenant')
-      if(!this.token){
-        window.location.href='#/travel/login'
-      }else{
+      if (!this.token) {
+        window.location.href = '#/travel/login'
+      } else {
         //验证商户有无对公账户
-        axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchBank',qs.stringify({
-          token:this.token,
+        axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetMerchBank', qs.stringify({
+          token: this.token,
         })).then(function (res) {
-          var a=JSON.parse(Base64.decode(res.data))
-          if(a.code==10000){
-            if(a.data.err==10000){
-              if(a.data.data.bankno){
-                that.isadd=true
+          var a = JSON.parse(Base64.decode(res.data))
+          if (a.code == 10000) {
+            if (a.data.err == 10000) {
+              if (a.data.data.bankno) {
+                that.isadd = true
               }
             }
           }
@@ -72,23 +74,24 @@
 
         })
         //获取账户信息
-        axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatInfo',qs.stringify({
-          token:this.token
-        })).then(function(res){
-          var a =JSON.parse(Base64.decode(res.data))
-          if(a.code==10000){
-            if(a.data.err==10000){
+        axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetMerchatInfo', qs.stringify({
+          token: this.token
+        })).then(function (res) {
+          var a = JSON.parse(Base64.decode(res.data))
+          if (a.code == 10000) {
+            if (a.data.err == 10000) {
               that.my = a.data.data
-              if(a.data.data.attestation==1){
-                that.isok=true
+              that.ischild = a.data.data.store
+              if (a.data.data.attestation == 1) {
+                that.isok = true
               }
-            }else{
+            } else {
               Toast('商户信息获取失败，请刷新页面')
             }
-          }else{
+          } else {
             Toast('商户信息获取失败')
           }
-        }).catch(function(err){
+        }).catch(function (err) {
 
         })
 
@@ -102,7 +105,7 @@
 
     },
     components: {
-      'travel-tab':TravelTab
+      'travel-tab': TravelTab
     }
   }
 </script>
@@ -113,67 +116,67 @@
     height: 100%;
     position: relative;
     ul {
-      a{
+      a {
         padding: 0 0.75rem;
         font-size: 0.75rem;
         color: #333;
         display: flex;
-        justify-content:space-between;
+        justify-content: space-between;
         border-bottom: 1px solid #f5f5f5;
         background: #fff;
         height: 2.5rem;
         line-height: 2.5rem;
-        span{
+        span {
           display: flex;
           height: 100%;
           align-items: center;
         }
-        i{
+        i {
           width: 1rem;
           height: 100%;
           display: flex;
           display: inline-block;
           margin-right: 0.75rem;
         }
-        .recode{
+        .recode {
           background-image: url("../../assets/images/travel/collectionrecord.png");
           -webkit-background-size: 100%;
           background-size: 100%;
           background-repeat: no-repeat;
           background-position: center center;
         }
-        .refund{
+        .refund {
           background-image: url("../../assets/images/travel/refund.png");
           -webkit-background-size: 100%;
           background-size: 100%;
           background-repeat: no-repeat;
           background-position: center center;
         }
-        b{
+        b {
           color: #dedede;
         }
       }
-      li:last-child{
+      li:last-child {
         border-bottom: none;
       }
     }
-    .out_box{
+    .out_box {
       position: absolute;
       bottom: 2.5rem;
       left: 0;
-      padding:0.75rem  2.25rem;
+      padding: 0.75rem 2.25rem;
       width: 100%;
-      button{
+      button {
         width: 100%;
         /*background: #ebbd6d;*/
         line-height: 2.25rem;
         border: none;
         color: #fff;
         font-size: 0.8rem;
-        background:linear-gradient(#f0c47d,#e3b151);
-        background: -moz-linear-gradient(#f0c47d,#e3b151);
-        background: -webkit-linear-gradient(#f0c47d,#e3b151); /* Safari 5.1 - 6.0 */
-        background: -o-linear-gradient(#f0c47d,#e3b151); /* Opera 11.1 - 12.0 */
+        background: linear-gradient(#f0c47d, #e3b151);
+        background: -moz-linear-gradient(#f0c47d, #e3b151);
+        background: -webkit-linear-gradient(#f0c47d, #e3b151); /* Safari 5.1 - 6.0 */
+        background: -o-linear-gradient(#f0c47d, #e3b151); /* Opera 11.1 - 12.0 */
         outline: none;
       }
     }

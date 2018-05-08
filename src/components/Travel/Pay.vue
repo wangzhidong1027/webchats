@@ -123,8 +123,8 @@
           stageTitle:this.paytitle,
           stageContent:this.payContent
         })).then(function(res){
-          var data = JSON.parse(Base64.decode(res.data))
           Indicator.close()
+          var data = JSON.parse(Base64.decode(res.data))
           if(data.code==10000){
             if(data.data.err=10000){
               if(that.paytype==9){
@@ -134,6 +134,7 @@
                 window.location.href = '#/travel/userinfo/' + that.token + '/' + data.data.data.orderid
               }
             }else{
+
               Toast(data.data.msg)
             }
           }else{
@@ -149,15 +150,11 @@
       // var token = localStorage.getItem('tenant')
       var paylist =this.$route.params.order
       this.order=paylist.split('&')
-      this.token=this.order[0].toString().split('=')[1].replace('@','/')
+      this.token=this.order[0].toString().split('=')[1].replace(/@/g,'/')
       var goodid=this.order[1].toString().split('=')
       var ordermoney=this.order[2].toString().split('=')
       this.money=ordermoney[1]
       this.id=goodid[1]
-      // var goodid=this.$route.params.id.split('=')
-      // this.id=goodid[1]
-      // var ordermoney=this.$route.params.money.split('=')
-      // this.money=ordermoney[1]
       var that =this
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchatPay',qs.stringify({
         token: this.token,

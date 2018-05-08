@@ -85,6 +85,8 @@
         if(this.slots[0].values){
           picker.setSlotValue(1,this.slots[0].values[1]);
           this.bankname=values[0]
+          console.log(values)
+
         }
       },
       testphone(){

@@ -184,7 +184,7 @@ export default new Router({
             { path: '/travel/userinfo/:token/:orderid', name: 'UserInfo', component: UserInfo },
             { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo },
             { path: '/travel/oneday/:date', name: 'Oneday', component: Oneday },
-            { path: '/travel/childmerchants', name: 'ChildMerchants', component: ChildMerchants },
+            { path: '/travel/childmerchants/:token/:time/:sign', name: 'ChildMerchants', component: ChildMerchants },
             { path: '/travel/invite', name: 'Invite', component: Invite },
             { path: '/travel/paycode/:token/:orderid/:sign', name: 'PayCode', component: PayCode },
             {path:'/travel',redirect:"/travel/index"},
