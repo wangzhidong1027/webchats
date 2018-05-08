@@ -17,7 +17,7 @@
 	import axios from 'axios'
   import qs from 'qs'
   import {Toast, MessageBox, Indicator, Spinner} from 'mint-ui'
-	
+
   export default{
     name: 'Invite',
     data() {
@@ -27,6 +27,9 @@
       }
     },
     methods: {},
+
+
+    
     mounted() {
     	this.token = localStorage.getItem('tenant')
     	var that = this
@@ -34,10 +37,10 @@
     		token: this.token,
   		})).then(function (res) {
     		var a = JSON.parse(Base64.decode(res.data))
-      
+
     	if (a.code == 10000) {
-    		
-    		that.codesrc = a.data.data.codeUrl 
+
+    		that.codesrc = a.data.data.codeUrl
     		Toast(a.data.msg)
       }
   		}).catch(function (err) {
@@ -84,7 +87,7 @@
 	    width: 100%;
 	    height: 100%;
 	  }
-    
+
     .hint{
     	font-size: 0.9rem;
     	color: #333333;
