@@ -82,12 +82,10 @@
         this.showbank=true
       },
       onValuesChange(picker,values){
-
         if(this.slots[0].values){
           picker.setSlotValue(1,this.slots[0].values[1]);
           this.bankname=values[0]
         }
-
       },
       testphone(){
         if(!(/^1[3|4|5|8|7][0-9]\d{8,8}$/).test(this.mobile)){
@@ -152,6 +150,7 @@
           banksubname:this.banksubname,
           bankname:this.bankname.paybankname,
           chinacode:this.bankname.bankcode,
+          bankid:this.bankname.id,
           bankno:this.bankno,
           mobile:this.mobile
         })).then(function (res) {

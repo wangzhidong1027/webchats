@@ -5,7 +5,7 @@
     <div class="input_box"><i class="mast">*</i><mt-field label="企业名称" placeholder="请输入企业名称" v-model="merchants_name" :state="merchants_state" @keyup.native="testname"></mt-field> </div>
     <div class="input_box" @click="showcity()"><i class="mast">*</i><div class="input_tit"><b>城市</b><span v-text="showaddress"></span></div></div>
     <div class="input_box"><i class="mast">*</i><mt-field label="手机号" :attr="{ maxlength: 11 }" placeholder="请输入手机号" type="tel" v-model="phone"  :state="phone_state" @keyup.native="testphone(1)"></mt-field></div>
-    <div class="input_box"><i class="mast">*</i><mt-field label="激活码" :attr="{ maxlength: 11 }" placeholder="请输入激活码" type="tel" v-model="activation"  :state="activation_state" @keyup.native="testphone(2)"></mt-field></div>
+    <div class="input_box"><i class="mast">*</i><mt-field label="激活码" :attr="{ maxlength: 11 }" placeholder="请输入总店联系人手机号" type="tel" v-model="activation"  :state="activation_state" @keyup.native="testphone(2)"></mt-field></div>
     <div class="img_box">
       <p class="card_title"><i>*</i>请上传店主身份证正面照片</p>
       <div class="dimg just"  @click="clickDom('faceIdcard')">

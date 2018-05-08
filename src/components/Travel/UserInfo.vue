@@ -1,32 +1,15 @@
 <template>
   <div class="addcredit" v-html="">
     <div class="creditcard">
-      <p><span><i>*</i>姓名：</span><input type="text" placeholder="请输入姓名" v-model="name"></p>
+      <p><span><i>*</i>姓名：</span><input type="text" placeholder="请输入姓名" v-model="cname"></p>
       <p><span><i>*</i>身份证号码：</span><input type="text" placeholder="请输入身份证号码" v-model="idcard"></p>
       <p><span><i>*</i>信用卡卡号：</span><input type="tel" placeholder="请输入信用卡卡号" v-model="bank" @blur="changeCount"></p>
       <p><span><i>*</i>预留手机号：</span><input type="tel" placeholder="请输入预留手机号" v-model="mobile"></p>
       <p><span><i>*</i>有效期：</span><i class="data" v-text="date" @click="selectDate"></i></p>
       <p><span><i>*</i>CVV2码：</span><input type="tel" placeholder="CVV2码" v-model="cvv"><b @click="explain">说明</b></p>
     </div>
-    <button @click="verify">tijiao</button>
-    <div>
-      <form action="https://gateway.95516.com/gateway/api/frontTransReq.do" method="post" id = "pay_form" >
-        <input type="hidden" name="accessType" id="accessType" value="0"/>
-        <input type="hidden" name="backUrl" id="backUrl" value="http://124.207.178.129:8082/backNotify/UNIONPAY_INSTAL/99"/>
-        <input type="hidden" name="bizType" id="bizType" value="000301"/>
-        <input type="hidden" name="certId" id="certId" value="74778248003"/>
-        <input type="hidden" name="channelType" id="channelType" value="07"/>
-        <input type="hidden" name="encoding" id="encoding" value="UTF-8"/>
-        <input type="hidden" name="frontUrl" id="frontUrl" value="http://124.207.178.129:8082/frontNotify/UNIONPAY_INSTAL/99"/>
-        <input type="hidden" name="merId" id="merId" value="802310048161356"/>
-        <input type="hidden" name="orderId" id="orderId" value="1000018523"/>
-        <input type="hidden" name="signMethod" id="signMethod" value="01"/>
-        <input type="hidden" name="signature" id="signature" value="hoZhfPLHVygjQE2y0eD2l6NwROj9B5d34ZJ7w3FXMCWEQnZGaI8zPVx1jy40K5GSlNgkRyXZg8fZ+e5YL845ydjY5WWBlYa/LJSJW68IpcAshVyYLjP/spEqh+f7ZxwKv5yeb4UyiM1Aw9vMkqujsD2s478Tvoq/hYNutNdloMPMfLhkAJjXTdf/kmK2owwsdWmla6+SBWc+KSN/oJXwrNECSNnWNGaK7upR91k4OxYIbegcumwPY6RYGYZ26k0ZPIN4x1XXIaDACjy15LoIBcqK1kF/e6XQL/dp+dDSOsyLTrJcb8K7721gYnWM80DIwwGLW/ynAlGerbrPkNEfKg=="/>
-        <input type="hidden" name="txnSubType" id="txnSubType" value="00"/>
-        <input type="hidden" name="txnTime" id="txnTime" value="20180504105911"/>
-        <input type="hidden" name="txnType" id="txnType" value="79"/>
-        <input type="hidden" name="version" id="version" value="5.1.0"/>
-      </form>
+    <div v-html="Html">
+
     </div>
     <div class="btn">
       <p @click="gopay">提交</p>
@@ -63,7 +46,7 @@
     name: 'Userinfo',
     data() {
       return {
-        name: '',
+        cname: '',
         idcard: '',
         date: '请选择有效期号',
         showcvv2: false,
@@ -76,43 +59,11 @@
         verification: '',//获取银行卡信息
         orderNo: '',
         token: '',
-        data: ''
+        Html:''
       }
     },
     methods: {
-      verify() {
-        var formData =new FormData
-        formData.append({
-          accessType: '0',
-          backUrl: 'http://124.207.178.129:8082/backNotify/UNIONPAY_INSTAL/99',
-          bizType:'000301',
-          certId:'74778248003',
-          channelType:'07',
-          encoding:'UTF-8',
-          frontUrl:'http://124.207.178.129:8082/frontNotify/UNIONPAY_INSTAL/99',
-          merId:'802310048161356',
-          orderId:'1000018523',
-          signMethod:'01',
-          signature:'hoZhfPLHVygjQE2y0eD2l6NwROj9B5d34ZJ7w3FXMCWEQnZGaI8zPVx1jy40K5GSlNgkRyXZg8fZ+e5YL845ydjY5WWBlYa/LJSJW68IpcAshVyYLjP/spEqh+f7ZxwKv5yeb4UyiM1Aw9vMkqujsD2s478Tvoq/hYNutNdloMPMfLhkAJjXTdf/kmK2owwsdWmla6+SBWc+KSN/oJXwrNECSNnWNGaK7upR91k4OxYIbegcumwPY6RYGYZ26k0ZPIN4x1XXIaDACjy15LoIBcqK1kF/e6XQL/dp+dDSOsyLTrJcb8K7721gYnWM80DIwwGLW/ynAlGerbrPkNEfKg==',
-          txnSubType:'00',
-          txnTime:'20180504105911',
-          txnType:'79',
-          version:'5.1.0'
-        })
-        // document.all.pay_form.submit()
-        // axios({
-        //   url: 'https://gateway.95516.com/gateway/api/frontTransReq.do',
-        //   method: 'post',
-        //   headers : {
-        //     "Content-Type":'application/x-www-form-urlencoded; charset=UTF-8'
-        //   },
-        //
-        // })
-        // axios.post('https://gateway.95516.com/gateway/api/frontTransReq.do', formData)
-        //   .then(response => {
-        //
-        //   })
-      },
+
       selectDate() {
         this.$refs.picker.open();
       },
@@ -166,11 +117,11 @@
           });
       },
       gopay() {
-        if (!this.name) {
+        if (!this.cname) {
           Toast('请输入姓名')
           return
         }
-        if (!(/^([\u4e00-\u9fa5]){2,7}$/).test(this.name)) {
+        if (!(/^([\u4e00-\u9fa5]){2,7}$/).test(this.cname)) {
           Toast('姓名格式有误')
           return
         }
@@ -221,7 +172,7 @@
         axios.post(BASE_URL + '/index.php?r=YinjiaStage/UserInfo', qs.stringify({
           token: this.token,
           orderid: this.orderNo,
-          signedName: this.name,
+          signedName: this.cname,
           idNo: this.idcard,
           accountNumber: that.bank,
           selectFinaCode: that.verification,
@@ -233,7 +184,8 @@
           var a = Base64.decode(res.data)
           a = JSON.parse(a)
           if (a.code == 10000) {
-            MessageBox.alert('支付成功', '提示')
+            console.log(a)
+            window.location.href='#/travel/paycode/'+that.token+'/'+that.orderNo+'/'+a.data.data.signOrderid
           } else {
             Toast(a.info)
           }
@@ -245,11 +197,12 @@
 
     },
     mounted() {
+      this.$router.replace()
       this.token = this.$route.params.token
       this.orderNo = this.$route.params.orderid
     },
     updated() {
-      document.all.pay_form.submit()
+      // document.all.pay_form.submit()
     },
     activated() {
 

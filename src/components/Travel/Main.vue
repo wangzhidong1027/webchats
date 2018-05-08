@@ -3,6 +3,7 @@
     <ul>
       <li><a  @click="gourl('#/travel/income')"><span ><i class="recode"></i>收款记录</span><b class="iconfont icon-jiantou-copy"></b></a></li>
       <li><a  @click="gourl('#/travel/refund')"><span><i class="refund"></i>退款</span><b class="iconfont icon-jiantou-copy"></b></a></li>
+      <li><a  @click="gourl('#/travel/invite')"><span><i class="refund"></i>邀请分店入驻</span><b class="iconfont icon-jiantou-copy"></b></a></li>
     </ul>
     <div class="out_box">
       <button @click="loginout">退出登录</button>

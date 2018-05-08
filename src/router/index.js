@@ -108,6 +108,8 @@ import UserInfo from '@/components/Travel/UserInfo'
 import RefundInfo from '@/components/Travel/RefundInfo'
 import Oneday from '@/components/Travel/Oneday'
 import ChildMerchants from '@/components/Travel/ChildMerchants'
+import Invite from '@/components/Travel/Invite'
+import PayCode from '@/components/Travel/PayCode'
 
 Vue.use(Router)
 export default new Router({
@@ -183,6 +185,8 @@ export default new Router({
             { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo },
             { path: '/travel/oneday/:date', name: 'Oneday', component: Oneday },
             { path: '/travel/childmerchants', name: 'ChildMerchants', component: ChildMerchants },
+            { path: '/travel/invite', name: 'Invite', component: Invite },
+            { path: '/travel/paycode/:token/:orderid/:sign', name: 'PayCode', component: PayCode },
             {path:'/travel',redirect:"/travel/index"},
             {path:'/travel/*',redirect:"/travel/index"}
           ]
