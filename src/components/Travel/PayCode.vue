@@ -36,7 +36,7 @@
         var that = this
         if(this.codeMsg=='已发送'){
           MessageBox.confirm('未收到验证码，重新下单？').then(action => {
-            window.history.back(-1)
+            window.history.go(-2)
           },action => {
             return
           });
@@ -79,7 +79,8 @@
               message: '支付成功',
               duration: 1000
             });
-            //window.location.href=''
+            var mtoken = that.token.replace(/\//g,'@')
+            window.location.href='#/travel/sccessful/'+ that.orderid+ mtoken
           }else{
             Toast({
               message: a.info,
@@ -106,8 +107,11 @@
             Indicator.close()
             var a = Base64.decode(res.data)
             a=JSON.parse(a)
+          if(a.code==10000){
             that.order=a.data.data
-            console.log(a)
+          }else{
+            Toast(a.info)
+          }
         }).catch(function(err){
           Indicator.close()
           Toast('网络故障，请稍后再试')

@@ -22,7 +22,7 @@
 			    				<i class="ibox2">{{item.shortname}}</i>
 			    			</b>
 			    			<b class="box2">
-			    				<i class="ibox1">有效期<span>{{item.diffday}}</span>天</i>
+			    				<i class="ibox1">有效期截止<span>{{getday(item.diffday)}}</span>天</i>
 			    			</b>
 		    			</div>
 		    		</a>
@@ -128,7 +128,12 @@
 
 			    });
 
-	  		}
+	  		},
+        getday(date) {
+          var day = date.split(' ')[0]
+          day = day.replace(/-/g, '.')
+          return day
+        },
 	  		//切换状态
 	  	},
 	  	mounted(){

@@ -291,7 +291,6 @@
             var a =Base64.decode(res.data)
             a=JSON.parse(a)
             Indicator.close()
-            console.log(a.code)
             if(a.code==10000){
               Toast({
                 message: '入驻成功',

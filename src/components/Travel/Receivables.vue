@@ -9,12 +9,12 @@
       <div class="money">
         <span>￥</span>
         <p @click="changemoney()"><label for="money"  number>{{message}}</label></p>
-        <input type='text' id="money" ref="money" v-model="message" @blur="change()" @keyup="inputmoney">
+        <input type='text' id="money" ref="money" v-model="message" @focus="showbutton" @blur="change()" @keyup="inputmoney">
       </div>
       <div class="content" v-text="tit"></div>
       <div class="operation">
         <a class="modify" @click="changemoney()">修改金额</a>
-        <!--<a class="preservation">长按图片保存</a>-->
+        <a class="preservation" v-if="showtrue">确定修改</a>
       </div>
     </div>
     <a class="jump" href="#/travel/settlement">查看结算账户</a>
@@ -36,7 +36,8 @@
         imgsrc: '',
         name: '',
         payway: '',
-        tit: ''
+        tit: '',
+        showtrue:false
       }
     },
     methods: {
@@ -148,6 +149,10 @@
       },
       change() {
         this.setmoney()
+        this.showtrue=false
+      },
+      showbutton(){
+        this.showtrue=true
       }
 
     },
@@ -157,6 +162,7 @@
       this.payway =   this.$route.params.type
       this.goodid = this.$route.params.id
       this.token = localStorage.getItem('tenant')
+      this.clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
       var that = this
       Indicator.open()
       axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetGoods', qs.stringify({
@@ -180,7 +186,11 @@
       }).catch(function (err) {
 
       })
+    },
+    updated(){
+
     }
+
   }
 </script>
 
@@ -257,8 +267,9 @@
   }
 
   .receivablesbox div.operation {
-    width: 9.1rem;
-    margin: 0 auto;
+      width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .receivablesbox div.operation a {
@@ -268,11 +279,9 @@
   }
 
   .receivablesbox div.operation a.modify {
-    height: 30px;
-    line-height: 30px;
     text-align: left;
     text-align: center;
-    width: 100%
+    line-height: 30px;
   }
 
   .receivablesbox div.operation a.preservation {

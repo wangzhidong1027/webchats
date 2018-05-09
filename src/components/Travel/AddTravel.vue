@@ -7,7 +7,7 @@
       <div class="list">
         <ul>
           <li><label for="email"><i>* </i>邮箱：</label><input id="email" v-model="email" type="text"
-                                                             placeholder="请输入您的邮箱 " @blur="testemail"></li>
+                                                            placeholder="请输入您的邮箱 " @blur="testemail"></li>
           <li><label for="compony_name"><i>* </i>企业名称：</label><input id="compony_name" v-model="companyname" type="text"
                                                                      placeholder="请输入企业名称"
                                                                      @blur="errinput(companyname)"/></li>
@@ -20,8 +20,7 @@
                                                                   type="tel" placeholder="请输入联系人手机号 " @blur="testphone">
           </li>
           <li><label for="bslicenseNO"><i>* </i>营业执照号：</label><input id="bslicenseNO" v-model="bslicenseNO" type="tel"
-                                                                     placeholder="请输入营业执照号 "
-                                                                     @blur="isnumber(bslicenseNO)"></li>
+                                                                     placeholder="请输入营业执照号 "></li>
           <li><label for="salerphone">激活码：</label><input id="salerphone" v-model="salerphone" type="tel"
                                                          placeholder="请输入激活码 "
                                                          @blur="isnumber(salerphone)"><span>非必填选项</span></li>
@@ -82,8 +81,7 @@
 <script>
   import axios from "axios";
   import qs from "qs";
-  import {Indicator, Toast} from "mint-ui";
-  import {MessageBox} from 'mint-ui'
+  import {Indicator, MessageBox, Toast} from "mint-ui";
   import PickerAddress from './PickerAddress';
 
   export default {
@@ -424,11 +422,15 @@
         }
       },
       gosubmit() {
-        if (!this.email ) {
+        if ((/(?=[\x21-\x7e]+)[^A-Za-z0-9]/).test(this.bslicenseNO)){
+          MessageBox.alert('营业执照号码格式不正确')
+          return
+        }
+        if (!this.email) {
           MessageBox.alert('请输入用户名邮箱')
           return
         }
-        if(!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(this.email)){
+        if (!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).test(this.email)) {
           MessageBox.alert('邮箱格式不正确')
           return
         }
@@ -440,7 +442,7 @@
           MessageBox.alert('请输入联系人姓名')
           return
         }
-        if (!(/^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,8}$/.test(this.linkname))){
+        if (!(/^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,8}$/.test(this.linkname))) {
           MessageBox.alert('联系人姓名格式不正确')
           return
         }
@@ -448,15 +450,12 @@
           MessageBox.alert('请输入营业执照号')
           return
         }
-        if (!(/^[0-9]*$/g.test(this.bslicenseNO))) {
-          MessageBox.alert('营业执照号码格式不正确')
-          return
-        }
-        if(!this.linkphone){
+
+        if (!this.linkphone) {
           MessageBox.alert('请输入联系人手机号码')
           return
         }
-        if (!(/^1[3|4|5|8|7][0-9]\d{8,8}$/.test(this.linkphone)) ) {
+        if (!(/^1[3|4|5|8|7][0-9]\d{8,8}$/.test(this.linkphone))) {
           MessageBox.alert('联系人手机号码格式不正确')
           return
         }

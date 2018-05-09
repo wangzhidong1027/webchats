@@ -210,7 +210,6 @@
     },
     mounted() {
       // this.$router.replace()
-
       this.token = this.$route.params.token.replace(/@/g,'/')
       this.orderNo = this.$route.params.orderid
     },

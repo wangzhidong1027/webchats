@@ -254,6 +254,7 @@ import qs from 'qs'
   background: #fff;
   display: flex;
   flex-flow: column;
+  overflow: scroll;
   #img{
     display: none;
   }

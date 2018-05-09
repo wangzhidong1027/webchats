@@ -29,7 +29,7 @@
     methods: {},
 
 
-    
+
     mounted() {
     	this.token = localStorage.getItem('tenant')
     	var that = this

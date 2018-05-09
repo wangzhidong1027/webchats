@@ -9,12 +9,12 @@
   </header>
   <div class="typelist" v-if="paytypelist.length">
     <!-- 信用卡分期 -->
-    <div class="creditcard" v-for="type in paytypelist">
+    <div class="creditcard" v-for="type in paytypelist"  v-if="type.catid!=9">
       <div class="name" @click="changetype(type.catid,type.cat)"><span><img :src='"../../assets/images/travel/paytype"+ type.catid + ".png"' alt="">{{type.cat}}</span><b :class="paytype==type.catid?'selsect':''"></b></div>
        <div class="numlist" v-show="selectType==type.catid" >
           <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat,type.cat)"  :class="selectPeriods== item.catid&& paytype== type.catid? 'periods':''">
             <p>{{money}}元x{{item.cat}}</p>
-            <p>含服务费***元/期</p>
+            <p>&nbsp</p>
           </div>
          <!--<h4>应还总额<span>xxx</span>元</h4>-->
       </div>
@@ -131,6 +131,7 @@
                 that.codeurl=data.data.data.code_url
                 that.showWX=true
               }else {
+                var Btoken=that.token.replace(/\//g,'@ ')
                 window.location.href = '#/travel/userinfo/' + that.token + '/' + data.data.data.orderid
               }
             }else{
