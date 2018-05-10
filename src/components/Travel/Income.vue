@@ -1,9 +1,15 @@
 <template>
-<div class="income">
+<div class="income" style="height:100%;">
 <header>
   <div class="contianer">
-    <nav><span></span><span class="checklist">全部收入<!--<b class="iconfont icon-jiantou"></b><ul><li>dasdas</li></ul>--></span><span><a
-      href="#/travel/history">历史收入</a></span></nav>
+    <nav><span></span><span @click="changeshowtype"  class="checklist">{{typetext}}<b class="iconfont  " :class="showType ?'icon-jiantou1':'icon-jiantou'" ></b>
+    <ul class="typelist" v-if="showType">
+      <li :class="{sele:type==0}" @click="looktype(0)">全部收入</li>
+      <li :class="{sele:type==9}" @click="looktype(9)">微信支付</li>
+      <li :class="{sele:type==7}" @click="looktype(7)">信用卡分期</li>
+      </ul>
+      </span><span>
+        <a href="#/travel/history">历史收入</a></span></nav>
     <h4><b>{{allmoney}}</b>元</h4>
     <p>共计<b>{{data.length}}</b>笔</p>
   </div>
@@ -12,7 +18,7 @@
   <ul>
     <li v-for="item in data">
       <div class="title"><p class="number">{{item.orderid}}</p><p class="time">{{item.paytime}}</p></div>
-      <div class="dealType">微信全额支付</div>
+      <div class="dealType">{{changetype(item.paytype)}}</div>
       <div class="money">+{{item.orderselprice}}</div>
     </li>
   </ul>
@@ -28,7 +34,10 @@
     data() {
       return {
         data:[],
-        allmoney:'0.00'
+        allmoney:'0.00',
+        type:0,
+        typetext:'',
+        showType:false
       }
     },
     methods: {
@@ -39,26 +48,56 @@
           }
           money=money/100
           this.allmoney= money
+        },
+        changeshowtype(){
+          this.showType=!this.showType
+        },
+        changetype(type){
+          if(type==9){
+            return '微信支付'
+          }
+          if(type==7){
+            return '银联信用卡分期'
+          }
+        },
+        type_cn(){
+          if(this.type==0){
+            this.typetext= '全部收入'
+          }
+           if(this.type==9){
+            this.typetext='微信支付'
+          }
+           if(this.type==7){
+            this.typetext= '信用卡分期'
+          }
+        },
+        looktype(num){
+            this.type=num
+            this.getdata()
+        },
+        getdata(){
+          var that =this
+          var token = localStorage.getItem('tenant')
+          this.type_cn()
+          axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatOrder',qs.stringify({
+            token:token,
+            type:this.type
+          })).then(function(res){
+              var data =JSON.parse(Base64.decode(res.data))
+            if(data.code==10000){
+              if(data.data.err==10000){
+                that.data=data.data.data
+                that.getallMoney()
+              }
+            }
+          }).catch(function(err){
+
+          })
         }
     },
     mounted() {
       document.title='退单详情'
-      var that =this
-      var token = localStorage.getItem('tenant')
-      axios.post(BASE_URL+'/index.php?r=YinjiaStage/GetMerchatOrder',qs.stringify({
-        token:token
-      })).then(function(res){
-          var data =JSON.parse(Base64.decode(res.data))
-        if(data.code==10000){
-          if(data.data.err==10000){
-            that.data=data.data.data
-            that.getallMoney()
-          }
-        }
-      }).catch(function(err){
-
-      })
-
+      this.getdata()
     },
     updated() {
 
@@ -74,6 +113,8 @@
 .income{
   display: flex;
   flex-flow: column;
+  background:#fff;
+  overflow: scroll;
   header{
     width: 100%;
     height: 6.25rem;
@@ -95,7 +136,7 @@
         position: relative;
         ul{
           position: absolute;
-          top: 1rem;
+          top: 1.3rem;
           left: 0;
           background: #fff;
           border: 1px solid #eee;
@@ -105,6 +146,9 @@
           -moz-border-radius: 4px;
           border-radius: 4px;
           line-height: 2rem;
+        }
+        .sele{
+          background: #f6f6f8;
         }
       }
       span{
@@ -153,6 +197,7 @@
           display: flex;
           flex: 1;
           margin-left: 1.5rem;
+          text-align: center;
         }
         .money{
           color: #333333;

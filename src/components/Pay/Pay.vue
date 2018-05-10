@@ -421,12 +421,14 @@
         }
       },
       getorder(){
+        Indicator.open()
         var that=this
         axios.post(BASE_URL+'/index.php?r=order/view',qs.stringify({
           oid:Base64.encode(this.orderid),
           ischild:Base64.encode("0"),
           token:this.token
         })).then(function(res){
+          Indicator.close()
           var a =Base64.decode(res.data)
           a=JSON.parse(a)
           that.order=a.data.order
@@ -448,22 +450,23 @@
             Toast('该订单已支付完成')
             window.location.href="#/order/all"
           }
-
         }).catch(function(err){
-
+          Indicator.close()
         })
       },
       getYue(){
+        Indicator.open()
         var that= this
         axios.post(BASE_URL +'/index.php?r=site/userinfo',qs.stringify({
           token:this.token
         })).then(function(data){
+          Indicator.close()
           var a = JSON.parse(Base64.decode(data.data))
           if(a.data.err==10002){
             that.mymoney=a.data.allMoney;
           }
         }).catch(function(err){
-
+          Indicator.close()
         })
       },
       getwxStr(){
@@ -502,6 +505,7 @@
     },
     mounted(){
       this.isgologin()
+      Indicator.open()
       var that =this
       this.token = localStorage.getItem("token");
       document.title = '订单支付'
@@ -513,7 +517,7 @@
         if(url.indexOf('openid=')=='-1'){
           var myurl= Base64.encode(url)
           var gohref=encodeURIComponent(BASE_URL+"/index.php?r=weiXinPay/getOP&vueUrl="+myurl+'&token='+this.token)
-           window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+PAY_appid+'&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
+           window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
           // window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
         }else{
           this.openid=url.split("openid=")[1];

@@ -31,8 +31,8 @@
                 </div>
               </div>
               <div class='gopay'>
-                <a @click="back" class="cardpay">分期收款</a><!-- :href='"#/travel/receivables/"+goods.pid +"/card "'-->
-                <a :href=' "#/travel/receivables/"+goods.pid+"/wx" '>微信收款</a>
+                <a  @click='back(1,"#/travel/receivables/"+goods.pid +"/card ")' class="cardpay">分期收款</a><!-- -->
+                <a   @click='back(2,"#/travel/receivables/"+goods.pid+"/wx")'>微信收款</a>
                 <button @click="deleteGoods(goods.pid,index)"></button>
               </div>
             </li>
@@ -60,12 +60,27 @@
         my: '',
         token: '',
         ishave: false,
-        issure: false
+        issure: false,
+        isOpenW:false,
+        isOpenF:false,
       }
     },
     methods: {
-      back() {
-        MessageBox.alert('正在开发中，请您耐心等待')
+      back(type,src) {
+          // MessageBox.alert('正在开发中，请您耐心等待')
+        if (type==1) {
+          if(this.isOpenF){
+            window.location.href=src
+          }else{
+              MessageBox.alert('您未开通分期收款')
+          }
+        }else{
+          if(this.isOpenW){
+            window.location.href=src
+          }else{
+              MessageBox.alert('您未开通微信收款')
+          }
+        }
       },
       loadBottom() {
       },
@@ -172,6 +187,8 @@
               that.my = a.data.data
               if (a.data.data.attestation == 1) {
                 that.issure = true
+                that.isOpenF=a.data.data.isOpenF
+                that.isOpenW=a.data.data.isOpenW
                 that.getgoods()
               }
             }else if (a.code == 10007) {

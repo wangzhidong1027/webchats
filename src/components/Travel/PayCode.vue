@@ -80,7 +80,7 @@
               duration: 1000
             });
             var mtoken = that.token.replace(/\//g,'@')
-            window.location.href='#/travel/sccessful/'+ that.orderid+ mtoken
+            window.location.href='#/travel/sccessful/'+ that.orderid+'/'+ mtoken
           }else{
             Toast({
               message: a.info,

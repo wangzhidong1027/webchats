@@ -9,7 +9,6 @@
       <p><span><i>*</i>CVV2码：</span><input type="tel" placeholder="CVV2码" v-model="cvv"><b @click="explain">说明</b></p>
     </div>
     <div v-html="Html">
-
     </div>
     <div class="btn">
       <p @click="gopay">提交</p>
@@ -180,10 +179,8 @@
           validityCard: that.date,
           mobileNo: that.mobile,
         })).then(function (res) {
-
           var a = Base64.decode(res.data)
           a = JSON.parse(a)
-          console.log(a)
           if (a.code == 10000) {
             if(a.data.err==10011){
               Indicator.close()
@@ -202,15 +199,12 @@
             Toast(a.info)
           }
         }).catch(function (err) {
-
         });
-
       },
-
     },
     mounted() {
       // this.$router.replace()
-      this.token = this.$route.params.token.replace(/@/g,'/')
+      this.token = (this.$route.params.token).replace(/@/g,'/')
       this.orderNo = this.$route.params.orderid
     },
     updated() {

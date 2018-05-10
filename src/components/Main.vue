@@ -132,7 +132,7 @@ export default {
       width: 17.25rem;
       height: 3rem;
       display: flex;
-      box-shadow: 0 5px 15px #f5c3c3;
+      /*box-shadow: 0 5px 15px #f5c3c3;*/
       position: absolute;
       top: -1.5rem;
       justify-content: space-between;
@@ -169,7 +169,7 @@ export default {
       background: #fff;
       padding: 0 0.75rem;
       border-radius: 8px;
-      box-shadow: 0 5px 15px #f5c3c3;
+      /*box-shadow: 0 5px 15px #f5c3c3;*/
       hr {
         color: #eee;
         height: 1px;
@@ -194,7 +194,7 @@ export default {
       margin-top: 0.75rem;
       background: #fff;
       border-radius: 8px;
-      box-shadow: 0 5px 15px #f5c3c3;
+      /*box-shadow: 0 5px 15px #f5c3c3;*/
       div {
         display: flex;
         justify-content: space-between;

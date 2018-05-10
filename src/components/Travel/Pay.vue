@@ -16,6 +16,12 @@
             <p>{{money}}元x{{item.cat}}</p>
             <p>&nbsp</p>
           </div>
+          <div class="bankinfo" v-if="type.catid==7">
+            <h5>温馨提示：</h5>
+            <p>目前支持银行有:<span v-for="bankitem in banklist">{{bankitem.bankName}}、</span>
+              感谢您的配合。
+            </p>
+          </div>
          <!--<h4>应还总额<span>xxx</span>元</h4>-->
       </div>
   </div>
@@ -81,7 +87,8 @@
         name:'',
         logo:'',
         showWX:false,
-        codeurl:''
+        codeurl:'',
+        banklist:[]
       }
     },
     methods: {
@@ -132,7 +139,7 @@
                 that.showWX=true
               }else {
                 var Btoken=that.token.replace(/\//g,'@ ')
-                window.location.href = '#/travel/userinfo/' + that.token + '/' + data.data.data.orderid
+                window.location.href = '#/travel/userinfo/' + Btoken + '/' + data.data.data.orderid
               }
             }else{
 
@@ -168,6 +175,16 @@
             that.name=a.data.data.companyname,
             that.logo=a.data.data.logo
           }
+        }
+      }).catch(function (err) {
+
+      })
+       axios.post(BASE_URL +'/index.php?r=YinjiaStageShare/BankList',qs.stringify({
+        token: this.token,
+      })).then(function (res) {
+          var a=JSON.parse(Base64.decode(res.data))
+        if(a.code==10000){
+          that.banklist=a.data.data.res
         }
       }).catch(function (err) {
 
@@ -227,7 +244,7 @@
     padding: 0 0.75rem;
     padding-bottom:2.25rem;
     .creditcard{
-      box-shadow:0px 0px 30px rgba(0,0,0,0.1);
+      box-shadow:0px 0px 20px #ebeaef;
       margin-bottom:0.75rem;
       .name{
         padding: 0 0.75rem;
@@ -260,6 +277,16 @@
         display: flex;
         justify-content: space-between;
         flex-wrap:wrap;
+        //银行列表
+        .bankinfo{
+            width: 100%;
+            font-size: 0.5rem;
+            color: #333;
+            padding-bottom: 1rem;
+            P{
+              color: #666;
+            }
+        }
         .list{
           border: 1px solid #eee;
           background: #fbfbfb;

@@ -1,9 +1,14 @@
 <template>
-  <div class="oneday">
+  <div class="oneday" style="height:100%;">
     <header>
       <div class="contianer">
-        <nav><span>{{day}}</span><span class="checklist">全部收入
-          <!--<b class="iconfont icon-jiantou"></b><ul><li>dasdas</li></ul>--></span><span></span></nav>
+        <nav><span>{{day}}</span><span class="checklist" @click="changeshowtype">{{typetext}}
+          <b class="iconfont  " :class="showType ?'icon-jiantou1':'icon-jiantou'" ></b>
+      <ul class="typelist" v-if="showType">
+        <li :class="{sele:type==0}" @click="looktype(0)">全部收入</li>
+        <li :class="{sele:type==9}" @click="looktype(9)">微信支付</li>
+        <li :class="{sele:type==7}" @click="looktype(7)">信用卡分期</li>
+      </ul></span><span></span></nav>
         <h4><b>{{data.money}}</b>元</h4>
         <p>共计<b>{{allnum}}</b>笔</p>
       </div>
@@ -13,7 +18,7 @@
         <li v-for="item in data.order">
           <div class="title"><p class="number">{{item.orderid}}</p>
             <p class="time">{{item.paytime}}</p></div>
-          <div class="dealType">微信全额支付</div>
+          <div class="dealType">{{changetype(item.paytype)}}</div>
           <div class="money">+{{item.pmoney}}</div>
         </li>
       </ul>
@@ -33,35 +38,68 @@
         data: [],
         allmoney: '',
         allnum: 0,
-        day: ''
-
+        day: '',
+        type:0,
+        showType:false,
+        typetext:'全部收入'
       }
     },
-    methods: {},
+    methods: {
+      changetype(type){
+        if(type==9){
+          return '微信支付'
+        }
+        if(type==7){
+          return '银联信用卡分期'
+        }
+      },
+      getorder(){
+        var that = this
+        axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetOrderPass', qs.stringify({
+          token: this.token,
+          paytime: this.day,
+          type:this.type
+        })).then(function (res) {
+          var a = JSON.parse(Base64.decode(res.data))
+          if (a.code == 10000) {
+            if (a.data.err == 10000) {
+              that.data = a.data.data
+              that.allnum = a.data.data.order.length
+            } else {
+              Toast(a.msg)
+            }
+          } else {
+            Toast(a.info)
+          }
+        }).catch(function (err) {
+
+        })
+      },
+      type_cn(){
+        if(this.type==0){
+          this.typetext= '全部收入'
+        }
+        if(this.type==9){
+          this.typetext='微信支付'
+        }
+        if(this.type==7){
+          this.typetext= '信用卡分期'
+        }
+      },
+      changeshowtype(num){
+          this.showType=!this.showType
+      },
+      looktype(num){
+        this.type=num
+        this.type_cn()
+        this.getorder()
+      }
+    },
     mounted() {
       document.title='订单记录'
-      var that = this
       this.day = this.$route.params.date
       this.token = localStorage.getItem('tenant')
-      axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetOrderPass', qs.stringify({
-        token: this.token,
-        paytime: this.day
-      })).then(function (res) {
-        var a = JSON.parse(Base64.decode(res.data))
-        if (a.code == 10000) {
-          if (a.data.err == 10000) {
-            that.data = a.data.data
-            that.allnum = a.data.data.order.length
-          } else {
-            Toast(a.msg)
-          }
-        } else {
-          Toast(a.info)
-        }
-      }).catch(function (err) {
-
-      })
-
+      this.getorder()
     },
     updated() {
 
@@ -77,6 +115,8 @@
   .oneday {
     display: flex;
     flex-flow: column;
+    background: #fff;
+    overflow: scroll;
     header {
       width: 100%;
       height: 6.25rem;
@@ -109,6 +149,9 @@
             border-radius: 4px;
             line-height: 2rem;
           }
+        }
+        .sele{
+          background: #f6f6f8;
         }
         span {
           font-size: 0.7rem;

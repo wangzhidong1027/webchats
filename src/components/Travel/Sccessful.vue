@@ -48,6 +48,7 @@
       }
     },
     mounted() {
+      Indicator.open()
       var that = this
       this.orderid = this.$route.params.orderid
       this.token = (this.$route.params.token).replace(/@/g,'/')
