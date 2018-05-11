@@ -164,7 +164,7 @@
             MessageBox.alert(a.info)
           }
         }).catch(function (err) {
-
+            Indicator.close()
         })
       }
     },

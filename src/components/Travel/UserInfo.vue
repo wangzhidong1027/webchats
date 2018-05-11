@@ -29,7 +29,7 @@
       year-format="{value} 年"
       month-format="{value} 月"
       date-format="{value} 日"
-      :startDate="new Date('1990-01-01')"
+      :startDate="new Date()"
       :endDate="new Date('2070-12-31')"
       @confirm="handleConfirm">
     </mt-datetime-picker>
@@ -61,6 +61,13 @@
         Html:''
       }
     },
+    computed:{
+        datatime(){
+            console.log(this.time.replace(0,7))
+          return this.time.replace(0,7)
+         
+        }
+    },
     methods: {
 
       selectDate() {
@@ -72,7 +79,7 @@
         m = m < 10 ? '0' + m : m;
         var d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
-        this.date = y + '-' + m + '-' + d;
+        this.date = y + '-' + m 
         this.format = this.date
       },
       explain() {
@@ -217,7 +224,7 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .addcredit {
     width: 100%;
     height: 100%;
@@ -386,6 +393,9 @@
         color: #ff3737;
         margin-top: 1rem;
       }
+    }
+    .picker-slot-center:nth-last-child(2){
+      display: none;
     }
   }
 

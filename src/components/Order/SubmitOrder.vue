@@ -440,18 +440,14 @@
         if (this.cardorder.length) {
           if (this.code) {
             var that = this;
-            var allnumber = (this.paygoods.length +
-              this.cardorder.length +
-              this.shiticard.length
-            ).toFixed(2);
+            var allnumber = (this.paygoods.length +this.cardorder.length +this.shiticard.length).toFixed(2);
             if (allnumber <= 0) {
               Toast("该订单没有可下单商品");
               return;
             }
             Indicator.open()
             var token = localStorage.getItem("token");
-            axios
-              .post(
+            axios.post(
                 BASE_URL + "/index.php?r=shop/Restorders",
                 qs.stringify({
                   addressid: that.shouAddress.id,
@@ -498,6 +494,7 @@
           }
           var b = JSON.stringify(this.paygoods);
           var token = localStorage.getItem("token");
+          Indicator.open()
           axios
             .post(
               BASE_URL + "/index.php?r=shop/Restorders",
@@ -511,6 +508,7 @@
               })
             )
             .then(function (res) {
+              Indicator.close()
               if (res.data.data.err == "10002") {
                 window.location.href = "?#/pay/" + res.data.data.mainorderid;
               } else {
@@ -525,6 +523,7 @@
               }
             })
             .catch(function (err) {
+              Indicator.close()
             });
         }
       },

@@ -40,7 +40,7 @@
             <a v-if='!backIdcard'></a>
             <img v-if='backIdcard' :src="backIdcard" alt="">
             <input type="file" id="backIdcard" ref="backIdcard" accept="image/*"
-                   ImgBase64 name="bslicense">
+                  @change="ImgBase64($event,'backIdcard')" ImgBase64 name="bslicense">
           </div>
           <p><i>* </i>请上传手持身份证照片</p>
           <div class="dimg just" @click="clickDom('takeIdcard')">
@@ -537,7 +537,7 @@ export default {
         MessageBox.alert("身份证信息有误，请重新上传");
         return;
       }
-      // Indicator.open()
+      Indicator.open()
       axios
         .post(
           BASE_URL + "/index.php?r=YinjiaStage/InputMerch",
@@ -565,7 +565,6 @@ export default {
         .then(function(res) {
           Indicator.close();
           var a = JSON.parse(Base64.decode(res.data));
-          console.log(a);
           if (a.code == 10000) {
             localStorage.setItem("tenant", a.token);
             MessageBox.alert("请补全您的对公账户信息", "提示").then(action => {
@@ -575,7 +574,9 @@ export default {
             MessageBox.alert(a.info, "提示");
           }
         })
-        .catch(function(err) {});
+        .catch(function(err) {
+          Indicator.close();
+        });
     }
   },
   mounted() {

@@ -66,9 +66,9 @@
             }
           }
         }
-        if (this.message > 10000) {
-          MessageBox.alert('金额不能超过一万')
-          this.message =10000
+        if ( this.payway == 'wx'&& this.message > 20000) {
+          MessageBox.alert('金额不能超过两万')
+          this.message =20000
         }
       },
       setmoney() {
@@ -77,10 +77,7 @@
           Toast('金额格式不正确')
           return
         }
-        if (this.message > 10000) {
-          Toast('金额不能超过一万')
-          return
-        }
+
         if (this.message <= 0 || !this.message) {
           Toast('请输入正确金额')
           return
@@ -316,7 +313,7 @@
         padding: 0;
         margin: 0;
         outline: none;
-        padding-right: 1rem;
+        padding-right: 0rem;
       }
     }
     input[type=number]::-webkit-inner-spin-button,
@@ -327,7 +324,7 @@
     }
     #money {
       margin-left:0.1rem;
-      width: 0.1rem;
+      width: 1rem;
       border: none;
       opacity: 0;
     }

@@ -25,7 +25,8 @@
       return {
         isadd: false,
         isok: false,
-        ischild: false
+        ischild: false,
+        status:null
       }
     },
     methods: {
@@ -45,9 +46,12 @@
           return
         }
         if (!this.isok) {
-          MessageBox.alert('信息认证中，请耐心等待', '提示').then(action => {
-          })
+          MessageBox.alert('信息认证中，请耐心等待', '提示')
           return
+        }
+        if(this.status!=0){
+            MessageBox.alert('您的账户已冻结，请联系客服', '提示')
+             return
         }
         window.location.href = url
       }
@@ -82,6 +86,7 @@
             if (a.data.err == 10000) {
               that.my = a.data.data
               that.ischild = a.data.data.store
+              that.status=a.data.data.status
               if (a.data.data.attestation == 1) {
                 that.isok = true
               }

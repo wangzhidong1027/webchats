@@ -31,8 +31,8 @@
                 </div>
               </div>
               <div class='gopay'>
-                <a  @click='back(1,"#/travel/receivables/"+goods.pid +"/card ")' class="cardpay">分期收款</a><!-- -->
-                <a   @click='back(2,"#/travel/receivables/"+goods.pid+"/wx")'>微信收款</a>
+                <a  @click='back(1,"#/travel/receivables/"+goods.pid +"/card ")' :class="{cardpay:!isOpenF}">分期收款</a><!-- -->
+                <a   @click='back(2,"#/travel/receivables/"+goods.pid+"/wx")' :class="{cardpay:!isOpenW}">微信收款</a>
                 <button @click="deleteGoods(goods.pid,index)"></button>
               </div>
             </li>
@@ -63,11 +63,16 @@
         issure: false,
         isOpenW:false,
         isOpenF:false,
+        status:null,//账户状态
       }
     },
     methods: {
       back(type,src) {
           // MessageBox.alert('正在开发中，请您耐心等待')
+        if(this.status!=0){
+          MessageBox.alert('您的账户已经冻结，请联系客服')
+          return
+        }
         if (type==1) {
           if(this.isOpenF){
             window.location.href=src
@@ -76,18 +81,23 @@
           }
         }else{
           if(this.isOpenW){
-            window.location.href=src
+              window.location.href=src
           }else{
               MessageBox.alert('您未开通微信收款')
           }
         }
       },
       loadBottom() {
+
       },
       goaddgoods() {
         if (this.ishave) {
           if (this.issure) {
-            window.location.href = '#/travel/publish'
+            if(this.status==0){
+              window.location.href = '#/travel/publish'
+            }else{
+              MessageBox.alert('您的账户已经冻结，请联系客服')
+            }
           } else {
             MessageBox.alert('您的信息正在认证中，请耐心等待')
           }
@@ -99,6 +109,10 @@
       },
       //删除
       deleteGoods(pid, index) {
+        if(this.status!=0){
+          MessageBox.alert('您的账户已经冻结，请联系客服')
+          return
+        }
         var that = this
         MessageBox.confirm("您确定删除此商品", '  ').then(action => {
           Indicator.open()
@@ -122,9 +136,11 @@
       },
       getgoods() {
         var that = this
+        Indicator.open()
         axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetMerchGoods', qs.stringify({
           token: this.token
         })).then(function (res) {
+          Indicator.close()
           var a = JSON.parse(Base64.decode(res.data))
           if (a.code == 10000) {
             if (a.data.err == 10000) {
@@ -142,45 +158,15 @@
         }).catch(function (err) {
 
         })
-      }
-    },
-    mounted() {
-      document.title = '分期业务'
-      var that = this
-      this.token = localStorage.getItem('tenant')
-      if (!this.token) {
-        window.location.href = '#/travel/login'
-      } else {
-        //验证商户有无对公账户
-        axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetMerchBank', qs.stringify({
-          token: this.token,
-        })).then(function (res) {
-          var a = JSON.parse(Base64.decode(res.data))
-          if (a.code == 10000) {
-            if (a.data.err == 10000) {
-              if (a.data.data.bankno) {
-                that.ishave = true
-              } else {
-                MessageBox.alert('请补全对公账户信息', '提示').then(action => {
-                  window.location.href = '#/travel/addcredit'
-                })
-              }
-            }
-          } else if (a.code == 10007) {
-            localStorage.removeItem('tenant')
-            window.location.href = '#/travel/login'
-            return
-          }else {
-            Toast('商品列表获取失败，请刷新页面')
-          }
-
-        }).catch(function (err) {
-
-        })
+      },
+      getMerchatInfo(){
         //获取账户信息
+        var that =this
+         Indicator.open()
         axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetMerchatInfo', qs.stringify({
           token: this.token
         })).then(function (res) {
+           Indicator.close()
           var a = JSON.parse(Base64.decode(res.data))
           if (a.code == 10000) {
             if (a.data.err == 10000) {
@@ -189,6 +175,7 @@
                 that.issure = true
                 that.isOpenF=a.data.data.isOpenF
                 that.isOpenW=a.data.data.isOpenW
+                that.status=a.data.data.status
                 that.getgoods()
               }
             }else if (a.code == 10007) {
@@ -199,11 +186,50 @@
               Toast('商户信息获取失败，请刷新页面')
             }
           } else {
-            Toast('商户信息获取失败')
+            Toast(a.info)
           }
         }).catch(function (err) {
-
+              Indicator.close()
         })
+      }
+
+    },
+    mounted() {
+      document.title = '分期业务'
+      var that = this
+      this.token = localStorage.getItem('tenant')
+      if (!this.token) {
+        window.location.href = '#/travel/login'
+      } else {
+        Indicator.open()
+        //验证商户有无对公账户
+        axios.post(BASE_URL + '/index.php?r=YinjiaStage/GetMerchBank', qs.stringify({
+          token: this.token,
+        })).then(function (res) {
+          Indicator.close()
+          var a = JSON.parse(Base64.decode(res.data))
+          if (a.code == 10000) {
+            if (a.data.err == 10000) {
+              if (a.data.data.bankno) {
+                that.ishave = true
+                that.getMerchatInfo()
+              }
+            }
+          } else if (a.code == 10007) {
+            localStorage.removeItem('tenant')
+            window.location.href = '#/travel/login'
+            return
+          }else if(a.code==10008){
+            MessageBox.alert('请补全对公账户信息', '提示').then(action => {
+              window.location.href = '#/travel/addcredit'
+            })
+        } else{
+            Toast(a.info)
+          }
+        }).catch(function (err) {
+            Indicator.close()
+        })
+
 
       }
     },

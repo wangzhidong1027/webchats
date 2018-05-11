@@ -36,7 +36,7 @@
         var that = this
         if(this.codeMsg=='已发送'){
           MessageBox.confirm('未收到验证码，重新下单？').then(action => {
-            window.history.go(-2)
+            window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderselprice
           },action => {
             return
           });
@@ -54,7 +54,11 @@
               Toast('验证码已发送')
               that.codeMsg='已发送'
             }else{
-              Toast(a.info)
+              MessageBox.confirm(a.info+'重新下单？').then(action => {
+                window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderselprice
+              },action => {
+                return
+              });
             }
           }).catch(function(err){
             Indicator.close()
@@ -82,14 +86,14 @@
             var mtoken = that.token.replace(/\//g,'@')
             window.location.href='#/travel/sccessful/'+ that.orderid+'/'+ mtoken
           }else{
-            Toast({
-              message: a.info,
-              duration: 1000
+            MessageBox.confirm(a.info+'重新下单？').then(action => {
+              window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderselprice
+            },action => {
+              return
             });
           }
         }).catch(function(err){
           Indicator.close()
-          Toast('网络故障，请稍后再试')
         })
       }
     },
@@ -143,6 +147,7 @@
     height:2rem;
     border-bottom: 1px solid #eee;
     color: #333;
+    line-height: 2rem;
   }
   .codehint{
     color: #666;
@@ -167,6 +172,7 @@
       border:none;
       color: #ffff;
       border-radius: 8px;
+      line-height: 1.5rem;
     }
   }
   .gopay{

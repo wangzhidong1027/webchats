@@ -1,7 +1,7 @@
 <template>
   <div class="successful_trade">
     <div class="money">
-      <p>{{order.pmoney}}</p>
+      <p>{{order.orderselprice}}</p>
       <span>总交易(元)</span>
       <div class="graphical"></div>
       <div class="transaction_content">
@@ -23,7 +23,7 @@
         </div>
         <div>
           <label>交易金额</label>
-          <span>{{order.pmoney}}</span>
+          <span>{{order.orderselprice}}</span>
         </div>
         <div class=" time" style="border: none;">
           <label>交易时间</label>
@@ -53,26 +53,28 @@
       this.orderid = this.$route.params.orderid
       this.token = (this.$route.params.token).replace(/@/g,'/')
       var that = this
-      axios.post(BASE_URL+'/index.php?r=YinjiaStageShare/OrderInfo',qs.stringify({
-        token:this.token,
-        orderid:this.orderid,
-      })).then(function(res){
-        Indicator.close()
-        var a = Base64.decode(res.data)
-        a=JSON.parse(a)
-        if(a.code==10000){
-          if(a.data.err==10000){
-            that.order=a.data.data.res
+      setTimeout(function(){
+        axios.post(BASE_URL+'/index.php?r=YinjiaStageShare/OrderInfo',qs.stringify({
+          token:that.token,
+          orderid:that.orderid,
+        })).then(function(res){
+          Indicator.close()
+          var a = Base64.decode(res.data)
+          a=JSON.parse(a)
+          if(a.code==10000){
+            if(a.data.err==10000){
+              that.order=a.data.data.res
+            }else{
+              Toast(a.data.msg)
+            }
           }else{
-            Toast(a.data.msg)
+            Toast(a.info)
           }
-        }else{
-          Toast(a.info)
-        }
-      }).catch(function(err){
-        Indicator.close()
-        Toast('网络故障，请稍后再试')
-      })
+        }).catch(function(err){
+          Indicator.close()
+          Toast('网络故障，请稍后再试')
+        })
+      },5000)
     }
   }
 </script>

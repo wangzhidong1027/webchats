@@ -87,10 +87,7 @@ import qs from 'qs'
             }
           }
         }
-        if(this.pmoney>10000){
-          MessageBox.alert('金额不能超过一万')
-          this.pmoney=''
-        }
+
       },
       getimg(){
         var img =this.$refs.aptitude
@@ -190,12 +187,7 @@ import qs from 'qs'
           Toast('请输入正确金额')
           return
         }
-        if(this.pmoney-10000<0){
 
-        }else{
-          Toast('金额最高为10000元')
-          return
-        }
         if(!(/^[0-9]+(\.[0-9]{0,2})?$/g).test(this.pmoney)){
           Toast('请输入正确商品金额')
           return

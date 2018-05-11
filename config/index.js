@@ -29,19 +29,19 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {//生产环境
-			 // '/index.php':{
-			 // 		target:'http://api.7shengqian.com/',
-			 // 		secure:true,
-			 // 		changeOrigin:true
-			 // },/.
+			//  '/index.php':{
+			//  		target:'http://api.7shengqian.com/',
+			//  		secure:true,
+			//  		changeOrigin:true
+			//  },
       // '/index.php':{//预生成
       //   target:'https://tapi.7shengqian.com/',
       //   secure:true,
       //   changeOrigin:true
       // },
 			 '/index.php':{//本地测试
-			 		// target:'http://testapi.7shengqian.com/',
-           target:'http://121.40.40.219:8601/', //蔡磊
+			 		target:'http://testapi.7shengqian.com/',
+           // target:'http://121.40.40.219:8601/', //蔡磊
 			 		secure:true,
 			 		changeOrigin:true
        	},
