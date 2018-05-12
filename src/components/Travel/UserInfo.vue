@@ -65,7 +65,7 @@
         datatime(){
             console.log(this.time.replace(0,7))
           return this.time.replace(0,7)
-         
+
         }
     },
     methods: {
@@ -79,7 +79,7 @@
         m = m < 10 ? '0' + m : m;
         var d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
-        this.date = y + '-' + m 
+        this.date = y + '-' + m
         this.format = this.date
       },
       explain() {
@@ -186,11 +186,11 @@
           validityCard: that.date,
           mobileNo: that.mobile,
         })).then(function (res) {
+          Indicator.close()
           var a = Base64.decode(res.data)
           a = JSON.parse(a)
           if (a.code == 10000) {
             if(a.data.err==10011){
-              Indicator.close()
               var Btokem =that.token.replace(/\//g,'@')
               window.location.href='#/travel/paycode/'+Btokem+'/'+that.orderNo+'/'+a.data.data.signOrderid
             }else if(a.data.err==10010){
@@ -206,6 +206,7 @@
             Toast(a.info)
           }
         }).catch(function (err) {
+          Indicator.close()
         });
       },
     },

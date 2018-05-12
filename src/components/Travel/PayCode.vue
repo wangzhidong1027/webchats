@@ -147,7 +147,7 @@
     height:2rem;
     border-bottom: 1px solid #eee;
     color: #333;
-    line-height: 2rem;
+
   }
   .codehint{
     color: #666;
@@ -160,7 +160,7 @@
   }
   .card{
     input{
-      flex: 1;
+    width: 10rem;
       padding: 0.3rem 0.5rem;
       border: none;
     }

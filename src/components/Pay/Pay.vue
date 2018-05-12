@@ -517,8 +517,8 @@
         if(url.indexOf('openid=')=='-1'){
           var myurl= Base64.encode(url)
           var gohref=encodeURIComponent(BASE_URL+"/index.php?r=weiXinPay/getOP&vueUrl="+myurl+'&token='+this.token)
-          //  window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
-          window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
+           window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
+          // window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
         }else{
           this.openid=url.split("openid=")[1];
           localStorage.setItem("openid",this.openid);
