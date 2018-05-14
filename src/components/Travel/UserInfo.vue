@@ -6,7 +6,7 @@
       <p><span><i>*</i>信用卡卡号：</span><input type="tel" placeholder="请输入信用卡卡号" v-model="bank" @blur="changeCount"></p>
       <p><span><i>*</i>预留手机号：</span><input type="tel" placeholder="请输入预留手机号" v-model="mobile"></p>
       <p><span><i>*</i>有效期：</span><i class="data" v-text="date" @click="selectDate"></i></p>
-      <p><span><i>*</i>CVV2码：</span><input type="tel" placeholder="CVV2码" v-model="cvv"><b @click="explain">说明</b></p>
+      <p><span><i>*</i>CVV2码：</span><input type="tel" placeholder='卡背末三位' v-model="cvv"><b @click="explain">说明</b></p>
     </div>
     <div v-html="Html">
     </div>
@@ -395,7 +395,7 @@
         margin-top: 1rem;
       }
     }
-    .picker-slot-center:nth-last-child(2){
+    .picker-slot-center:nth-of-type(3){
       display: none;
     }
   }

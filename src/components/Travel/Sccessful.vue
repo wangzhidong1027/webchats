@@ -65,10 +65,16 @@
             if(a.data.err==10000){
               that.order=a.data.data.res
             }else{
-              Toast(a.data.msg)
+              Toast({
+                message: a.data.msg,
+                duration: 5000
+              })
             }
           }else{
-            Toast(a.info)
+            Toast({
+              message: a.info,
+              duration: 5000
+            })
           }
         }).catch(function(err){
           Indicator.close()

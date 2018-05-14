@@ -185,7 +185,10 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
+ .addcredit .picker-items .slot1{
+    display: block;
+  }
   .addcredit{
     width: 100%;
     height: 100%;
