@@ -301,7 +301,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
                   window.location.href='#/travel/refundrecord'
                 }, 3000);
               }else{
-                MessageBox(a.info,'提示')
+                MessageBox.alert(a.info,'提示')
               }
           }).catch(function(err){
 

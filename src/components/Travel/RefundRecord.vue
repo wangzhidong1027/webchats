@@ -5,7 +5,7 @@
         <div class="orderid"><span>退款单号：<b>{{item.tdorderid}}</b></span>
           <div class="btn">
             <button v-if="item.tstatus==2||item.tstatus==4" @click="quxiao(item.tdorderid,index)">取消退款</button>
-            <a v-if="item.tstatus==6||item.tstatus==8" :href='"#/travel/backmoney/" + item.orderid '>修改</a></div>
+            <a v-if="item.tstatus==6" :href='"#/travel/backmoney/" + item.orderid '>修改</a></div>
         </div>
         <div class="order_contaner">
           <div class="order_img">

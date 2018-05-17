@@ -81,7 +81,7 @@ import BackTop from "./BackTop";
 import axios from "axios";
 import qs from "qs";
 import { mapState, mapActions } from "vuex";
-import { Indicator } from "mint-ui";
+import { Indicator ,MessageBox} from "mint-ui";
 import Search from "./JD/Search";
 export default {
   name: "QuStore",
@@ -183,6 +183,12 @@ export default {
     }
   },
   mounted() {
+          // axios.get( 'http://10.10.18.12:8080/manage-web/front/checkin',
+          //   qs.stringify({})
+          // ).then(function (res) {
+          //
+          //   }).catch(function (err) {
+          // });
     Indicator.open();
     document.title = "趣商城";
     var that = this;
