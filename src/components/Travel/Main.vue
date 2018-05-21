@@ -46,7 +46,7 @@
           return
         }
         if (!this.isok) {
-          MessageBox.alert('信息认证中，请耐心等待', '提示')
+          MessageBox.alert('您的信息正在认证中，请耐心等待', '提示')
           return
         }
         if(this.status!=0){

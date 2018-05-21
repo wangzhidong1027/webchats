@@ -264,15 +264,22 @@
             token:this.token
           })).then(function(res){
             var a=JSON.parse(Base64.decode(res.data))
-            var b=JSON.parse(a)
-            WeixinJSBridge.invoke(
-              'getBrandWCPayRequest',b,
-              function(res){
-                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                  window.location.href='#/succeedpay/'+that.orderid
-                }
+            if(a.code==1000){
+              if(a.data.err==10002){
+                var b=JSON.parse(a.data.data)
+                WeixinJSBridge.invoke(
+                  'getBrandWCPayRequest',b,
+                  function(res){
+                    if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                      window.location.href='#/succeedpay/'+that.orderid
+                    }
+                  });
+               }else {
+                  Toast(a.data.msg)
               }
-            );
+            }else{
+              Toast(a.info)
+            }
           }).catch(function(err){
 
           });
@@ -512,18 +519,20 @@
       this. directRightUrl ()
       var url=window.location.href
       var myopenid=localStorage.getItem("openid");
+
       this.orderid=this.$route.params.orderid
       if(!myopenid){
         if(url.indexOf('openid=')=='-1'){
           var myurl= Base64.encode(url)
           var gohref=encodeURIComponent(BASE_URL+"/index.php?r=weiXinPay/getOP&vueUrl="+myurl+'&token='+this.token)
-       window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
-      // window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
+       // window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
+      window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
         }else{
           this.openid=url.split("openid=")[1];
           localStorage.setItem("openid",this.openid);
         }
       }else{
+
         this.openid=localStorage.getItem("openid")
 //	  			localStorage.removeItem('openid');
       }

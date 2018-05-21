@@ -63,9 +63,7 @@
     },
     computed:{
         datatime(){
-            console.log(this.time.replace(0,7))
           return this.time.replace(0,7)
-
         }
     },
     methods: {

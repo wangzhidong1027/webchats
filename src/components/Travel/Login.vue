@@ -128,7 +128,6 @@ const Login = {
               type:'4'
 	           })).then(function(res){
 	              var a = res.data
-              console.log(a)
                 if(a.code==10000){
                   if(a.data.err==10002){
                       Toast('登录成功')

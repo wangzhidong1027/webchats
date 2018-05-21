@@ -19,6 +19,7 @@
         <div class="goods-name" >
           {{goodstit.name}}
         </div>
+        <p class="pianzi">请勿将电子卡卡号、密码泄露给他人，谨防诈骗。</p>
         <p class="economize" v-if="!(selectGoods[0].zxtprejiage==0)"><span>中欣通专享价</span><b>¥{{selectGoods[0].zxtprejiage}} </b><i>更省{{selectGoods[0].savem}}%</i> </p>
         <!--	        <p class="merit">全网通爆低价！5.5英寸移动联通典型4G手机 和漂亮 送保护壳保护膜 两年全国联保</p>-->
         <div class="price"><h5>¥&nbsp;<span>{{selectGoods[0].frontPrice}}</span><i class="chuxiao" v-if="goodstit.isPro==1">¥&nbsp;<span>{{goodstit.prejiage}}</span> </i> </h5><!--<b>降价通知</b>--> </div>
@@ -92,10 +93,8 @@
         islogin:true,
         address:[{'name':'北京'},{'name':'东城区','pid':'2802'}],
         stockStateDes:'',
-        
         //判断库存
         stocks:null
-        
       }
     },
     computed:{
@@ -107,7 +106,7 @@
           cpsgoodsid:id,
         })).then(function(res){
           var a=''
-          
+
           that.stocks=res.data.stock
           if(res.data.status==1&&res.data.stock!=0){
             a='有货'
@@ -153,13 +152,13 @@
       },
       ishave(){
         if(this.islogin){
-        	
+
           this.showaddress()
         }else{
           this.showaddadress()
         }
       },
-     
+
       changeNum(type){
         if(type=='add'){
         	if(this.number>=5){
@@ -171,13 +170,13 @@
         	}else{
         		this.number++
           	this.carnumber(this.number)
-          	
+
         	}
-      		
+
         }else{
           if(this.number==1){
             this.number=1
-           
+
           }else{
             this.number--
           }
@@ -207,7 +206,7 @@
 
     },
     updated(){
-			
+
     },
     activated(){
 
@@ -375,7 +374,7 @@
           color: #666;
           font-size: 0.3rem;
           font-weight: normal;
-          margin-left: 0.5rem
+          margin-left: 0.5rem;
           span{
             text-decoration: line-through;
             font-size: 0.3rem;
@@ -511,6 +510,12 @@
       left: 0;
     }
     .protect::-webkit-scrollbar{display:none;}
+    .pianzi{
+      background: #fff;
+      font-size: 0.65rem;
+      padding-left: 0.75rem;
+      color: #ff0000;
+    }
   }
 
 </style>

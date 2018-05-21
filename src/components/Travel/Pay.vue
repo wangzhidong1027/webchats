@@ -13,8 +13,7 @@
       <div class="name" @click="changetype(type.catid,type.cat)"><span><img :src='"../../assets/images/travel/paytype"+ type.catid + ".png"' alt="">{{type.cat}}</span><b :class="paytype==type.catid?'selsect':''"></b></div>
        <div class="numlist" v-show="selectType==type.catid" >
           <div class="list"  v-for="item in type.stage"  @click="changePeriods(item.catid,type.catid,item.cat,type.cat)"  :class="selectPeriods== item.catid&& paytype== type.catid? 'periods':''">
-            <p>{{money}}元x{{item.cat}}</p>
-            <p>&nbsp</p>
+            <p>{{money + '元/'+item.cat}}</p>
           </div>
           <div class="bankinfo" v-if="type.catid==7">
             <h5>温馨提示：</h5>
@@ -70,7 +69,7 @@
 <script>
   import axios from 'axios'
   import qs from 'qs'
-  import {Toast,Indicator} from 'mint-ui'
+  import {Toast,Indicator,MessageBox} from 'mint-ui'
   export default{
     name: 'Pay',
     data() {
@@ -88,7 +87,9 @@
         logo:'',
         showWX:false,
         codeurl:'',
-        banklist:[]
+        banklist:[],
+        sign:'',
+        time:'',
       }
     },
     methods: {
@@ -128,7 +129,9 @@
           payWay:this.paytype,
           stageWay:this.selectPeriods,
           stageTitle:this.paytitle,
-          stageContent:this.payContent
+          stageContent:this.payContent,
+          time:this.time,
+          sign:this.sign
         })).then(function(res){
           Indicator.close()
           var data = JSON.parse(Base64.decode(res.data))
@@ -142,7 +145,6 @@
                 window.location.href = '#/travel/userinfo/' + Btoken + '/' + data.data.data.orderid
               }
             }else{
-
               Toast(data.data.msg)
             }
           }else{
@@ -152,21 +154,34 @@
         }).catch(function(err){
 
         })
+      },
+      usebank(){
+        var that =this
+        axios.post(BASE_URL +'/index.php?r=YinjiaStageShare/BankList',qs.stringify({
+          token: this.token,
+        })).then(function (res) {
+          var a=JSON.parse(Base64.decode(res.data))
+          if(a.code==10000){
+            that.banklist=a.data.data.res
+          }else{
+            Toast(a.info)
+          }
+        }).catch(function (err) {
+
+        })
       }
+
     },
     mounted() {
       // var token = localStorage.getItem('tenant')
-      var paylist =this.$route.params.order
-      this.order=paylist.split('&')
-      this.token=this.order[0].toString().split('=')[1].replace(/@/g,'/')
-      var goodid=this.order[1].toString().split('=')
-      var ordermoney=this.order[2].toString().split('=')
-      this.money=ordermoney[1]
-      this.id=goodid[1]
+     var Tsign =this.$route.params.order
+      this.order= Tsign.split('&')
+      this.token=this.order[1].split('=')[1].replace(/@/g,'/')
+      var goodid=this.order[0]
       var that =this
       axios.post(BASE_URL +'/index.php?r=YinjiaStage/GetMerchatPay',qs.stringify({
         token: this.token,
-        productId: this.id
+        sign: Tsign
       })).then(function (res) {
           var a=JSON.parse(Base64.decode(res.data))
         if(a.code==10000){
@@ -174,17 +189,16 @@
             that.paytypelist=a.data.data.payWay
             that.name=a.data.data.companyname,
             that.logo=a.data.data.logo
+            that.money=a.data.data.money
+            that.id=a.data.data.pid
+            that.time=a.data.data.time
+            that.sign=a.data.data.sign
+            that.usebank()
+          }else{
+            MessageBox.alert(a.data.msg,'提示')
           }
-        }
-      }).catch(function (err) {
-
-      })
-       axios.post(BASE_URL +'/index.php?r=YinjiaStageShare/BankList',qs.stringify({
-        token: this.token,
-      })).then(function (res) {
-          var a=JSON.parse(Base64.decode(res.data))
-        if(a.code==10000){
-          that.banklist=a.data.data.res
+        }else{
+          MessageBox.alert(a.info,'提示')
         }
       }).catch(function (err) {
 
@@ -298,6 +312,7 @@
           color: #333;
           p{
             font-size: 0.7rem;
+            line-height: 1.5rem;
           }
         }
         .periods{

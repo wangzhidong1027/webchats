@@ -39,12 +39,19 @@ module.exports = {
       //   secure:true,
       //   changeOrigin:true
       // },
-			 '/index.php':{//本地测试
-			 		target:'http://testapi.7shengqian.com/',
-           // target:'http://121.40.40.219:8601/', //蔡磊
-			 		secure:true,
-			 		changeOrigin:true
-       	},
+		// 	 '/manage-web':{//本地测试
+      //       target:'http://10.10.18.12:8080/',
+		// 	 		// target:'http://testapi.7shengqian.com/',
+      //    // target:'http://121.40.40.219:8601/', //蔡磊
+      //    secure:true,
+		// 	 		changeOrigin:true
+      //  	},
+      '/index.php':{//本地测试
+        target:'http://testapi.7shengqian.com/',
+        // target:'http://121.40.40.219:8601/', //蔡磊
+        secure:true,
+        changeOrigin:true
+      },
       // 	 '/index.php':{
       //
       //   // target:'http://testapi.7shengqian.com:9528',// 振华

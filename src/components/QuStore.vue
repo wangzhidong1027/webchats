@@ -183,12 +183,12 @@ export default {
     }
   },
   mounted() {
-          // axios.get( 'http://10.10.18.12:8080/manage-web/front/checkin',
-          //   qs.stringify({})
-          // ).then(function (res) {
-          //
-          //   }).catch(function (err) {
-          // });
+          axios.get( 'http://10.10.18.12:8080/manage-web/front/checkin',
+            qs.stringify({})
+          ).then(function (res) {
+              console.log(res)
+            }).catch(function (err) {
+          });
     Indicator.open();
     document.title = "趣商城";
     var that = this;

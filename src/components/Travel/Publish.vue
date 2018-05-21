@@ -197,7 +197,7 @@ import qs from 'qs'
           return
         }
         if(this.pintro.length>40){
-          Toast('商品简介字数超过限制')
+          Toast('商品简介不能超过40字符')
           return
         }
          if(!this.imgsrc){
