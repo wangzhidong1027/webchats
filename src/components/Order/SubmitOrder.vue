@@ -470,7 +470,7 @@
                   } else {
                     MessageBox({
                       title: "提示",
-                      message: "下单失败"
+                      message: res.data.data.msg
                     });
                   }
                 }
@@ -517,7 +517,7 @@
                 } else {
                   MessageBox({
                     title: "提示",
-                    message: "下单失败"
+                    message: res.data.data.msg
                   });
                 }
               }
