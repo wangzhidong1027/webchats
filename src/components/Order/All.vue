@@ -37,7 +37,7 @@
 
           <div class="btn clear">
             <div class="need-pay handle" v-if="allitem.status=='1'||allitem.status=='40'">
-              <a class="btn1" v-if="allitem.status!='40'" @click="quxiao(allitem.id)">取消订单</a>
+              <a class="btn1"  v-if="allitem.status!='40'  @click="quxiao(allitem.id)">取消订单</a>
               <a class="btn2" :href="'?#/pay/'+allitem.id">付款</a>
             </div>
             <div class="wait-receiving handle" v-if="allitem.btocid==store&&allitem.status!=8&&allitem.btocorderid&&allitem.status!=11">

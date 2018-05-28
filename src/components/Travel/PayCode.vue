@@ -42,7 +42,7 @@
           });
         }else{
           Indicator.open()
-          axios.post(BASE_URL+'/index.php?r=YinjiaStage/SmsCodeSend',qs.stringify({
+          axios.post(BASE_URL+'/yinjiastage/getTerms',qs.stringify({
             token:this.token,
             orderid:this.orderid,
             signOrderid:this.sign
