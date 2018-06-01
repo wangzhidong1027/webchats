@@ -15,7 +15,7 @@
               {{ordergoods.pintro}}
             </div>
             <div class="order_money">
-              ￥<b>{{ordergoods.orderselprice}}</b>
+              ￥<b>{{ordergoods.orderprice}}</b>
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@ import {Toast,Indicator,MessageBox} from 'mint-ui'
               if(a.data.data.singlestatus!=5){
                 if(a.data.data.singlestatus!=4){
                   that.ordergoods=a.data.data
-                  that.money=that.ordergoods.orderselprice
+                  that.money=that.ordergoods.orderprice
                   if(a.data.data.singlestatus!=3){
                     if(a.data.data.singlestatus!=2) {
                       if (a.data.data.singlestatus == 6) {

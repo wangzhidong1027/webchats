@@ -111,7 +111,7 @@ import ChildMerchants from '@/components/Travel/ChildMerchants'
 import Invite from '@/components/Travel/Invite'
 import PayCode from '@/components/Travel/PayCode'
 import Sccessful from '@/components/Travel/Sccessful'
-
+import MakeOrder from '@/components/Travel/MakeOrder'
 
 
 Vue.use(Router)
@@ -191,7 +191,7 @@ export default new Router({
             { path: '/travel/invite', name: 'Invite', component: Invite },
             { path: '/travel/paycode/:token/:orderid/:sign', name: 'PayCode', component: PayCode },
             { path: '/travel/sccessful/:orderid/:token', name: 'Sccessful', component: Sccessful },
-
+            { path: '/travel/makeorder/:sign', name: 'MakeOrder', component: MakeOrder },
             {path:'/travel',redirect:"/travel/index"},
             {path:'/travel/*',redirect:"/travel/index"}
           ]

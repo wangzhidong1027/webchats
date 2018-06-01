@@ -532,7 +532,6 @@
           localStorage.setItem("openid",this.openid);
         }
       }else{
-
         this.openid=localStorage.getItem("openid")
 //	  			localStorage.removeItem('openid');
       }

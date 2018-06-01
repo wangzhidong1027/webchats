@@ -19,7 +19,7 @@
     <li v-for="item in data">
       <div class="title"><p class="number">{{item.orderid}}</p><p class="time">{{item.paytime}}</p></div>
       <div class="dealType">{{changetype(item.paytype)}}</div>
-      <div class="money">+{{item.orderselprice}}</div>
+      <div class="money">+{{item.orderprice}}</div>
     </li>
   </ul>
 </div>
@@ -44,7 +44,7 @@
         getallMoney(){
           var money =0
           for(var i=0;i<this.data.length;i++){
-              money+=this.data[i].orderselprice*100
+              money+=this.data[i].orderprice*100
           }
           money=money/100
           this.allmoney= money

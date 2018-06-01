@@ -1,7 +1,7 @@
 <template>
   <div class="successful_trade">
     <div class="money">
-      <p>{{order.orderselprice}}</p>
+      <p>{{order.orderprice}}</p>
       <span>总交易(元)</span>
       <div class="graphical"></div>
       <div class="transaction_content">
@@ -23,7 +23,7 @@
         </div>
         <div>
           <label>交易金额</label>
-          <span>{{order.orderselprice}}</span>
+          <span>{{order.orderprice}}</span>
         </div>
         <div class=" time" style="border: none;">
           <label>交易时间</label>

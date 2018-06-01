@@ -3,7 +3,7 @@
   <div class="order">
       <p>订单号: <span>{{order.orderid}}</span></p>
       <p>商品名称: <span>{{order.pname}}</span></p>
-      <p>金额: <span>￥{{order.orderselprice}}</span></p>
+      <p>金额: <span>￥{{order.orderprice}}</span></p>
     <div class="card">
       <p>银行卡号: <span>{{order.bankaccountnumber}}</span></p>
       <p>持卡人姓名: <span>{{order.signedname}}</span></p>
@@ -36,7 +36,7 @@
         var that = this
         if(this.codeMsg=='已发送'){
           MessageBox.confirm('未收到验证码，重新下单？').then(action => {
-            window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderselprice
+            window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderprice
           },action => {
             return
           });
@@ -55,7 +55,7 @@
               that.codeMsg='已发送'
             }else{
               MessageBox.confirm(a.info+'重新下单？').then(action => {
-                window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderselprice
+                window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderprice
               },action => {
                 return
               });
@@ -87,7 +87,7 @@
             window.location.href='#/travel/sccessful/'+ that.orderid+'/'+ mtoken
           }else{
             MessageBox.confirm(a.info+'重新下单？').then(action => {
-              window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderselprice
+              window.location.href='#/travel/travelpay/mtoken='+that.token +'&productId='+ that.order.pid +'&money='+that.order.orderprice
             },action => {
               return
             });
