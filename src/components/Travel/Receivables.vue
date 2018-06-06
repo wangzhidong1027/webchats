@@ -37,7 +37,8 @@
         name: '',
         payway: '',
         tit: '',
-        showtrue:false
+        showtrue:false,
+        maxMoney:''
       }
     },
     methods: {
@@ -66,9 +67,9 @@
             }
           }
         }
-        if ( this.payway == 'wx'&& this.message > 20000) {
-          MessageBox.alert('金额不能超过两万')
-          this.message =20000
+        if ( this.payway == 'wx'&& this.message-this.maxMoney>0) {
+          MessageBox.alert('金额不能超过'+this.maxMoney)
+          this.message =this.maxMoney
         }
       },
       setmoney() {
@@ -83,7 +84,7 @@
           return
         }
         if (this.payway == 'wx') {
-          that.wxcode()
+              that.wxcode()
         } else {
           Indicator.open()
           axios.post(BASE_URL + '/index.php?r=YinjiaStage/PayQrcode', qs.stringify({
@@ -130,11 +131,17 @@
                 duration: 1000
               })
               that.imgsrc = data.data.data.code_url
+              that.maxMoney= data.data.data.payLimit
               that.showWX = true
             } else {
               Toast(data.data.msg)
             }
-          } else {
+          } else if(data.code == 10012){
+            Toast(data.info)
+            setTimeout(function(){
+              window.location.href='#/travel'
+            },2000)
+          }else{
             Toast(data.info)
           }
         }).catch(function (err) {

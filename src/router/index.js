@@ -95,7 +95,7 @@ import AddTravel from '@/components/Travel/AddTravel'
 import Publish from '@/components/Travel/Publish'
 import Receivables from '@/components/Travel/Receivables'
 import Income from '@/components/Travel/Income'
-import TravelPay from '@/components/Travel/Pay'
+// import TravelPay from '@/components/Travel/Pay'
 import History from '@/components/Travel/History'
 import TravelLogin from '@/components/Travel/Login'
 import TravelAddCredit from '@/components/Travel/AddCredit'
@@ -104,12 +104,12 @@ import TravelMain from '@/components/Travel/Main'
 import TravelRefund from '@/components/Travel/Refund'
 import BackMoney from '@/components/Travel/BackMoney'
 import RefundRecord from '@/components/Travel/RefundRecord'
-import UserInfo from '@/components/Travel/UserInfo'
+// import UserInfo from '@/components/Travel/UserInfo'
 import RefundInfo from '@/components/Travel/RefundInfo'
 import Oneday from '@/components/Travel/Oneday'
 import ChildMerchants from '@/components/Travel/ChildMerchants'
 import Invite from '@/components/Travel/Invite'
-import PayCode from '@/components/Travel/PayCode'
+// import PayCode from '@/components/Travel/PayCode'
 import Sccessful from '@/components/Travel/Sccessful'
 import MakeOrder from '@/components/Travel/MakeOrder'
 
@@ -176,7 +176,7 @@ export default new Router({
             {path: '/travel/addtravel', name: 'AddTravel', component:AddTravel },
             { path: '/travel/publish', name: 'Publish', component: Publish },
             { path: '/travel/income', name: 'Income', component: Income },
-            { path: '/travel/travelpay/:order', name: 'TravelPay', component: TravelPay },
+            // { path: '/travel/travelpay/:order', name: 'TravelPay', component: TravelPay },
             { path: '/travel/history', name: 'History', component: History },
             { path: '/travel/login', name: 'TravelLogin', component: TravelLogin },
             { path: '/travel/addcredit', name: 'TravelAddCredit', component: TravelAddCredit },
@@ -184,12 +184,12 @@ export default new Router({
             { path: '/travel/refund', name: 'TravelRefund', component: TravelRefund },
             { path: '/travel/backmoney/:torderid', name: 'BackMoney', component: BackMoney },
             { path: '/travel/refundrecord', name: 'RefundRecord', component: RefundRecord },
-            { path: '/travel/userinfo/:token/:orderid', name: 'UserInfo', component: UserInfo },
+            // { path: '/travel/userinfo/:token/:orderid', name: 'UserInfo', component: UserInfo },
             { path: '/travel/refundinfo/:id', name: 'RefundInfo', component: RefundInfo },
             { path: '/travel/oneday/:date', name: 'Oneday', component: Oneday },
             { path: '/travel/childmerchants/:token/:time/:sign', name: 'ChildMerchants', component: ChildMerchants },
             { path: '/travel/invite', name: 'Invite', component: Invite },
-            { path: '/travel/paycode/:token/:orderid/:sign', name: 'PayCode', component: PayCode },
+            // { path: '/travel/paycode/:token/:orderid/:sign', name: 'PayCode', component: PayCode },
             { path: '/travel/sccessful/:orderid/:token', name: 'Sccessful', component: Sccessful },
             { path: '/travel/makeorder/:sign', name: 'MakeOrder', component: MakeOrder },
             {path:'/travel',redirect:"/travel/index"},

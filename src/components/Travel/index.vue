@@ -31,8 +31,8 @@
                 </div>
               </div>
               <div class='gopay'>
-                <a  @click='back(1,"#/travel/receivables/"+goods.pid +"/card ")' :class="{cardpay:!isOpenF}">分期收款</a><!-- -->
-                <a   @click='back(2,"#/travel/receivables/"+goods.pid+"/wx")' :class="{cardpay:!isOpenW}">微信收款</a>
+                <a  @click='back(1,"#/travel/receivables/"+goods.pid +"/card" ,goods.pmoney)' :class="{cardpay:!isOpenF}">分期收款</a><!-- -->
+                <a   @click='back(2,"#/travel/receivables/"+goods.pid+"/wx",goods.pmoney)' :class="{cardpay:!isOpenW}">微信收款</a>
                 <button @click="deleteGoods(goods.pid,index)"></button>
               </div>
             </li>
@@ -63,11 +63,12 @@
         issure: false,
         isOpenW:false,
         isOpenF:false,
+        wxmax:'',
         status:null,//账户状态
       }
     },
     methods: {
-      back(type,src) {
+      back(type,src,money) {
           // MessageBox.alert('正在开发中，请您耐心等待')
         if(this.status!=0){
           MessageBox.alert('您的账户已经冻结，请联系客服')
@@ -81,7 +82,11 @@
           }
         }else{
           if(this.isOpenW){
+            // if(this.wxmax-money>=0){
               window.location.href=src
+            // }else{
+            //   MessageBox.alert('微信支付最大限额'+this.wxmax)
+            // }
           }else{
               MessageBox.alert('您未开通微信收款')
           }
@@ -126,11 +131,9 @@
               that.tenant.splice(index, 1)
               Toast('删除成功')
             } else {
-
               Toast(data.info)
             }
           }).catch(function (err) {
-
           })
         })
       },
@@ -176,6 +179,7 @@
                 that.isOpenF=a.data.data.isOpenF
                 that.isOpenW=a.data.data.isOpenW
                 that.status=a.data.data.status
+                that.wxmax=a.data.data.payLimit
                 that.getgoods()
               }
             }else if (a.code == 10007) {
