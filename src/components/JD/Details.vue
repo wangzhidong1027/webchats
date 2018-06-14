@@ -84,20 +84,13 @@
           });
 			  },
         carnumber(n){
-        
           this.selectGoods[0].number = n
-          
         },
 
 	    nice(){
-				console.log(1)
-	    	 if(this.selectGoods[0].number>2){
-	    	 	alert(1)
-	    	 }
 	    	if(this.addcar){
 	    		if(this.selectGoods[0].sku){
 	    			this.addCar(this.selectGoods)
-	    			console.log(1)
 		    	}else{
 		    		return
 		    	}

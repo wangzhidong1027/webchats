@@ -11,7 +11,7 @@ import Car from '@/components/Car'
 
 //活动专用
 import Activitytheme from '@/components/Activitytheme'
-
+import WordCup from '@/components/Afd/WordCup' //世界杯
 //愚人节
 
 //mport Afd from '@/components/Afd/afd'
@@ -120,6 +120,8 @@ export default new Router({
   	routes: [
         {path: '/Activitytheme', name: 'Activitytheme', component: Activitytheme },
 		  //  {path: '/Afd', name: 'Afd', component: Afd },
+      //世界杯
+       {path: '/wordcup', name: 'WordCup', component: WordCup },
       {path:'/rnas', name:'Rnas', component: Rnas},
 
       {path:'/qustore',name: 'QuStore',component: QuStore},
