@@ -22,7 +22,7 @@
           <p>微信支付</p></div>
     </div>
     <div class="card-tit" v-if="payway=='ZXcard'" >
-        <p ><b>支付金额：</b><input v-model="cardpayNum" type="tel" placeholder="请输入支付金额"></p>
+        <p ><b>支付金额：</b><input v-model="cardpayNum" type="tel" placeholder="请输入支付金额" @input="resetcode()" ></p>
         <p ><b>中欣卡号：</b><input v-model="cardpayNo" type="tel" placeholder="请输入中欣卡号"></p>
        <div v-if="showisactive">
           <p><b>手机号码：</b><input v-model="phone"  type="tel" placeholder="手机号码"/></p>
@@ -92,6 +92,11 @@
     },
 
     methods:{
+      //修改支付金额，重新获取短信
+      resetcode(){
+        this.cardTime = "获取验证码"
+        this.msgCode = ''
+      },
       changeway(way){
         if(this.order.status==40){
           if(this.isuseZXT&&way=='ZXcard'){
@@ -177,10 +182,12 @@
                   that.pay.rechargeCode = a.data.rechargeCode
                   that.cardTime=60
                   var timer = setInterval(function () {
-                    that.cardTime--
-                    if ( that.cardTime == 1) {
+                    if ( that.cardTime >= 1) {
+                      that.cardTime --
+                    }else{
                       that.cardTime = "获取验证码"
                       clearTimeout(timer)
+                      timer = null
                     }
                   }, 1000)
                 }else {
