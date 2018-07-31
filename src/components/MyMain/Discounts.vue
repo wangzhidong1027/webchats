@@ -1,7 +1,7 @@
 <template>
   <div class="discounts">
     <mt-navbar v-model="selected">
-      <mt-tab-item id="1">未使用</mt-tab-item>
+      <mt-tab-item id="1" >未使用</mt-tab-item>
       <mt-tab-item id="2" @click.native="already(2)">已使用</mt-tab-item>
       <mt-tab-item id="3" @click.native="already(3)">已过期</mt-tab-item>
       <!--<mt-tab-item id="4" @click.native="already(4)">兑换优惠券</mt-tab-item>-->
@@ -90,7 +90,7 @@
         notuse: [],
         over: [],
         couCode: '',
-        status: ''
+        status: '1'
 
       }
     },
@@ -149,7 +149,15 @@
           .then(function (res) {
             var a = JSON.parse(Base64.decode(res.data))
             if (a.data.err == 10002) {
-              that.use = a.data.result
+            	if(that.status == 1){
+            		that.use = a.data.result
+            	}else if(that.status == 2){
+            		that.notuse = a.data.result
+            	}else if(that.status == 3){
+            		that.over = a.data.result
+            	}
+
+
             }
           }).catch(function (err) {
 
