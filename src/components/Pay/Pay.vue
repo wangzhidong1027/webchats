@@ -27,7 +27,7 @@
        <div v-if="showisactive">
           <p><b>手机号码：</b><input v-model="phone"  type="tel" placeholder="手机号码"/></p>
           <p><b>激活码：</b><input  v-model="activcode" type="tel" placeholder="激活码"/></p>
-          <p><b>身份证号：</b><input v-model="personid"  type="tel" placeholder="身份证号"/></p>
+          <p><b>身份证号：</b><input v-model="personid"  type="text" placeholder="身份证号"/></p>
         </div>
         <p ><b>验证码：</b><input v-model="msgCode" type="tel" placeholder="请输入短信验证码"><button @click="getCardCode">{{cardTime}}</button></p>
     </div>
@@ -525,9 +525,9 @@
         if(url.indexOf('openid=')=='-1'){
           var myurl= Base64.encode(url)
           var gohref=encodeURIComponent(BASE_URL+"/index.php?r=weiXinPay/getOP&vueUrl="+myurl+'&token='+this.token)
-         window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
-      // window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
-        }else{ 
+         // window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd11d5e7feb979553&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'; //正式appid
+      window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb68ed0995576d589&redirect_uri='+gohref+'&response_type=code&scope=snsapi_base&state=123#wechat_redirect';	//测试  appid
+        }else{
           this.openid=url.split("openid=")[1];
           localStorage.setItem("openid",this.openid);
         }
